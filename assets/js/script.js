@@ -30,10 +30,6 @@ elem("#usernameBtn").addEventListener("click", saveUser)
 
 document.querySelector("#buttonId").addEventListener("click", onSendChat)
 
-function onSendChat() {
-   ws.send(`{"to":"quizGame", "user":${JSON.stringify(user)}, "content":"${document.querySelector("#Mensaje").value}", "type":"messageU"}`);
-}
-
 window.onbeforeunload = leaveGame;
 
 
@@ -183,6 +179,10 @@ function animaProfileRatio(){
    }
 }
 
+function onSendChat() {
+   ws.send(`{"to":"quizGame", "user":${JSON.stringify(user)}, "content":"${document.querySelector("#Mensaje").value}", "type":"messageU"}`);
+}
+
 function leaveGame() {
    user.id = ""
    user.name = ""
@@ -198,7 +198,6 @@ function getQuestions(amount = 10) {
 
       })
 }
-
 
 function elem(selector, all = false) {
    return all ? document.querySelectorAll(selector) : document.querySelector(selector)
