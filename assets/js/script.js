@@ -18,6 +18,8 @@ var user = JSON.parse(localStorage.getItem("user")) || {
     ratio: 0//(this.countGames == 0) ? 0 : ((this.win / this.countGames) * 100)
 }
 
+console.log(user)
+
 /**
  * LISTENERS
  */
@@ -79,7 +81,7 @@ function joinGame() {
 
 
 function init(){
-   if(!user.name.length){
+   if(!user.name){
       user.name = prompt("Name:");
    }
    joinGame();
