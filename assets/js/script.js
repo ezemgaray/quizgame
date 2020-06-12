@@ -35,7 +35,7 @@ window.onbeforeunload = leaveGame;
  * FUNCTIONS
  */
 
-init()
+init();
 
 
 function joinGame() {
