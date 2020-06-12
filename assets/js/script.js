@@ -19,6 +19,24 @@ var user = JSON.parse(localStorage.getItem("user")) || {
 console.log(user)
 user.name = prompt("Name:");
 
+/**
+ * EVENT LISTENERS
+ */
+
+document.querySelector("#buttonId").addEventListener("click", onSendChat)
+function onSendChat(){
+    ws.send(`{"to":"quizGame", "user":"${user.name}", "content":"${document.querySelector("#Mensaje").value}", "type":"messageU"}`);
+}
+
+window.onbeforeunload = leaveGame;
+
+
+
+
+/**
+ * FUNCTIONS
+ */
+
 function calcRatio(){
     return
 }
@@ -71,9 +89,3 @@ function leaveGame(){
     ws.close();
 }
 
-document.querySelector("#buttonId").addEventListener("click", onSendChat)
-function onSendChat(){
-    ws.send(`{"to":"quizGame", "user":"${user.name}", "content":"${document.querySelector("#Mensaje").value}", "type":"messageU"}`);
-}
-
-window.onbeforeunload = leaveGame;
