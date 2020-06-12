@@ -113,3 +113,14 @@ div .title__span:nth-child(2) span:nth-child(4){
    box-shadow: none;
    transition: 0.1s ease;
 }
+
+.confirm{
+   height: 40%;
+   max-height: 300px;
+   min-height: 200px;
+   width: 80%;
+   max-width: 500px;
+   background-color: white;
+   border-radius: 10px;
+   box-shadow: 0px 10px 10px rgba(0, 0, 0, 0.15);
+}
