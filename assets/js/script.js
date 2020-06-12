@@ -79,6 +79,8 @@ function joinGame() {
 function init() {
    if (!user.name.length || !user.name) {
       showLogin()
+   } else {
+      showConfirmUser()
    }
 }
 
@@ -87,7 +89,7 @@ function sendUser(user) {
    ws.send(`{"to":"quizGame", "user":${user}, "type":"user"}`);
 }
 
-function printUsers(userData) {   
+function printUsers(userData) {
    if (userData.name != "" && userData.id != "") {
       users.push({
          name: userData.name,
@@ -103,20 +105,51 @@ function printMessage(user, message) {
    document.body.append(x);
 }
 
-function showLogin(){
+function showLogin() {
+   console.log("si");
+
    let register = elem("#login")
    let confirm = elem("#confirm")
-   if(!JSON.parse(localStorage.getItem("user"))){
-      register.classList.toggle("d-flex")
-      register.classList.toggle("d-none")
-      confirm.classList.toggle("d-flex")
-      confirm.classList.toggle("d-none")
-   }
+   let profile = elem("#profile")
+   register.classList.add("d-flex")
+   register.classList.remove("d-none")
+   confirm.classList.add("d-none")
+   confirm.classList.remove("d-flex")
+   profile.classList.add("d-none")
+   profile.classList.remove("d-flex")
 }
 
-function saveUser(){
+function showConfirmUser() {
+   elem("#name-confirm").innerText = `"${user.name}"`
+   let register = elem("#login")
+   let confirm = elem("#confirm")
+   let profile = elem("#profile")
+   register.classList.remove("d-flex")
+   register.classList.add("d-none")
+   confirm.classList.remove("d-none")
+   confirm.classList.add("d-flex")
+   profile.classList.add("d-none")
+   profile.classList.remove("d-flex")
+   elem("#confirmN").onclick = showLogin
+   elem("#confirmY").onclick = showProfile
+}
+
+function showProfile() {
+   let register = elem("#login")
+   let confirm = elem("#confirm")
+   let profile = elem("#profile")
+   register.classList.remove("d-flex")
+   register.classList.add("d-none")
+   confirm.classList.add("d-none")
+   confirm.classList.remove("d-flex")
+   profile.classList.remove("d-none")
+   profile.classList.add("d-flex")
+}
+
+function saveUser() {
    user.name = elem("#usernameInp").value
-   if(user.name.length){
+   if (user.name.length) {
+      showProfile()
       joinGame();
    }
 }
@@ -133,11 +166,11 @@ function getQuestions(amount = 10) {
       .get("https://opentdb.com/api.php?amount=" + amount)
       .then(function (response) {
          currGame = response.data.results
-         
+
       })
 }
 
 
-function elem(selector, all = false){
+function elem(selector, all = false) {
    return all ? document.querySelectorAll(selector) : document.querySelector(selector)
 }
