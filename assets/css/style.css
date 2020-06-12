@@ -75,7 +75,6 @@ div .title__span:nth-child(2) span:nth-child(4){
 }
 
 .login__menu{
-   /* border: 1px solid red; */
    height: 30%;
 }
 
@@ -89,7 +88,6 @@ div .title__span:nth-child(2) span:nth-child(4){
    font-size: 24px;
    font-weight: 200;
 }
-
 .login__menu--username::placeholder{
    color: rgba(255, 255, 255, 0.5);
 }
