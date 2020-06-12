@@ -18,14 +18,24 @@ var user = JSON.parse(localStorage.getItem("user")) || {
     ratio: 0//(this.countGames == 0) ? 0 : ((this.win / this.countGames) * 100)
 }
 
+/**
+ * LISTENERS
+ */
 
+document.querySelector("#buttonId").addEventListener("click", onSendChat)
+function onSendChat(){
+    ws.send(`{"to":"quizGame", "user":"${user.name}", "content":"${document.querySelector("#Mensaje").value}", "type":"messageU"}`);
+}
+
+window.onbeforeunload = leaveGame;
+
+
+
+/**
+ * FUNCTIONS
+ */
 
 init()
-
-
-function calcRatio(){
-    return
-}
 
 
 function joinGame() {
@@ -82,9 +92,3 @@ function leaveGame(){
     ws.close();
 }
 
-document.querySelector("#buttonId").addEventListener("click", onSendChat)
-function onSendChat(){
-    ws.send(`{"to":"quizGame", "user":"${user.name}", "content":"${document.querySelector("#Mensaje").value}", "type":"messageU"}`);
-}
-
-window.onbeforeunload = leaveGame;
