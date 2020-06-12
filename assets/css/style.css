@@ -101,4 +101,15 @@ div .title__span:nth-child(2) span:nth-child(4){
    color: white;
    font-size: 32px;
    font-weight: 900;
+   transition: 0.3s ease;
+}
+.login__menu--button:hover{
+   transform: scale(1.03);
+   box-shadow: 0px 6px 5px rgba(0, 0, 0, 0.15);
+   transition: 0.3s ease;
+}
+.login__menu--button:active{
+   transform: scale(1);
+   box-shadow: none;
+   transition: 0.1s ease;
 }
