@@ -181,7 +181,7 @@ div .title__span:nth-child(2) span:nth-child(4){
 /*? ========= PROFILE DISPLAY ========== ?*/
 
 .profile{
-   height: 100vh;
+   height: 100%;
    width: 100vw;
 }
 
