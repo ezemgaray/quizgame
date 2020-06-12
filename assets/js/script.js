@@ -106,26 +106,6 @@ function printMessage(user, message) {
 }
 
 function saveUser() {
-<<<<<<< HEAD
-   user.name = elem("#usernameInp").value
-   if (user.name.length) {
-      joinGame();
-      showProfile()
-   }
-}
-
-function showLogin() {
-   let register = elem("#login")
-   let confirm = elem("#confirm")
-   let profile = elem("#profile")
-   register.classList.add("d-flex")
-   register.classList.remove("d-none")
-   confirm.classList.add("d-none")
-   confirm.classList.remove("d-flex")
-   profile.classList.add("d-none")
-   profile.classList.remove("d-flex")
-   elem("#usernameInp").focus()
-=======
     user.name = elem("#usernameInp").value
     if (user.name.length) {
         joinGame();
@@ -144,7 +124,6 @@ function showLogin() {
     profile.classList.remove("d-flex")
     elem("#usernameInp").focus()
 
->>>>>>> 19a7fa3c6987043ed3eecec8e5d6ee105918eeca
 }
 
 function showConfirmUser() {
