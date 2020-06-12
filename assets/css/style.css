@@ -31,19 +31,24 @@ button:focus, input:focus{
    font-family: 'Source Sans Pro', sans-serif;
 }
 
-
-.login{
-   display: block;
-   width: 100%;
+.main__container{
    height: 100vh;
 }
 
+.login{
+   /* border: 1px solid red; */
+   width: 100vw;
+   height: 100vh;
+   max-height: 750px;
+}
+
 .login__title{
-   width: 100%;
+   width: 360px;
+   height: 70%;
 }
 
 .title__span{
-   border: 1px solid red;
+   /* border: 1px solid red; */
    width: 100%;
    font-size: 56px;
    color: white;
@@ -57,7 +62,8 @@ div .title__span:nth-child(2){
 }
 
 .login__menu{
-   border: 1px solid red;
+   /* border: 1px solid red; */
+   height: 30%;
 }
 
 .login__menu--username{
@@ -71,10 +77,17 @@ div .title__span:nth-child(2){
    font-weight: 200;
 }
 
+.login__menu--username::placeholder{
+   color: rgba(255, 255, 255, 0.5);
+}
+
 .login__menu--button{
    width: 200px;
-   height: 45px;
+   height: 50px;
    background: #F9DE41;
    border: none;
    border-radius: 10px;
+   color: white;
+   font-size: 32px;
+   font-weight: 900;
 }
