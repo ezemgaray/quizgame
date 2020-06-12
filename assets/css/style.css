@@ -35,6 +35,8 @@ button:focus, input:focus{
    height: 100vh;
 }
 
+/*? ========= LOGIN SCREEN ========= ?*/
+
 .login{
    /* border: 1px solid red; */
    width: 100vw;
@@ -171,4 +173,61 @@ div .title__span:nth-child(2) span:nth-child(4){
 }
 .confirm__inner--buttons button:nth-child(2){
    background-color: #20C868;
+}
+
+
+.profile{
+   height: 100vh;
+   width: 100vw;
+}
+
+.profile__container{
+   border: 1px solid yellow;
+   height: 100%;
+   max-height: 650px;
+   width: 100%;
+}
+
+.profile__container__info{
+   width: 100%;
+   max-height: 500px;
+   height: 80%;
+   max-width: 400px;
+   background-color: white;
+   border-radius: 15px;
+}
+
+.profile__container__info--img{
+   height: 120px;
+   width: 120px;
+   border-radius: 50%;
+   overflow: hidden;
+}
+
+.profile__container__info--values{
+   font-size: 22px;
+   font-weight: 700;
+   width: 100%;
+}
+
+.profile__container__info--values > span{
+   width: 100%;
+}
+
+.profile__container__info--values > span > span{
+   display: inline-block;
+   width: 49%;
+}
+
+.profile__container__info--values > * > span:first-child{
+   text-align: right;
+}
+.profile__container__info--values > * > span:last-child{
+   font-weight: 300;
+}
+
+.profile__container--enter{
+   width: 75%;
+   max-width: 400px;
+   height: 45px;
 }
