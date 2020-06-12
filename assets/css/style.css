@@ -124,3 +124,18 @@ div .title__span:nth-child(2) span:nth-child(4){
    border-radius: 10px;
    box-shadow: 0px 10px 10px rgba(0, 0, 0, 0.15);
 }
+
+.confirm__buttons button{
+   border: none;
+   border-radius: 10px;
+   width: 100px;
+   height: 35px;
+   color: white;
+}
+
+.confirm__buttons button:nth-child(1){
+   background-color: #F52631;
+}
+.confirm__buttons button:nth-child(2){
+   background-color: #20C868;
+}
