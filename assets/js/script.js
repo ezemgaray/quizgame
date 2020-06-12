@@ -4,6 +4,7 @@ var ws;
 //     name: "",
 
 // }
+var users = [];
 var user = JSON.parse(localStorage.getItem("user")) || {
     id: "",
     name: "",
@@ -16,15 +17,16 @@ var user = JSON.parse(localStorage.getItem("user")) || {
     currR: "",
     ratio: 0//(this.countGames == 0) ? 0 : ((this.win / this.countGames) * 100)
 }
-console.log(user)
-user.name = prompt("Name:");
+
+
+
+init()
+
 
 function calcRatio(){
     return
 }
 
-var users = [];
-joinGame();
 
 function joinGame() {
     ws = new WebSocket("wss://cloud.achex.ca");
@@ -37,6 +39,7 @@ function joinGame() {
         if(responseUser.auth == "OK"){
             ws.send(`{"to":"quizGame", "user":"${responseUser.SID}", "type":"connect"}`);
             user.id = responseUser.SID;
+            localStorage.setItem("user", JSON.stringify(user))
         }
 
         if (responseUser.type === "messageU"){
@@ -62,6 +65,14 @@ function joinGame() {
     // ws.onclose = function (e) {
     //     console.log("onclose")
     // }
+}
+
+
+function init(){
+   if(!user.name.length){
+      user.name = prompt("Name:");
+   }
+   joinGame();
 }
 
 function leaveGame(){
