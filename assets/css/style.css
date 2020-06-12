@@ -35,6 +35,8 @@ button:focus, input:focus{
    height: 100vh;
 }
 
+/*? ========= LOGIN SCREEN ========= ?*/
+
 .login{
    /* border: 1px solid red; */
    width: 100vw;
@@ -114,6 +116,8 @@ div .title__span:nth-child(2) span:nth-child(4){
    transition: 0.1s ease;
 }
 
+/*? ========== CONFRIM DISPLAY ========== ?*/
+
 .confirm{
    height: 40%;
    max-height: 300px;
@@ -155,12 +159,13 @@ div .title__span:nth-child(2) span:nth-child(4){
    font-size: 24px;
    transition: 0.2s ease;
 }
-.confirm__inner--buttons button:hover{
+.confirm__inner--buttons button:hover, .profile__container--enter:hover{
    transform: scale(1.05);
    box-shadow: 0px 5px 16px rgba(0, 0, 0, 0.2);
    transition: 0.2s ease;
 }
-.confirm__inner--buttons button:active{
+.confirm__inner--buttons button:active, .profile__container--enter:active{
+   border: none;
    transform: scale(1);
    box-shadow: none;
    transition: 0.1s ease;
@@ -171,4 +176,96 @@ div .title__span:nth-child(2) span:nth-child(4){
 }
 .confirm__inner--buttons button:nth-child(2){
    background-color: #20C868;
+}
+
+/*? ========= PROFILE DISPLAY ========== ?*/
+
+.profile{
+   height: 100%;
+   width: 100vw;
+}
+
+.profile__container{
+   /* border: 1px solid yellow; */
+   height: 100%;
+   max-height: 650px;
+   width: 100%;
+}
+
+.profile__container__info{
+   width: 100%;
+   max-height: 500px;
+   height: 80%;
+   max-width: 400px;
+   background-color: white;
+   border-radius: 15px;
+}
+
+.profile__container__info--img{
+   height: 120px;
+   width: 120px;
+   border-radius: 50%;
+   overflow: hidden;
+}
+
+.profile__container__info--graph{
+   border-bottom: 1px solid rgb(29, 29, 29, 0.5);
+   height: 120px;
+   width: 100%;
+   max-width: 250px;
+}
+
+.profile__container__info--graph > div{
+   width: 50%;
+   height: 100%;
+}
+   .profile__container__info--graph > div > div{
+   width: 20px;
+}
+.profile__container__info--graph > div>div:first-child{
+   background-color: #20C868;
+   height: 80%;
+}
+.profile__container__info--graph > div>div:nth-child(2){
+   background-color: #F52631;
+   height: 50%;
+}
+
+.profile__container__info--graph > span {
+   font-size: 48px;
+   font-weight: 100;
+}
+
+.profile__container__info--values{
+   font-size: 22px;
+   font-weight: 700;
+   width: 100%;
+}
+
+.profile__container__info--values > span{
+   width: 100%;
+}
+
+.profile__container__info--values > span > span{
+   display: inline-block;
+   width: 49%;
+}
+
+.profile__container__info--values > * > span:first-child{
+   text-align: right;
+}
+.profile__container__info--values > * > span:last-child{
+   font-weight: 300;
+}
+
+.profile__container--enter{
+   width: 95%;
+   max-width: 400px;
+   height: 65px;
+   border-radius: 10px;
+   background-color: #F9DE41;
+   color: white;
+   font-weight: 700;
+   font-size: 40px;
+   transition: 0.3s ease;
 }
