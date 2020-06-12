@@ -53,6 +53,7 @@ function joinGame() {
             ws.send(`{"to":"quizGame", "user":"${responseUser.SID}", "type":"connect"}`);
             user.id = responseUser.SID;
             localStorage.setItem("user", JSON.stringify(user))
+            showProfile()
         }
 
         switch (responseUser.type) {
@@ -107,7 +108,6 @@ function printMessage(user, message) {
 function saveUser() {
     user.name = elem("#usernameInp").value
     if (user.name.length) {
-        showProfile()
         joinGame();
     }
 }
