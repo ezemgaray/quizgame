@@ -175,6 +175,7 @@ div .title__span:nth-child(2) span:nth-child(4){
    background-color: #20C868;
 }
 
+/*? ========= PROFILE DISPLAY ========== ?*/
 
 .profile{
    height: 100vh;
@@ -182,7 +183,7 @@ div .title__span:nth-child(2) span:nth-child(4){
 }
 
 .profile__container{
-   border: 1px solid yellow;
+   /* border: 1px solid yellow; */
    height: 100%;
    max-height: 650px;
    width: 100%;
@@ -202,6 +203,13 @@ div .title__span:nth-child(2) span:nth-child(4){
    width: 120px;
    border-radius: 50%;
    overflow: hidden;
+}
+
+.profile__container__info--graph{
+   border-bottom: 1px solid rgb(29, 29, 29, 0.5);
+   height: 50px;
+   width: 100%;
+   max-width: 250px;
 }
 
 .profile__container__info--values{
@@ -227,7 +235,12 @@ div .title__span:nth-child(2) span:nth-child(4){
 }
 
 .profile__container--enter{
-   width: 75%;
+   width: 95%;
    max-width: 400px;
-   height: 45px;
+   height: 65px;
+   border-radius: 10px;
+   background-color: #F9DE41;
+   color: white;
+   font-weight: 700;
+   font-size: 40px;
 }
