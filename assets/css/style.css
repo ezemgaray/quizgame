@@ -61,6 +61,19 @@ div .title__span:nth-child(2){
    font-weight: 900;
 }
 
+div .title__span:nth-child(2) span:nth-child(1){
+   color: #F9DE41;
+}
+div .title__span:nth-child(2) span:nth-child(2){
+   color: #F352AF;
+}
+div .title__span:nth-child(2) span:nth-child(3){
+   color: #20C868;
+}
+div .title__span:nth-child(2) span:nth-child(4){
+   color: #F52631;
+}
+
 .login__menu{
    /* border: 1px solid red; */
    height: 30%;
