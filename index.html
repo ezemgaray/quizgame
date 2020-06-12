@@ -7,7 +7,40 @@
    <link rel="stylesheet" href="assets/css/style.css">
 </head>
 <body>
-   <div>
+   <main>
+      <div class="container">
+         <div class="modal" id="modal">
+         </div>
+         <div class="main__view" id="main-view">
+            <h1 class="section__title">quizGame</h1>
+            <input type="text" id="input-name">
+            <input type="button" value="Start" id="start">
+         </div>
+         <div class="user__view" id="playing">
+            <!-- position relative y su contenido es el que se irá desplazando segu
+            el momento. Si está en espera o jugando y la pregunta de iniciar juego será en modal. -->
+            <div class="vistas">
+               <div class="jugando">
+
+               </div>
+               <div class="espera">
+
+               </div>
+            </div>
+            <div class="menu">
+               <div class="menu__container">
+                  <div class="chat-icon"></div>
+                  <div class="scoring-icon"></div>
+                  <div class="logout"></div>
+               </div>
+            </div>
+         </div>
+      </div>
+   </main>
+
+
+
+   <!-- <div>
       <input type="text" id="Mensaje">
       <input type="button" id="buttonId" value="Enviar Mensaje">
    </div>
@@ -16,7 +49,7 @@
       <span>Join Game</span>
       <input type="button" id ="sessionCreate" value="Join the game :D">
    </div>
-   <input type="button" id ="closeSession" value="Leave the game D:" onclick="leaveGame()">
+   <input type="button" id ="closeSession" value="Leave the game D:" onclick="leaveGame()"> -->
 
 <script src="assets/js/script.js"></script>
 </body>
