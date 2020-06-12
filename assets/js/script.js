@@ -19,11 +19,11 @@ var user = JSON.parse(localStorage.getItem("user")) || {
    ratio: 0 //(this.countGames == 0) ? 0 : ((this.win / this.countGames) * 100)
 }
 
-console.log(user)
-
 /**
  * LISTENERS
  */
+
+elem("#usernameBtn").addEventListener("click", saveUser)
 
 document.querySelector("#buttonId").addEventListener("click", onSendChat)
 
@@ -78,17 +78,16 @@ function joinGame() {
 
 function init() {
    if (!user.name.length || !user.name) {
-      user.name = prompt("Name:");
+      showLogin()
    }
-   joinGame();
 }
 
 function sendUser(user) {
-   ws.send(`{"to":"quizGame", "user":${user}, "type":"user"}`);
    users = [];
+   ws.send(`{"to":"quizGame", "user":${user}, "type":"user"}`);
 }
 
-function printUsers(userData) {
+function printUsers(userData) {   
    if (userData.name != "" && userData.id != "") {
       users.push({
          name: userData.name,
@@ -102,6 +101,24 @@ function printMessage(user, message) {
    var x = document.createElement("p");
    x.textContent = user.name + ": " + message;
    document.body.append(x);
+}
+
+function showLogin(){
+   let register = elem("#login")
+   let confirm = elem("#confirm")
+   if(!JSON.parse(localStorage.getItem("user"))){
+      register.classList.toggle("d-flex")
+      register.classList.toggle("d-none")
+      confirm.classList.toggle("d-flex")
+      confirm.classList.toggle("d-none")
+   }
+}
+
+function saveUser(){
+   user.name = elem("#usernameInp").value
+   if(user.name.length){
+      joinGame();
+   }
 }
 
 function leaveGame() {
@@ -118,4 +135,9 @@ function getQuestions(amount = 10) {
          currGame = response.data.results
          
       })
+}
+
+
+function elem(selector, all = false){
+   return all ? document.querySelectorAll(selector) : document.querySelector(selector)
 }
