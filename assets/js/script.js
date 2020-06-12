@@ -18,6 +18,8 @@ var user = JSON.parse(localStorage.getItem("user")) || {
     ratio: 0 //(this.countGames == 0) ? 0 : ((this.win / this.countGames) * 100)
 }
 
+console.log(user)
+
 /**
  * LISTENERS
  */
@@ -35,7 +37,7 @@ window.onbeforeunload = leaveGame;
  * FUNCTIONS
  */
 
-init()
+init();
 
 
 function joinGame() {
@@ -72,7 +74,6 @@ function joinGame() {
     //     console.log("onclose")
     // }
 }
-
 
 function init() {
     if (!user.name.length || !user.name) {

@@ -16,7 +16,111 @@ COLORS:
    !ORANGE  RGB = rgb(255,148,0)
    !GRAY  HEX = #DBDBDB
    !GRAY  RGB = rgb(219,219,219)
-
-
 */
 
+body{
+   background-color: #1675CE;
+}
+
+button:focus, input:focus{
+   outline: none;
+}
+
+*{
+   /* border: 1px solid red; */
+   font-family: 'Source Sans Pro', sans-serif;
+}
+
+.main__container{
+   height: 100vh;
+}
+
+.login{
+   /* border: 1px solid red; */
+   width: 100vw;
+   height: 100vh;
+   max-height: 750px;
+}
+
+.login__title{
+   width: 360px;
+   height: 70%;
+}
+
+.title__span{
+   /* border: 1px solid red; */
+   width: 100%;
+   font-size: 56px;
+   color: white;
+   font-weight: 100;
+   line-height: 70px;
+}
+
+div .title__span:nth-child(2){
+   font-size: 120px;
+   font-weight: 900;
+}
+
+div .title__span:nth-child(2) span:nth-child(1){
+   color: #F9DE41;
+}
+div .title__span:nth-child(2) span:nth-child(2){
+   color: #F352AF;
+}
+div .title__span:nth-child(2) span:nth-child(3){
+   color: #20C868;
+}
+div .title__span:nth-child(2) span:nth-child(4){
+   color: #F52631;
+}
+
+.login__menu{
+   height: 30%;
+}
+
+.login__menu--username{
+   border: 1px solid white;
+   border-radius: 10px;
+   width: 300px;
+   background: none;
+   text-align: center;
+   color: white;
+   font-size: 24px;
+   font-weight: 200;
+}
+.login__menu--username::placeholder{
+   color: rgba(255, 255, 255, 0.5);
+}
+
+.login__menu--button{
+   width: 200px;
+   height: 50px;
+   background: #F9DE41;
+   border: none;
+   border-radius: 10px;
+   color: white;
+   font-size: 32px;
+   font-weight: 900;
+   transition: 0.3s ease;
+}
+.login__menu--button:hover{
+   transform: scale(1.03);
+   box-shadow: 0px 6px 5px rgba(0, 0, 0, 0.15);
+   transition: 0.3s ease;
+}
+.login__menu--button:active{
+   transform: scale(1);
+   box-shadow: none;
+   transition: 0.1s ease;
+}
+
+.confirm{
+   height: 40%;
+   max-height: 300px;
+   min-height: 200px;
+   width: 80%;
+   max-width: 500px;
+   background-color: white;
+   border-radius: 10px;
+   box-shadow: 0px 10px 10px rgba(0, 0, 0, 0.15);
+}
