@@ -267,6 +267,7 @@ div .title__span:nth-child(2) span:nth-child(4){
    width: 95%;
    max-width: 400px;
    height: 65px;
+   border: none;
    border-radius: 10px;
    background-color: #F9DE41;
    color: white;
@@ -278,6 +279,29 @@ div .title__span:nth-child(2) span:nth-child(4){
 @media (max-height: 668px){
    .profile__container__info--values{
       font-size: 15px;
+   }
+
+   .profile__container__info--graph{
+      height: 60px;
+      max-width: 250px;
+   }
+
+   .profile__container__info--graph > span {
+      font-size: 32px;
+   }
+}
+@media (max-height: 380px){
+   .profile__container__info{
+      flex-direction: row !important;
+   }
+
+   .profile__container__info--img{
+      height: 50px;
+      width: 50px;
+   }
+
+   .profile__container__info--values{
+      max-width: 120px;
    }
 
    .profile__container__info--graph{
@@ -304,4 +328,20 @@ div .title__span:nth-child(2) span:nth-child(4){
 .menu button{
    background: none;
    border: none;
+   height: 100%;
+   width: 70px;
+   transition: 0.2s ease;
+}
+.menu button:hover{
+   transform: scale(1.1);
+   transition: 0.2s ease;
+}
+
+.menu__icon{
+   fill: #1675CE;
+   transition: 0.1s ease;
+}
+.menu button:hover svg{
+   fill: #F9DE41;
+   transition: 0.1s ease;
 }
