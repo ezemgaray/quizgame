@@ -23,6 +23,9 @@ var user = JSON.parse(localStorage.getItem("user")) || {
  * LISTENERS
  */
 
+elem("#usernameInp").onkeyup = function(e){
+   if(e.keyCode == 13) saveUser()
+}
 elem("#usernameBtn").addEventListener("click", saveUser)
 
 document.querySelector("#buttonId").addEventListener("click", onSendChat)
@@ -105,9 +108,15 @@ function printMessage(user, message) {
    document.body.append(x);
 }
 
-function showLogin() {
-   console.log("si");
+function saveUser() {
+   user.name = elem("#usernameInp").value
+   if (user.name.length) {
+      showProfile()
+      joinGame();
+   }
+}
 
+function showLogin() {
    let register = elem("#login")
    let confirm = elem("#confirm")
    let profile = elem("#profile")
@@ -117,6 +126,8 @@ function showLogin() {
    confirm.classList.remove("d-flex")
    profile.classList.add("d-none")
    profile.classList.remove("d-flex")
+   elem("#usernameInp").focus()
+   
 }
 
 function showConfirmUser() {
@@ -144,13 +155,31 @@ function showProfile() {
    confirm.classList.remove("d-flex")
    profile.classList.remove("d-none")
    profile.classList.add("d-flex")
+   showProfileData()
 }
 
-function saveUser() {
-   user.name = elem("#usernameInp").value
-   if (user.name.length) {
-      showProfile()
-      joinGame();
+function showProfileData(){
+   elem("#profileUsername").innerText = user.name
+   elem("#profileLevel").innerText = user.win
+   elem("#profileId").innerText = user.id
+   elem("#profileGames").innerText = user.countGames
+   setTimeout(function(){
+      animaProfileRatio()
+      elem("#winGraph").style.height = "80%"
+      elem("#looseGraph").style.height = "55%"
+   }, 100)
+}
+
+function animaProfileRatio(){
+   let inter
+   let count = 0
+   if(!inter){
+      clearInterval(inter)
+      inter = setInterval(() => {
+         elem("#profileRatio").innerText = count + "%"
+         if(count >= user.ratio) clearInterval(inter)
+         else count++
+      }, 11);
    }
 }
 
