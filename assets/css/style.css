@@ -45,7 +45,8 @@ button:focus, input:focus{
 }
 
 .login__title{
-   width: 360px;
+   width: 90%;
+   max-width: 360px;
    height: 70%;
 }
 
