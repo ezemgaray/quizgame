@@ -278,3 +278,8 @@ div .title__span:nth-child(2) span:nth-child(4){
    border-radius: 10px 10px 0 0;
    background: white;
 }
+
+.menu button{
+   background: none;
+   border: none;
+}
