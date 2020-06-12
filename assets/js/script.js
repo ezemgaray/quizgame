@@ -195,7 +195,6 @@ function getQuestions(amount = 10) {
         .get("https://opentdb.com/api.php?amount=" + amount)
         .then(function (response) {
             currGame = response.data.results
-
         })
 }
 
