@@ -22,3 +22,41 @@ body{
    background-color: #1675CE;
 }
 
+button:focus, input:focus{
+   outline: none;
+}
+
+*{
+   /* border: 1px solid red; */
+   font-family: 'Source Sans Pro', sans-serif;
+}
+
+.login{
+   width: 100%;
+}
+
+.login__title{
+   width: 100%;
+}
+
+.title__span{
+   border: 1px solid red;
+   width: 100%;
+   font-size: 56px;
+   color: white;
+   font-weight: 100;
+   line-height: 70px;
+}
+
+div .title__span:nth-child(2){
+   font-size: 120px;
+   font-weight: 900;
+}
+
+.login__menu{
+   border: 1px solid red;
+}
+
+.login__menu--button{
+   
+}
