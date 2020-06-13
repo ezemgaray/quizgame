@@ -44,8 +44,19 @@ elem("#buttonId").addEventListener("click", onSendChat);
 window.onbeforeunload = leaveGame;
 
 elem("#imgImport").addEventListener("change", () => {
+    var info = elem("#imgImportInfo");
     var file = (elem("#imgImport").files[0]);
-    if (file.size > 40000) alert("File too big! Max size: 40kb");
+    console.log(file)
+    info.textContent = truncate(file.name, 25, false);
+    info.style = "color: #20C868"
+    if (file.size > 40000){
+        alert("File too big! Max size: 40kb");
+        info.textContent = truncate(file.name, 15, false) + " won't be uploaded";
+        info.style = "color: #F52631"
+        //Arreglar span con (...)
+        //Revisar ezequiel
+        //
+    }
 });
 
 
@@ -143,7 +154,7 @@ function saveUser() {
         var reader = new FileReader();
 
         reader.onloadend = function () {
-            (file.size < 40000) ? user.image = reader.result: user.image = `https://ssl.gstatic.com/docs/common/profile/${anonymousUser[Math.floor(Math.random() * (anonymousUser.length))]}_lg.png`; //elem("#imgImport").value = "";
+            (file.size < 40000) ? user.image = reader.result: user.image = `https://ssl.gstatic.com/docs/common/profile/${anonymousUser[Math.floor(Math.random() * (anonymousUser.length))]}_lg.png`;
         }
 
         if (file) {
@@ -158,7 +169,15 @@ function saveUser() {
     if (user.name.length) {
         joinGame();
     }
+}
 
+function truncate(str, n, useWordBoundary) {
+    if (str.length <= n) {
+        return str;
+    }
+
+    var subString = str.substr(0, n - 1);
+    return (useWordBoundary ? subString.substr(0, subString.lastIndexOf(" ")) : subString) + " (...)";
 }
 
 function showLogin() {
