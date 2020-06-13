@@ -22,9 +22,9 @@
                <button class="login__menu--button d-flex align-items-center justify-content-center" id="usernameBtn">REGISTER</button>
             </div>
          </div>
-         <div class="confirm d-none flex-column align-items-center justify-content-center" id="confirm">
+         <div class="confirm d-flex flex-column align-items-center justify-content-center" id="confirm">
             <div class="confirm__innner d-flex flex-column justify-content-between align-items-center">
-               <span class="confirm__inner--message">Continue as <span>"USERNAME"</span>?</span>
+               <span class="confirm__inner--message">Continue as <span id="name-confirm"></span>?</span>
                <div class="confirm__inner--buttons d-flex justify-content-between">
                   <button id="confirmN">NO</button>
                   <button id="confirmY">YES</button>
@@ -40,13 +40,13 @@
                         <div id="winGraph"></div>
                         <div id="looseGraph"></div>
                      </div>
-                     <span>63%</span>
+                     <span id="profileRatio"></span>
                   </div>
                   <div class="profile__container__info--values d-flex flex-column">
-                     <span class="d-flex justify-content-between"><span>Name</span><span id="profileUsername">Alex</span></span>
-                     <span class="d-flex justify-content-between"><span>Level</span><span id="profileLevel">34</span></span>
-                     <span class="d-flex justify-content-between"><span>Session ID</span><span id="profileId">3517</span></span>
-                     <span class="d-flex justify-content-between"><span>Total Games</span><span id="profileGames">65</span></span>
+                     <span class="d-flex justify-content-between"><span>Name</span><span id="profileUsername"></span></span>
+                     <span class="d-flex justify-content-between"><span>Level</span><span id="profileLevel"></span></span>
+                     <span class="d-flex justify-content-between"><span>Session ID</span><span id="profileId"></span></span>
+                     <span class="d-flex justify-content-between"><span>Total Games</span><span id="profileGames"></span></span>
                   </div>
                </div>
                <button class="profile__container--enter" id="enterGameBtn">Enter Game</button>
