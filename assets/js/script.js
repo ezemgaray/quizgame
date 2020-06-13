@@ -326,28 +326,32 @@ function showQuestion() {
 }
 
 function questionTime() {
-   let clock = document.createElement("div")
-   let bar = document.createElement("span")
-   clock.appendChild(bar)
-   elem("#confirm").appendChild(clock)
-   clock.style.cssText = "width: 100%; height: 10px"
-   bar.style.cssText = "display: inline-block; width: 100%; height: 100%; background-color: #20C868; transition: all 1s linear"
-
-   barW = bar.clientWidth
-   wPerSecond = barW / 30
-   let time
-   if (time) {
-      clearInterval(time)
+   let bar = elem(".seconds")
+   barW = bar.parentElement.clientWidth
+   wPerSecond = barW / 5 // Divido por la cantidad de segundo para responder
+   if (globalInterval) {
+      clearInterval(globalInterval)
    }
-   time = setInterval(() => {
+   let sec = 0
+   globalInterval = setInterval(() => {
       barW -= wPerSecond
-      bar.style.width = barW + "px"
-      if (barW <= 10) {
-         clearInterval(time)
+      if (barW < 0) bar.style.width = "0px"
+      else bar.style.width = barW + "px"
+      sec++
+      console.log(sec);
+
+      if (sec > 5) { // si pasa la cantidad de segundos cierra la pregunta
+         clearInterval(globalInterval)
+
+         elem("#question").classList.toggle("open")
+         setTimeout(function () {
+
+            bar.removeAttribute("style")
+            showQuestion()
+         }, 700)
       }
    }, 1000);
 }
-questionTime()
 
 function elem(selector, all = false) {
    return all ? document.querySelectorAll(selector) : document.querySelector(selector)
