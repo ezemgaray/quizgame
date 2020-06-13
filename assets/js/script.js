@@ -34,11 +34,12 @@ elem("#chatBtn").addEventListener("click", showChat)
 elem("#profileBtn").addEventListener("click", showProfile)
 elem("#rankingBtn").addEventListener("click", showRanking)
 elem("#chatSendBtn").addEventListener("click", onSendChat)
+elem("#enterGameBtn").addEventListener("click", showQuestions)
 elem("#chatInp").onkeyup = e => {
    if (e.keyCode == 13) onSendChat()
 }
+elem("#buttonId").addEventListener("click", onSendChat);
 
-document.querySelector("#buttonId").addEventListener("click", onSendChat);
 
 window.onbeforeunload = leaveGame;
 
