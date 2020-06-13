@@ -299,6 +299,32 @@ function showCountDown(e) {
    elem("#questions").removeEventListener("transitionend", showCountDown)
 }
 
+let questionCount = 0 // cuenta ascendente de preguntas, al cargar preguntas que manejar el contador por el length del array de preguntas
+function showQuestion() {
+   questionCount++
+   if (questionCount > 2) {
+      elem("#questions").classList.toggle("open")
+      elem("#question").remove()
+      recuento()
+      questionCount = 0
+      return
+   }
+
+   if (elem("#question")) elem("#question").remove()
+   elem("#questions").innerHTML = elem("#templateQuestion").innerHTML
+
+   //Adaptar posibles respuestas en base a la api de preguntas.
+   setTimeout(function () {
+      elem("#question").classList.toggle("open")
+      let buttons = elem(".answers button", true)
+      let transition = 0.9
+      for (btn of buttons) {
+         btn.style.animation = `appear ${transition += 0.2}s ease-in-out forwards`
+      }
+      questionTime()
+   }, 200)
+}
+
 function questionTime() {
    let clock = document.createElement("div")
    let bar = document.createElement("span")
