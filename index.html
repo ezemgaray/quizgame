@@ -19,7 +19,10 @@
             </div>
             <div class="login__menu d-flex flex-column align-items-center justify-content-center mb-2">
                <!-- <form id="form"> -->
-                  <!-- <label for="imgImport" class="login__menu--importPic">Choose your </label> -->
+                  <div class="mb-2 d-flex flex-column align-items-center">
+                     <label for="imgImport" class="login__menu--importPic">Upload your picture</label>
+                     <span id="imgImportInfo" class=""></span>
+                  </div>
                   <input type="file" name="importProfilPic" accept="image/png, image/jpeg" id="imgImport">
                <!-- </form> -->
                <input type="text" class="login__menu--username mb-4" id="usernameInp" maxlength="15" placeholder="YOUR NAME">
@@ -140,16 +143,9 @@
                <div class="logout"></div>
             </div> -->
          </div>
+         <!-- CHAT SECTION -->
          <div class="chat p-2 d-flex flex-column justify-content-center" id="chat">
             <div class="chat__box">
-               <div class="msg received mb-2 p-1 d-flex justify-content-around">
-                  <div class="msg__user"></div>
-                  <div class="msg__content p-1">mensaje Lorem ipsum dolor sit amet consectetur adipisicing elit. Consequuntur corporis iste assumenda et itaque sunt temporibus iusto deserunt eos distinctio?</div>
-               </div>
-               <div class="msg sent mb-2 p-1 d-flex justify-content-around">
-                  <div class="msg__user"></div>
-                  <div class="msg__content p-1">mensaje Lorem ipsum, dolor sit amet consectetur adipisicing elit. Voluptas accusantium eligendi impedit explicabo id sequi officiis ratione omnis, consequatur voluptatibus?</div>
-               </div>
             </div>
             <div class="chat__form d-flex justify-content-around">
                <input type="text" class="chat__form--message mb-4" id="chatInp" placeholder="YOUR MESSAGE">
@@ -196,6 +192,9 @@
 
             </div>
          </div>
+         <!-- questions section -->
+         <div class="questions p-2 d-flex flex-column justify-content-center" id="questions">
+         </div>
       </div>
    </main>
 
@@ -218,5 +217,26 @@
    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js" integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous"></script>
    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
    <script src="assets/js/script.js"></script>
+
+   <template id="templateQuestion">
+      <div class="question__container" id="question">
+         <div class="question p-4 d-flex flex-column justify-content-center">
+            <div class="time">
+               <span class="seconds"></span>
+            </div>
+            <div class="paper">
+               <h2>I am a question</h2>
+            </div>
+         </div>
+         <div class="answers p-3 d-flex flex-column justify-content-center">
+            <button class="question__btn btn-grad" id="chatSendBtn">Lorem ipsum dolor sit amet.</button>
+            <button class="question__btn" id="chatSendBtn">Lorem ipsum dolor sit amet consectetur adipisicing
+               elit. Ratione, reprehenderit!</button>
+            <button class="question__btn" id="chatSendBtn">Lorem ipsum dolor sit amet consectetur adipisicing
+               elit. Neque aspernatur aperiam qui, distinctio quas placeat!</button>
+            <button class="question__btn" id="chatSendBtn">Hola SEND</button>
+         </div>
+   </template>
+
 </body>
 </html>

@@ -6,6 +6,7 @@
 var ws;
 var users = [];
 var currGame
+var globalInterval
 var user = JSON.parse(localStorage.getItem("user")) || {
     id: "",
     name: "",
@@ -33,17 +34,26 @@ elem("#chatBtn").addEventListener("click", showChat)
 elem("#profileBtn").addEventListener("click", showProfile)
 elem("#rankingBtn").addEventListener("click", showRanking)
 elem("#chatSendBtn").addEventListener("click", onSendChat)
+elem("#enterGameBtn").addEventListener("click", showQuestions)
 elem("#chatInp").onkeyup = e => {
     if (e.keyCode == 13) onSendChat()
 }
+elem("#buttonId").addEventListener("click", onSendChat);
 
-document.querySelector("#buttonId").addEventListener("click", onSendChat);
 
 window.onbeforeunload = leaveGame;
 
 elem("#imgImport").addEventListener("change", () => {
+    var info = elem("#imgImportInfo");
     var file = (elem("#imgImport").files[0]);
-    if (file.size > 40000) alert("File too big! Max size: 40kb");
+    console.log(file)
+    info.textContent = truncate(file.name, 25, false);
+    info.style = "color: #20C868"
+    if (file.size > 40000){
+        alert("File too big! Max size: 40kb");
+        info.textContent = truncate(file.name, 15, false) + " won't be uploaded";
+        info.style = "color: #F52631"
+    }
 });
 
 
@@ -141,7 +151,7 @@ function saveUser() {
         var reader = new FileReader();
 
         reader.onloadend = function () {
-            (file.size < 40000) ? user.image = reader.result : user.image = `https://ssl.gstatic.com/docs/common/profile/${anonymousUser[Math.floor(Math.random() * (anonymousUser.length))]}_lg.png`;//elem("#imgImport").value = "";
+            (file.size < 40000) ? user.image = reader.result: user.image = `https://ssl.gstatic.com/docs/common/profile/${anonymousUser[Math.floor(Math.random() * (anonymousUser.length))]}_lg.png`;
         }
 
         if (file) {
@@ -149,14 +159,22 @@ function saveUser() {
         } else {
             user.image = "";
         }
-    }else{
+    } else {
         user.image = `https://ssl.gstatic.com/docs/common/profile/${anonymousUser[Math.floor(Math.random() * (anonymousUser.length))]}_lg.png`
     }
 
     if (user.name.length) {
         joinGame();
     }
+}
 
+function truncate(str, n, useWordBoundary) {
+    if (str.length <= n) {
+        return str;
+    }
+
+    var subString = str.substr(0, n - 1);
+    return (useWordBoundary ? subString.substr(0, subString.lastIndexOf(" ")) : subString) + " (...)";
 }
 
 function showLogin() {
@@ -233,16 +251,15 @@ function showRanking() {
 }
 
 function animaProfileRatio() {
-    let inter
     let count = 0
-    if (!inter) {
-        clearInterval(inter)
-        inter = setInterval(() => {
-            elem("#profileRatio").innerText = count + "%"
-            if (count >= user.ratio) clearInterval(inter)
-            else count++
-        }, 11);
+    if (globalInterval) {
+        clearInterval(globalInterval)
     }
+    globalInterval = setInterval(() => {
+        elem("#profileRatio").innerText = count + "%"
+        if (count >= user.ratio) clearInterval(globalInterval)
+        else count++
+    }, 11);
 }
 
 function onSendChat() {
@@ -258,148 +275,108 @@ function leaveGame() {
     ws.close();
 }
 
-function getQuestions(amount = 10) {
+function getQuestions(amount = 5) {
     axios
-        .get("https://opentdb.com/api.php?amount=" + amount)
+        .get("https://opentdb.com/api.php?difficulty=easy&amount=" + amount)
         .then(function (response) {
             currGame = response.data.results
         })
 }
 
-function questionTime() {
-    let clock = document.createElement("div")
-    let bar = document.createElement("span")
-    clock.appendChild(bar)
-    elem("#confirm").appendChild(clock)
-    clock.style.cssText = "width: 100%; height: 10px"
-    bar.style.cssText = "display: inline-block; width: 100%; height: 100%; background-color: #20C868; transition: all 1s linear"
+function showQuestions() {
+    elem("#questions").classList.toggle("open")
+    let quest = elem("#questions")
+    quest.addEventListener("transitionend", showCountDown)
+}
 
-    barW = bar.clientWidth
-    wPerSecond = barW / 30
-    let time
-    if (time) {
-        clearInterval(time)
+function showCountDown(e) {
+    let countDown = document.createElement("div")
+    countDown.className = "countdown"
+    let countNumber = document.createElement("span")
+    countNumber.className = "countdown__number"
+    countNumber.id = "countdownNumber"
+    countDown.append(countNumber)
+    elem("#questions").append(countDown)
+
+    if (globalInterval) {
+        clearInterval(globalInterval)
     }
-    time = setInterval(() => {
+    let down = 3
+    elem("#countdownNumber").innerText = down
+    elem("#countdownNumber").dataset.color = down
+    globalInterval = setInterval(() => {
+        down -= 1
+        elem("#countdownNumber").innerText = down
+        elem("#countdownNumber").dataset.color = down
+        if (!down) {
+            clearInterval(globalInterval)
+            countDown.remove()
+            showQuestion()
+        }
+    }, 1000);
+    elem("#questions").removeEventListener("transitionend", showCountDown)
+}
+
+let questionCount = 0 // cuenta ascendente de preguntas, al cargar preguntas que manejar el contador por el length del array de preguntas
+function showQuestion() {
+    questionCount++
+    if (questionCount > 2) {
+        elem("#questions").classList.toggle("open")
+        elem("#question").remove()
+        recuento()
+        questionCount = 0
+        return
+    }
+
+    if (elem("#question")) elem("#question").remove()
+    elem("#questions").innerHTML = elem("#templateQuestion").innerHTML
+
+    //Adaptar posibles respuestas en base a la api de preguntas.
+    setTimeout(function () {
+        elem("#question").classList.toggle("open")
+        let buttons = elem(".answers button", true)
+        let transition = 0.9
+        for (btn of buttons) {
+            btn.style.animation = `appear ${transition += 0.2}s ease-in-out forwards`
+        }
+        questionTime()
+    }, 200)
+}
+
+function questionTime() {
+    let bar = elem(".seconds")
+    barW = bar.parentElement.clientWidth
+    wPerSecond = barW / 5 // Divido por la cantidad de segundo para responder
+    if (globalInterval) {
+        clearInterval(globalInterval)
+    }
+    let sec = 0
+    globalInterval = setInterval(() => {
         barW -= wPerSecond
-        bar.style.width = barW + "px"
-        if (barW <= 10) {
-            clearInterval(time)
+        if (barW < 0) bar.style.width = "0px"
+        else bar.style.width = barW + "px"
+        sec++
+
+        if (sec > 5) { // si pasa la cantidad de segundos cierra la pregunta
+            clearInterval(globalInterval)
+
+            elem("#question").classList.toggle("open")
+            setTimeout(function () {
+
+                bar.removeAttribute("style")
+                showQuestion()
+            }, 700)
         }
     }, 1000);
 }
-questionTime()
+
+// simulando la seccion al terminar la partida - definir seccion
+function recuento() {
+    setTimeout(() => {
+        alert("estoy en recuento")
+    }, 700);
+}
 
 function elem(selector, all = false) {
     return all ? document.querySelectorAll(selector) : document.querySelector(selector)
 }
-
-// ! ----------------- RESIZING FUNCTIONALITY ------------------- ! \\
-/*
-var fileinput = document.getElementById('imgImport');
-
-var max_width = fileinput.getAttribute('data-maxwidth');
-var max_height = fileinput.getAttribute('data-maxheight');
-
-var preview = document.getElementById('preview');
-
-var form = document.getElementById('form');
-
-function processfile(file) {
-
-    if (!(/image/i).test(file.type)) {
-        alert("File " + file.name + " is not an image.");
-        return false;
-    }
-    // read the files
-    var reader = new FileReader();
-    // reader.readAsArrayBuffer(file);
-    reader.readAsDataURL(file);
-
-    reader.onload = function (event) {
-        // blob stuff
-        var blob = new Blob([event.target.result]); // create blob...
-        window.URL = window.URL || window.webkitURL;
-        var blobURL = window.URL.createObjectURL(blob); // and get it's URL
-        // helper Image object
-        var image = new Image();
-        // image.src = blobURL;
-        // image.src = event.target.result;
-        image.src = reader.result;
-        //preview.appendChild(image); // preview commented out, I am using the canvas instead
-        image.onload = function () {
-            // have to wait till it's loaded
-            var resized = resizeMe(image); // send it to canvas
-            var newinput = document.createElement("input");
-            newinput.type = 'hidden';
-            newinput.id = "resizedProfilePic"
-            newinput.name = 'images[]';
-            newinput.value = resized; // put result from canvas into new hidden input
-            form.appendChild(newinput);
-        }
-    };
-}
-
-function readfiles(files) {
-
-    // remove the existing canvases and hidden inputs if user re-selects new pics
-    var existinginputs = document.getElementsByName('images[]');
-    var existingcanvases = document.getElementsByTagName('canvas');
-    while (existinginputs.length > 0) { // it's a live list so removing the first element each time
-        // DOMNode.prototype.remove = function() {this.parentNode.removeChild(this);}
-        form.removeChild(existinginputs[0]);
-        preview.removeChild(existingcanvases[0]);
-    }
-
-    for (var i = 0; i < files.length; i++) {
-        processfile(files[i]); // process each file at once
-    }
-    //fileinput.value = ""; //remove the original files from fileinput
-    // TODO remove the previous hidden inputs if user selects other files
-}
-
-// this is where it starts. event triggered when user selects files
-fileinput.onchange = function () {
-    if (!(window.File && window.FileReader && window.FileList && window.Blob)) {
-        alert('The File APIs are not fully supported in this browser.');
-        return false;
-    }
-    readfiles(fileinput.files);
-}
-
-// === RESIZE ====
-
-function resizeMe(img) {
-
-    var canvas = document.createElement('canvas');
-
-    var width = img.width;
-    var height = img.height;
-
-    // calculate the width and height, constraining the proportions
-    if (width > height) {
-        if (width > max_width) {
-            //height *= max_width / width;
-            height = Math.round(height *= max_width / width);
-            width = max_width;
-        }
-    } else {
-        if (height > max_height) {
-            //width *= max_height / height;
-            width = Math.round(width *= max_height / height);
-            height = max_height;
-        }
-    }
-
-    // resize the canvas and draw the image data into it
-    canvas.width = width;
-    canvas.height = height;
-    var ctx = canvas.getContext("2d");
-    ctx.drawImage(img, 0, 0, width, height);
-    preview.appendChild(canvas); // do the actual resized preview
-
-    return canvas.toDataURL("image/jpeg", 0.7); // get the data from canvas as 70% JPG (can be also PNG, etc.)
-
-}
-
-*/
