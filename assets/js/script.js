@@ -27,6 +27,8 @@ elem("#usernameInp").onkeyup = function (e) {
     if (e.keyCode == 13) saveUser()
 }
 elem("#usernameBtn").addEventListener("click", saveUser)
+elem("#chatBtn").addEventListener("click", showChat)
+elem("#profileBtn").addEventListener("click", showProfile)
 
 document.querySelector("#buttonId").addEventListener("click", onSendChat)
 
@@ -164,6 +166,13 @@ function showProfileData() {
         elem("#winGraph").style.height = "80%"
         elem("#looseGraph").style.height = "55%"
     }, 100)
+}
+
+function showChat(){
+    elem("#profile").classList.remove("d-flex");
+    elem("#profile").classList.add("d-none");
+    elem("#chat").classList.add("d-flex");
+    elem("#chat").classList.remove("d-none");
 }
 
 function animaProfileRatio() {
