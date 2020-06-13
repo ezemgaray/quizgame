@@ -353,6 +353,13 @@ function questionTime() {
    }, 1000);
 }
 
+// simulando la seccion al terminar la partida - definir seccion
+function recuento() {
+   setTimeout(() => {
+      alert("estoy en recuento")
+   }, 700);
+}
+
 function elem(selector, all = false) {
    return all ? document.querySelectorAll(selector) : document.querySelector(selector)
 }
