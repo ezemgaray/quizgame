@@ -198,27 +198,27 @@ function getQuestions(amount = 10) {
         })
 }
 
-function questionTime(){
-   let clock = document.createElement("div")
-   let bar = document.createElement("span")
-   clock.appendChild(bar)
-   elem("#confirm").appendChild(clock)
-   clock.style.cssText="width: 100%; height: 10px"
-   bar.style.cssText = "display: inline-block; width: 100%; height: 100%; background-color: #20C868; transition: all 1s linear"
+function questionTime() {
+    let clock = document.createElement("div")
+    let bar = document.createElement("span")
+    clock.appendChild(bar)
+    elem("#confirm").appendChild(clock)
+    clock.style.cssText = "width: 100%; height: 10px"
+    bar.style.cssText = "display: inline-block; width: 100%; height: 100%; background-color: #20C868; transition: all 1s linear"
 
-   barW = bar.clientWidth
-   wPerSecond = barW / 30
-   let time
-   if(time){
-      clearInterval(time)
-   }
-   time = setInterval(() => {
-      barW -= wPerSecond
-      bar.style.width = barW + "px"
-      if(barW <= 10) {
-         clearInterval(time)
-      }
-   }, 1000);
+    barW = bar.clientWidth
+    wPerSecond = barW / 30
+    let time
+    if (time) {
+        clearInterval(time)
+    }
+    time = setInterval(() => {
+        barW -= wPerSecond
+        bar.style.width = barW + "px"
+        if (barW <= 10) {
+            clearInterval(time)
+        }
+    }, 1000);
 }
 questionTime()
 
