@@ -327,8 +327,6 @@ div .title__span:nth-child(2) span:nth-child(4) {
 .menu button:hover {
    transform: scale(1.1);
    transition: 0.2s ease;
-   /* background-image: url(assets/img/);
-   background-size: contain; */
 }
 
 .menu__icon {
