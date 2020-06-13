@@ -31,6 +31,9 @@ elem("#chatBtn").addEventListener("click", showChat)
 elem("#profileBtn").addEventListener("click", showProfile)
 elem("#rankingBtn").addEventListener("click", showRanking)
 elem("#chatSendBtn").addEventListener("click", onSendChat)
+elem("#chatSendBtn").onkeyup = e=>{
+    if (e.keyCode == 13) onSendChat()
+}
 
 document.querySelector("#buttonId").addEventListener("click", onSendChat)
 
