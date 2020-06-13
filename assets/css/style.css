@@ -33,6 +33,7 @@ button:focus, input:focus{
 
 .main__container{
    height: 100vh;
+   width: 100vw;
 }
 
 /*? ========= LOGIN SCREEN ========= ?*/
@@ -128,6 +129,7 @@ div .title__span:nth-child(2) span:nth-child(4){
    background-color: white;
    border-radius: 10px;
    box-shadow: 0px 10px 10px rgba(0, 0, 0, 0.15);
+   flex-grow: 1;
 }
 
 .confirm__innner{
@@ -182,8 +184,9 @@ div .title__span:nth-child(2) span:nth-child(4){
 /*? ========= PROFILE DISPLAY ========== ?*/
 
 .profile{
-   height: 100%;
+   height: 90%;
    width: 100vw;
+   flex-grow: 1;
 }
 
 .profile__container{
@@ -200,6 +203,7 @@ div .title__span:nth-child(2) span:nth-child(4){
    max-width: 400px;
    background-color: white;
    border-radius: 15px;
+   box-shadow: 0px 10px 10px rgba(0, 0, 0, 0.15);
 }
 
 .profile__container__info--img{
@@ -268,10 +272,81 @@ div .title__span:nth-child(2) span:nth-child(4){
    width: 95%;
    max-width: 400px;
    height: 65px;
+   border: none;
    border-radius: 10px;
    background-color: #F9DE41;
    color: white;
    font-weight: 700;
-   font-size: 40px;
+   font-size: 32px;
    transition: 0.3s ease;
+}
+
+@media (max-height: 668px){
+   .profile__container__info--values{
+      font-size: 15px;
+   }
+
+   .profile__container__info--graph{
+      height: 60px;
+      max-width: 250px;
+   }
+
+   .profile__container__info--graph > span {
+      font-size: 32px;
+   }
+}
+@media (max-height: 380px){
+   .profile__container__info{
+      flex-direction: row !important;
+   }
+
+   .profile__container__info--img{
+      height: 50px;
+      width: 50px;
+   }
+
+   .profile__container__info--values{
+      max-width: 120px;
+   }
+
+   .profile__container__info--graph{
+      height: 60px;
+      max-width: 250px;
+   }
+
+   .profile__container__info--graph > span {
+      font-size: 32px;
+   }
+}
+
+/*? ======== MENU ======== ?*/
+
+.menu{
+   height: 10%;
+   max-height: 55px;
+   width: 100%;
+   border-radius: 10px 10px 0 0;
+   background: white;
+   /* position: absolute; */
+}
+
+.menu button{
+   background: none;
+   border: none;
+   height: 100%;
+   width: 70px;
+   transition: 0.2s ease;
+}
+.menu button:hover{
+   transform: scale(1.1);
+   transition: 0.2s ease;
+}
+
+.menu__icon{
+   fill: #1675CE;
+   transition: 0.1s ease;
+}
+.menu button:hover svg{
+   fill: #F9DE41;
+   transition: 0.1s ease;
 }
