@@ -29,6 +29,7 @@ elem("#usernameInp").onkeyup = function (e) {
 elem("#usernameBtn").addEventListener("click", saveUser)
 elem("#chatBtn").addEventListener("click", showChat)
 elem("#profileBtn").addEventListener("click", showProfile)
+elem("#rankingBtn").addEventListener("click", showRanking)
 
 document.querySelector("#buttonId").addEventListener("click", onSendChat)
 
@@ -169,10 +170,10 @@ function showProfileData() {
 }
 
 function showChat(){
-    elem("#profile").classList.remove("d-flex");
-    elem("#profile").classList.add("d-none");
-    elem("#chat").classList.add("d-flex");
-    elem("#chat").classList.remove("d-none");
+    elem("#chat").classList.toggle("open");
+}
+function showRanking(){
+    elem("#ranking").classList.toggle("open");
 }
 
 function animaProfileRatio() {
