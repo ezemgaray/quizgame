@@ -30,6 +30,7 @@ elem("#usernameBtn").addEventListener("click", saveUser)
 elem("#chatBtn").addEventListener("click", showChat)
 elem("#profileBtn").addEventListener("click", showProfile)
 elem("#rankingBtn").addEventListener("click", showRanking)
+elem("#chatBtn").addEventListener("click", onSendChat)
 
 document.querySelector("#buttonId").addEventListener("click", onSendChat)
 
@@ -170,10 +171,12 @@ function showProfileData() {
 }
 
 function showChat(){
-    elem("#chat").classList.toggle("open");
+    elem("#chat").classList.add("open");
+    elem("#ranking").classList.remove("open");
 }
 function showRanking(){
-    elem("#ranking").classList.toggle("open");
+    elem("#ranking").classList.add("open");
+    elem("#chat").classList.remove("open");
 }
 
 function animaProfileRatio() {
@@ -190,7 +193,7 @@ function animaProfileRatio() {
 }
 
 function onSendChat() {
-    ws.send(`{"to":"quizGame", "user":${JSON.stringify(user)}, "content":"${document.querySelector("#Mensaje").value}", "type":"messageU"}`);
+    ws.send(`{"to":"quizGame", "user":${JSON.stringify(user)}, "content":"${elem("#chatInp").value}", "type":"messageU"}`);
 }
 
 function leaveGame() {
