@@ -19,6 +19,8 @@ var user = JSON.parse(localStorage.getItem("user")) || {
     ratio: 0 //(this.countGames == 0) ? 0 : ((this.win / this.countGames) * 100)
 }
 
+var anonymousUser = ["quagga", "kiwi", "nyancat", "dragon", "anteater", "blobfish", "chupacabra", "bat", "ifrit", "kraken", "manatee", "ferret", "llama", "koala", "platypus", "wombat", "iguana", "mink", "narwhal", "liger"];
+
 /**
  * LISTENERS
  */
@@ -35,9 +37,14 @@ elem("#chatInp").onkeyup = e => {
     if (e.keyCode == 13) onSendChat()
 }
 
-document.querySelector("#buttonId").addEventListener("click", onSendChat)
+document.querySelector("#buttonId").addEventListener("click", onSendChat);
 
 window.onbeforeunload = leaveGame;
+
+elem("#imgImport").addEventListener("change", () => {
+    var file = (elem("#imgImport").files[0]);
+    if (file.size > 40000) alert("File too big! Max size: 40kb");
+});
 
 
 /**
@@ -127,22 +134,26 @@ function printMessage(userData, message) {
 
 function saveUser() {
     user.name = elem("#usernameInp").value
-    var file = (elem("#imgImport").files[0]);
-    var reader = new FileReader();
 
-    // var toCompress = new Image();
-    reader.onloadend = function () {
-        // preview.src = reader.result;
-        user.image = reader.result;
+    if (elem("#imgImport").value.length) {
+
+        var file = (elem("#imgImport").files[0]);
+        var reader = new FileReader();
+
+        reader.onloadend = function () {
+            (file.size < 40000) ? user.image = reader.result : user.image = `https://ssl.gstatic.com/docs/common/profile/${anonymousUser[Math.floor(Math.random() * (anonymousUser.length))]}_lg.png`;//elem("#imgImport").value = "";
+        }
+
+        if (file) {
+            reader.readAsDataURL(file);
+        } else {
+            user.image = "";
+        }
+    }else{
+        user.image = `https://ssl.gstatic.com/docs/common/profile/${anonymousUser[Math.floor(Math.random() * (anonymousUser.length))]}_lg.png`
     }
 
-    if (file) {
-        reader.readAsDataURL(file);
-    } else {
-        user.image = "";
-    }
-
-    if (user.name.length && file.size < 40000) {
+    if (user.name.length) {
         joinGame();
     }
 
@@ -282,3 +293,113 @@ questionTime()
 function elem(selector, all = false) {
     return all ? document.querySelectorAll(selector) : document.querySelector(selector)
 }
+
+// ! ----------------- RESIZING FUNCTIONALITY ------------------- ! \\
+/*
+var fileinput = document.getElementById('imgImport');
+
+var max_width = fileinput.getAttribute('data-maxwidth');
+var max_height = fileinput.getAttribute('data-maxheight');
+
+var preview = document.getElementById('preview');
+
+var form = document.getElementById('form');
+
+function processfile(file) {
+
+    if (!(/image/i).test(file.type)) {
+        alert("File " + file.name + " is not an image.");
+        return false;
+    }
+    // read the files
+    var reader = new FileReader();
+    // reader.readAsArrayBuffer(file);
+    reader.readAsDataURL(file);
+
+    reader.onload = function (event) {
+        // blob stuff
+        var blob = new Blob([event.target.result]); // create blob...
+        window.URL = window.URL || window.webkitURL;
+        var blobURL = window.URL.createObjectURL(blob); // and get it's URL
+        // helper Image object
+        var image = new Image();
+        // image.src = blobURL;
+        // image.src = event.target.result;
+        image.src = reader.result;
+        //preview.appendChild(image); // preview commented out, I am using the canvas instead
+        image.onload = function () {
+            // have to wait till it's loaded
+            var resized = resizeMe(image); // send it to canvas
+            var newinput = document.createElement("input");
+            newinput.type = 'hidden';
+            newinput.id = "resizedProfilePic"
+            newinput.name = 'images[]';
+            newinput.value = resized; // put result from canvas into new hidden input
+            form.appendChild(newinput);
+        }
+    };
+}
+
+function readfiles(files) {
+
+    // remove the existing canvases and hidden inputs if user re-selects new pics
+    var existinginputs = document.getElementsByName('images[]');
+    var existingcanvases = document.getElementsByTagName('canvas');
+    while (existinginputs.length > 0) { // it's a live list so removing the first element each time
+        // DOMNode.prototype.remove = function() {this.parentNode.removeChild(this);}
+        form.removeChild(existinginputs[0]);
+        preview.removeChild(existingcanvases[0]);
+    }
+
+    for (var i = 0; i < files.length; i++) {
+        processfile(files[i]); // process each file at once
+    }
+    //fileinput.value = ""; //remove the original files from fileinput
+    // TODO remove the previous hidden inputs if user selects other files
+}
+
+// this is where it starts. event triggered when user selects files
+fileinput.onchange = function () {
+    if (!(window.File && window.FileReader && window.FileList && window.Blob)) {
+        alert('The File APIs are not fully supported in this browser.');
+        return false;
+    }
+    readfiles(fileinput.files);
+}
+
+// === RESIZE ====
+
+function resizeMe(img) {
+
+    var canvas = document.createElement('canvas');
+
+    var width = img.width;
+    var height = img.height;
+
+    // calculate the width and height, constraining the proportions
+    if (width > height) {
+        if (width > max_width) {
+            //height *= max_width / width;
+            height = Math.round(height *= max_width / width);
+            width = max_width;
+        }
+    } else {
+        if (height > max_height) {
+            //width *= max_height / height;
+            width = Math.round(width *= max_height / height);
+            height = max_height;
+        }
+    }
+
+    // resize the canvas and draw the image data into it
+    canvas.width = width;
+    canvas.height = height;
+    var ctx = canvas.getContext("2d");
+    ctx.drawImage(img, 0, 0, width, height);
+    preview.appendChild(canvas); // do the actual resized preview
+
+    return canvas.toDataURL("image/jpeg", 0.7); // get the data from canvas as 70% JPG (can be also PNG, etc.)
+
+}
+
+*/
