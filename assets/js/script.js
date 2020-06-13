@@ -1,9 +1,9 @@
-var ws;
 // var user = {
-//     id: "",
-//     name: "",
-
-// }
+   //     id: "",
+   //     name: "",
+   
+   // }
+var ws;
 var users = [];
 var currGame
 var user = JSON.parse(localStorage.getItem("user")) || {
@@ -142,7 +142,7 @@ function showConfirmUser() {
     profile.classList.add("d-none")
     profile.classList.remove("d-flex")
     elem("#confirmN").onclick = showLogin
-    elem("#confirmY").onclick = showProfile
+    elem("#confirmY").onclick = joinGame
 }
 
 function showProfile() {
