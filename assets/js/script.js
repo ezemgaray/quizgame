@@ -173,12 +173,16 @@ function showProfileData() {
 }
 
 function showChat(){
-    elem("#chat").classList.toggle("open");
+   setTimeout(() => {
+      elem("#chat").classList.toggle("open");
+   }, 200);
     elem("#ranking").classList.remove("open");
 }
 function showRanking(){
-    elem("#ranking").classList.toggle("open");
-    elem("#chat").classList.remove("open");
+   setTimeout(() => {
+      elem("#ranking").classList.toggle("open");
+   }, 200);
+   elem("#chat").classList.remove("open");
 }
 
 function animaProfileRatio() {
