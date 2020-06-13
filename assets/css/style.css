@@ -552,6 +552,15 @@ div .title__span:nth-child(2) span:nth-child(4) {
    animation: countdown 1s ease-in-out infinite;
    -webkit-animation: countdown 1s ease-in-out infinite;
 }
+[data-color="3"]{
+   color: rgb(245,38,49);
+}
+[data-color="2"]{
+   color: rgb(249,222,65);
+}
+[data-color="1"]{
+   color: rgb(32,200,104);
+}
 
 .question__container{
    position: absolute;

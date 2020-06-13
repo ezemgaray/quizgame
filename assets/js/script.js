@@ -259,9 +259,9 @@ function leaveGame() {
    ws.close();
 }
 
-function getQuestions(amount = 10) {
+function getQuestions(amount = 5) {
    axios
-      .get("https://opentdb.com/api.php?amount=" + amount)
+      .get("https://opentdb.com/api.php?difficulty=easy&amount=" + amount)
       .then(function (response) {
          currGame = response.data.results
       })
@@ -287,10 +287,11 @@ function showCountDown(e) {
    }
    let down = 3
    elem("#countdownNumber").innerText = down
+   elem("#countdownNumber").dataset.color = down
    globalInterval = setInterval(() => {
       down -= 1
       elem("#countdownNumber").innerText = down
-      console.log()
+      elem("#countdownNumber").dataset.color = down
       if (!down) {
          clearInterval(globalInterval)
          countDown.remove()
@@ -339,7 +340,6 @@ function questionTime() {
       if (barW < 0) bar.style.width = "0px"
       else bar.style.width = barW + "px"
       sec++
-      console.log(sec);
 
       if (sec > 5) { // si pasa la cantidad de segundos cierra la pregunta
          clearInterval(globalInterval)
