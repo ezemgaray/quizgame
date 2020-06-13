@@ -104,9 +104,20 @@ function printUsers(userData) {
 }
 
 function printMessage(user, message) {
-    var x = document.createElement("p");
-    x.textContent = user.name + ": " + message;
-    document.body.append(x);
+    var msg = document.createElement("div");
+    var msgUser = document.createElement("div");
+    var msgContent = document.createElement("div");
+
+    msg.classList.add("msg", "mb-2", "p-1", "d-flex", "justify-content-around");
+    (user === user.name) ? msg.classList.add("send") : msg.classList.add("received");
+    msgUser.classList.add("msg__user");
+    msgContent.classList.add("msg__content", "p1");
+
+    msgContent.textContent = message;
+
+    msg.append(msgUser);
+    msg.append(msgContent);
+    elem(".chat__box").append(msg);
 }
 
 function saveUser() {
@@ -127,7 +138,6 @@ function showLogin() {
     profile.classList.add("d-none")
     profile.classList.remove("d-flex")
     elem("#usernameInp").focus()
-
 }
 
 function showConfirmUser() {
@@ -200,8 +210,8 @@ function animaProfileRatio() {
 }
 
 function onSendChat() {
-    console.log(ws)
     ws.send(`{"to":"quizGame", "user":${JSON.stringify(user)}, "content":"${elem("#chatInp").value}", "type":"messageU"}`);
+    elem("#chatInp").value = "";
 }
 
 function leaveGame() {
