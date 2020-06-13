@@ -266,6 +266,12 @@ function getQuestions(amount = 10) {
       })
 }
 
+function showQuestions() {
+   elem("#questions").classList.toggle("open")
+   let quest = elem("#questions")
+   quest.addEventListener("transitionend", showCountDown)
+}
+
 function questionTime() {
    let clock = document.createElement("div")
    let bar = document.createElement("span")
