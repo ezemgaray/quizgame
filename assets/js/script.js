@@ -45,11 +45,15 @@ elem("#imgImport").addEventListener("change", () => {
     var info = elem("#imgImportInfo");
     var file = (elem("#imgImport").files[0]);
     console.log(file)
-    info.textContent = file.name;
+    info.textContent = truncate(file.name, 25, false);
+    info.style = "color: #20C868"
     if (file.size > 40000){
         alert("File too big! Max size: 40kb");
-        info.textContent = file.name + "will not charge";
-        
+        info.textContent = truncate(file.name, 15, false) + " won't be uploaded";
+        info.style = "color: #F52631"
+        //Arreglar span con (...)
+        //Revisar ezequiel
+        //
     }
 });
 
@@ -299,6 +303,15 @@ questionTime()
 
 function elem(selector, all = false) {
     return all ? document.querySelectorAll(selector) : document.querySelector(selector)
+}
+
+function truncate(str, n, useWordBoundary) {
+    if (str.length <= n) {
+        return str;
+    }
+
+    var subString = str.substr(0, n - 1);
+    return (useWordBoundary ? subString.substr(0, subString.lastIndexOf(" ")) : subString) + " (...)";
 }
 
 // ! ----------------- RESIZING FUNCTIONALITY ------------------- ! \\
