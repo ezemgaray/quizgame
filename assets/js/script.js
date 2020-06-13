@@ -19,7 +19,7 @@ var user = JSON.parse(localStorage.getItem("user")) || {
     ratio: 0 //(this.countGames == 0) ? 0 : ((this.win / this.countGames) * 100)
 }
 
-var anonymousUser = ["quagga", "kiwi", "nyancat", "dragon", "anteater", "blobfish", "chupacabra", "bat", "ifrit"];
+var anonymousUser = ["quagga", "kiwi", "nyancat", "dragon", "anteater", "blobfish", "chupacabra", "bat", "ifrit", "kraken", "manatee", "ferret", "llama", "koala", "platypus", "wombat", "iguana", "mink", "narwhal", "liger"];
 
 /**
  * LISTENERS
@@ -37,9 +37,14 @@ elem("#chatInp").onkeyup = e => {
     if (e.keyCode == 13) onSendChat()
 }
 
-document.querySelector("#buttonId").addEventListener("click", onSendChat)
+document.querySelector("#buttonId").addEventListener("click", onSendChat);
 
 window.onbeforeunload = leaveGame;
+
+elem("#imgImport").addEventListener("change", () => {
+    var file = (elem("#imgImport").files[0]);
+    if (file.size > 40000) alert("File too big! Max size: 40kb");
+});
 
 
 /**
@@ -136,7 +141,7 @@ function saveUser() {
         var reader = new FileReader();
 
         reader.onloadend = function () {
-            user.image = reader.result;
+            (file.size < 40000) ? user.image = reader.result : user.image = `https://ssl.gstatic.com/docs/common/profile/${anonymousUser[Math.floor(Math.random() * (anonymousUser.length))]}_lg.png`;//elem("#imgImport").value = "";
         }
 
         if (file) {
@@ -145,9 +150,7 @@ function saveUser() {
             user.image = "";
         }
     }else{
-        var index = Math.floor(Math.random() * (10 - 0));
-        user.image = `https://ssl.gstatic.com/docs/common/profile/${anonymousUser[index]}_lg.png`
-        console.log(user.image)
+        user.image = `https://ssl.gstatic.com/docs/common/profile/${anonymousUser[Math.floor(Math.random() * (anonymousUser.length))]}_lg.png`
     }
 
     if (user.name.length) {
@@ -155,11 +158,6 @@ function saveUser() {
     }
 
 }
-
-elem("#imgImport").addEventListener("change", () => {
-    var file = (elem("#imgImport").files[0]);
-    if (file.size > 40000) alert("File too big! Max size: 40kb");
-});
 
 function showLogin() {
     let register = elem("#login")
