@@ -19,6 +19,8 @@ var user = JSON.parse(localStorage.getItem("user")) || {
     ratio: 0 //(this.countGames == 0) ? 0 : ((this.win / this.countGames) * 100)
 }
 
+var anonymousUser = ["quagga", "kiwi", "nyancat", "dragon", "anteater", "blobfish", "chupacabra"];
+
 /**
  * LISTENERS
  */
@@ -136,17 +138,25 @@ function saveUser() {
         user.image = reader.result;
     }
 
+    
     if (file) {
         reader.readAsDataURL(file);
     } else {
         user.image = "";
     }
 
-    if (user.name.length && file.size < 60000) {
+    
+
+    if (user.name.length && file.size < 40000) {
         joinGame();
     }
 
 }
+
+elem("#imgImport").addEventListener("change", () => {
+    var file = (elem("#imgImport").files[0]);
+    if(file.size > 40000) alert("File too big! Max size: 40kb");
+});
 
 function showLogin() {
     let register = elem("#login")
@@ -307,11 +317,9 @@ function processfile(file) {
 
     reader.onload = function (event) {
         // blob stuff
-        console.log(event)
         var blob = new Blob([event.target.result]); // create blob...
         window.URL = window.URL || window.webkitURL;
         var blobURL = window.URL.createObjectURL(blob); // and get it's URL
-        console.log(blobURL)
         // helper Image object
         var image = new Image();
         // image.src = blobURL;
@@ -325,7 +333,6 @@ function processfile(file) {
             newinput.type = 'hidden';
             newinput.id = "resizedProfilePic"
             newinput.name = 'images[]';
-            console.log(resized)
             newinput.value = resized; // put result from canvas into new hidden input
             form.appendChild(newinput);
         }
@@ -388,7 +395,6 @@ function resizeMe(img) {
     canvas.height = height;
     var ctx = canvas.getContext("2d");
     ctx.drawImage(img, 0, 0, width, height);
-    console.log(img)
     preview.appendChild(canvas); // do the actual resized preview
 
     return canvas.toDataURL("image/jpeg", 0.7); // get the data from canvas as 70% JPG (can be also PNG, etc.)
