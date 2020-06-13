@@ -42,8 +42,15 @@ document.querySelector("#buttonId").addEventListener("click", onSendChat);
 window.onbeforeunload = leaveGame;
 
 elem("#imgImport").addEventListener("change", () => {
+    var info = elem("#imgImportInfo");
     var file = (elem("#imgImport").files[0]);
-    if (file.size > 40000) alert("File too big! Max size: 40kb");
+    console.log(file)
+    info.textContent = file.name;
+    if (file.size > 40000){
+        alert("File too big! Max size: 40kb");
+        info.textContent = file.name + "will not charge";
+        
+    }
 });
 
 
