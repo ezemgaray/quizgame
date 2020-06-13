@@ -155,6 +155,8 @@ function showProfile() {
     confirm.classList.remove("d-flex")
     profile.classList.remove("d-none")
     profile.classList.add("d-flex")
+    elem("#ranking").classList.remove("open");
+    elem("#chat").classList.remove("open");
     showProfileData()
 }
 
@@ -171,11 +173,11 @@ function showProfileData() {
 }
 
 function showChat(){
-    elem("#chat").classList.add("open");
+    elem("#chat").classList.toggle("open");
     elem("#ranking").classList.remove("open");
 }
 function showRanking(){
-    elem("#ranking").classList.add("open");
+    elem("#ranking").classList.toggle("open");
     elem("#chat").classList.remove("open");
 }
 
