@@ -19,7 +19,7 @@ var user = JSON.parse(localStorage.getItem("user")) || {
     ratio: 0 //(this.countGames == 0) ? 0 : ((this.win / this.countGames) * 100)
 }
 
-var anonymousUser = ["quagga", "kiwi", "nyancat", "dragon", "anteater", "blobfish", "chupacabra"];
+var anonymousUser = ["quagga", "kiwi", "nyancat", "dragon", "anteater", "blobfish", "chupacabra", "bat", "ifrit"];
 
 /**
  * LISTENERS
@@ -129,25 +129,28 @@ function printMessage(userData, message) {
 
 function saveUser() {
     user.name = elem("#usernameInp").value
-    var file = (elem("#imgImport").files[0]);
-    var reader = new FileReader();
-    console.log(elem("#resizedProfilePic"))
-    // var toCompress = new Image();
-    reader.onloadend = function () {
-        // preview.src = reader.result;
-        user.image = reader.result;
+
+    if (elem("#imgImport").value.length) {
+
+        var file = (elem("#imgImport").files[0]);
+        var reader = new FileReader();
+
+        reader.onloadend = function () {
+            user.image = reader.result;
+        }
+
+        if (file) {
+            reader.readAsDataURL(file);
+        } else {
+            user.image = "";
+        }
+    }else{
+        var index = Math.floor(Math.random() * (10 - 0));
+        user.image = `https://ssl.gstatic.com/docs/common/profile/${anonymousUser[index]}_lg.png`
+        console.log(user.image)
     }
 
-    
-    if (file) {
-        reader.readAsDataURL(file);
-    } else {
-        user.image = "";
-    }
-
-    
-
-    if (user.name.length && file.size < 40000) {
+    if (user.name.length) {
         joinGame();
     }
 
@@ -155,7 +158,7 @@ function saveUser() {
 
 elem("#imgImport").addEventListener("change", () => {
     var file = (elem("#imgImport").files[0]);
-    if(file.size > 40000) alert("File too big! Max size: 40kb");
+    if (file.size > 40000) alert("File too big! Max size: 40kb");
 });
 
 function showLogin() {
@@ -294,7 +297,7 @@ function elem(selector, all = false) {
 }
 
 // ! ----------------- RESIZING FUNCTIONALITY ------------------- ! \\
-
+/*
 var fileinput = document.getElementById('imgImport');
 
 var max_width = fileinput.getAttribute('data-maxwidth');
@@ -400,3 +403,5 @@ function resizeMe(img) {
     return canvas.toDataURL("image/jpeg", 0.7); // get the data from canvas as 70% JPG (can be also PNG, etc.)
 
 }
+
+*/
