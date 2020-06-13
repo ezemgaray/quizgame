@@ -339,6 +339,13 @@ div .title__span:nth-child(2) span:nth-child(4) {
    transition: 0.1s ease;
 }
 
+#profileBtn{
+   border-radius: 50%;
+   overflow: hidden;
+   height: 47px;
+   width: 47px;
+}
+
 .menu__chat__notification{
    height: 10px;
    width: 10px;

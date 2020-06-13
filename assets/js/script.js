@@ -31,7 +31,7 @@ elem("#chatBtn").addEventListener("click", showChat)
 elem("#profileBtn").addEventListener("click", showProfile)
 elem("#rankingBtn").addEventListener("click", showRanking)
 elem("#chatSendBtn").addEventListener("click", onSendChat)
-elem("#chatSendBtn").onkeyup = e=>{
+elem("#chatInp").onkeyup = e => {
     if (e.keyCode == 13) onSendChat()
 }
 
@@ -57,6 +57,7 @@ function joinGame() {
         let responseUser = JSON.parse(response.data);
 
         if (responseUser.auth == "OK") {
+            console.log(response)
             ws.send(`{"to":"quizGame", "user":"${responseUser.SID}", "type":"connect"}`);
             user.id = responseUser.SID;
             localStorage.setItem("user", JSON.stringify(user))
@@ -78,9 +79,9 @@ function joinGame() {
                 break
         }
     }
-    // ws.onclose = function (e) {
-    //     console.log("onclose")
-    // }
+    ws.onclose = function (e) {
+        console.log("onclose")
+    }
 }
 
 function init() {
@@ -107,7 +108,7 @@ function printUsers(userData) {
 }
 
 function printMessage(userData, message) {
-    if(!(elem("#chat").classList.contains("open"))) elem("#chatNot").classList.remove("d-none");
+    if (!(elem("#chat").classList.contains("open"))) elem("#chatNot").classList.remove("d-none");
     var msg = document.createElement("div");
     var msgUser = document.createElement("div");
     var msgContent = document.createElement("div");
@@ -125,6 +126,20 @@ function printMessage(userData, message) {
 
 function saveUser() {
     user.name = elem("#usernameInp").value
+    // var file = (elem("#imgImport").files[0]);
+    // var reader = new FileReader();
+
+    // reader.onloadend = function () {
+    //     // preview.src = reader.result;
+    //     user.image = reader.result;
+    // }
+
+    
+    // if (file) {
+    //     reader.readAsDataURL(file);
+    // } else {
+    //     user.image = "";
+    // }
     if (user.name.length) {
         joinGame();
     }
@@ -178,12 +193,14 @@ function showProfileData() {
     elem("#profileLevel").innerText = user.win
     elem("#profileId").innerText = user.id
     elem("#profileGames").innerText = user.countGames
+    // elem("#profileUserImg").src = user.image;
+    // elem("#profileBtn > img").src = user.image;
     setTimeout(function () {
         animaProfileRatio()
         elem("#winGraph").style.height = "80%"
         elem("#looseGraph").style.height = "55%"
     }, 100)
-    elem(".menu").classList.replace("d-none", "d-flex")
+    elem(".menu").classList.replace("d-none", "d-flex");
 }
 
 function showChat() {
@@ -222,6 +239,7 @@ function onSendChat() {
 function leaveGame() {
     user.id = ""
     user.name = ""
+    user.image = ""
     ws.send(`{"to":"quizGame", "userId":"", "username":"", "type":"disconnect"}`);
     ws.close();
 }
