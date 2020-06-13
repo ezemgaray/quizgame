@@ -65,7 +65,7 @@ function joinGame() {
                 sendUser(JSON.stringify(user))
                 break
             case "messageU":
-                printMessage(responseUser.user, responseUser.content)
+                printMessage(responseUser.user.id, responseUser.content)
                 break
             case "disconnect":
                 sendUser(JSON.stringify(user))
@@ -109,9 +109,9 @@ function printMessage(user, message) {
     var msgContent = document.createElement("div");
 
     msg.classList.add("msg", "mb-2", "p-1", "d-flex", "justify-content-around");
-    (user === user.name) ? msg.classList.add("send") : msg.classList.add("received");
+    (user === user.id) ? msg.classList.add("send") : msg.classList.add("received");
     msgUser.classList.add("msg__user");
-    msgContent.classList.add("msg__content", "p1");
+    msgContent.classList.add("msg__content", "p-1");
 
     msgContent.textContent = message;
 
