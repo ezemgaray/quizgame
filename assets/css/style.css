@@ -333,7 +333,7 @@ div .title__span:nth-child(2) span:nth-child(4) {
    width: 100%;
    border-radius: 10px 10px 0 0;
    background: white;
-   z-index: 5;
+   z-index: 100;
    /* position: absolute; */
 }
 
@@ -388,6 +388,7 @@ div .title__span:nth-child(2) span:nth-child(4) {
    left: 0;
    top: 100%;
    width: 100%;
+   z-index: 90;
    height: calc(100% - 75px);
    background-color: #1675CE;
    transition: top .7s ease-in-out;
@@ -490,7 +491,6 @@ div .title__span:nth-child(2) span:nth-child(4) {
    right: calc(100% - 1px);
    width: 10px;
    height: 10px;
-   z-index: 5;
    background-color: rgb(191, 200, 240);
    transform: translateX(50%) rotate(45deg);
    -webkit-transform: translateX(50%) rotate(45deg);
@@ -516,7 +516,6 @@ div .title__span:nth-child(2) span:nth-child(4) {
    left: 15px;
    width: 25px;
    height: 25px;
-   z-index: 5;
    border-radius: 50%;
    -webkit-border-radius: 50%;
    -moz-border-radius: 50%;
