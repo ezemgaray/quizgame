@@ -104,7 +104,7 @@ function printUsers(userData) {
 }
 
 function printMessage(userData, message) {
-   debugger
+    if(!(elem("#chat").classList.contains("open"))) elem("#chatNot").classList.remove("d-none");
     var msg = document.createElement("div");
     var msgUser = document.createElement("div");
     var msgContent = document.createElement("div");
@@ -180,11 +180,13 @@ function showProfileData() {
         elem("#winGraph").style.height = "80%"
         elem("#looseGraph").style.height = "55%"
     }, 100)
+    elem(".menu").classList.replace("d-none", "d-flex")
 }
 
 function showChat() {
     setTimeout(() => {
         elem("#chat").classList.toggle("open");
+        elem("#chatNot").classList.add("d-none");
     }, 200);
     elem("#ranking").classList.remove("open");
 }
