@@ -53,9 +53,6 @@ elem("#imgImport").addEventListener("change", () => {
         alert("File too big! Max size: 40kb");
         info.textContent = truncate(file.name, 15, false) + " won't be uploaded";
         info.style = "color: #F52631"
-        //Arreglar span con (...)
-        //Revisar ezequiel
-        //
     }
 });
 
