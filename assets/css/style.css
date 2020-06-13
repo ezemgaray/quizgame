@@ -32,7 +32,9 @@ button:focus, input:focus{
 }
 
 .main__container{
+   position: relative;
    height: 100vh;
+   overflow: hidden;
 }
 
 /*? ========= LOGIN SCREEN ========= ?*/
@@ -81,7 +83,7 @@ div .title__span:nth-child(2) span:nth-child(4){
    height: 30%;
 }
 
-.login__menu--username{
+.login__menu--username, .chat__form--message{
    border: 1px solid white;
    border-radius: 10px;
    width: 300px;
@@ -91,11 +93,14 @@ div .title__span:nth-child(2) span:nth-child(4){
    font-size: 24px;
    font-weight: 200;
 }
-.login__menu--username::placeholder{
+
+
+
+.login__menu--username::placeholder, .chat__form--message::placeholder{
    color: rgba(255, 255, 255, 0.5);
 }
 
-.login__menu--button{
+.login__menu--button, .chat__form--button{
    width: 200px;
    height: 50px;
    background: #F9DE41;
@@ -106,12 +111,13 @@ div .title__span:nth-child(2) span:nth-child(4){
    font-weight: 900;
    transition: 0.3s ease;
 }
-.login__menu--button:hover{
+
+.login__menu--button:hover, .chat__form--button:hover{
    transform: scale(1.03);
    box-shadow: 0px 6px 5px rgba(0, 0, 0, 0.15);
    transition: 0.3s ease;
 }
-.login__menu--button:active{
+.login__menu--button:active, .chat__form--button:active{
    transform: scale(1);
    box-shadow: none;
    transition: 0.1s ease;
@@ -272,6 +278,154 @@ div .title__span:nth-child(2) span:nth-child(4){
    background-color: #F9DE41;
    color: white;
    font-weight: 700;
-   font-size: 40px;
+   font-size: 32px;
    transition: 0.3s ease;
 }
+
+/*? ======== MENU ======== ?*/
+
+.menu{
+   height: 75px;
+   width: 100%;
+   border-radius: 10px 10px 0 0;
+   background: white;
+}
+
+.menu button{
+   background: none;
+   border: none;
+}
+
+
+
+
+/*? ======== CHAT ======== ?*/
+
+.chat, .ranking{
+   position: absolute;
+   left: 0;
+   top: 100%;
+   width: 100%;
+   height: calc(100% - 75px);
+   background-color: #1675CE;
+   transition: top .7s ease-in-out;
+   -webkit-transition: top .7s ease-in-out;
+   -moz-transition: top .7s ease-in-out;
+   -ms-transition: top .7s ease-in-out;
+   -o-transition: top .7s ease-in-out;
+}
+
+.check{
+   position: absolute;
+   bottom: 0;
+}
+
+.check:checked ~ .ranking{
+   top: 0;
+}
+
+.chat__box, .ranking__box{
+   height: calc(100% - 50px);
+}
+
+.chat__form{
+   /* background-color: #F352AF; */
+   width: 100%;
+   height: 50px;
+}
+
+.chat__form--message{
+   width: 80%;
+   height: 100%;
+   font-size: 16px;
+   text-align: left;
+   padding: 0 8px;
+}
+.chat__form--button{
+   width: 15%;
+   height: 100%;
+   font-size: 18px;
+   background-color: #20C868;
+}
+.msg, rkg{
+   width: 100%;
+   /* background-color: #F352AF; */
+}
+.rkg{
+   max-width: 400px;
+   margin: 0 auto;
+}
+
+.msg__user, .rkg__user{
+   width: 50px;
+   height: 50px;
+   background: url("/assets/img/PROFILE-PIC-ROUND-01.png");
+   background-size: cover;
+   background-position: center;
+   border-radius: 50%;
+   -webkit-border-radius: 50%;
+   -moz-border-radius: 50%;
+   -ms-border-radius: 50%;
+   -o-border-radius: 50%;
+}
+
+.msg.sent .msg__user{
+   order: 2;
+}
+
+
+.msg__content, .rkg__content{
+   position: relative;
+   width: calc(100% - 80px);
+   background-color: rgb(191, 200, 240);
+   box-shadow: 1px 1px 10px rgba(0, 0, 0, 0.3);
+   border-radius: 10px;
+   -webkit-border-radius: 10px;
+   -moz-border-radius: 10px;
+   -ms-border-radius: 10px;
+   -o-border-radius: 10px;
+}
+.rkg__content{
+   text-align: center;
+}
+.msg.received .msg__content::after, .msg.sent .msg__content::after{
+   content: "";
+   position: absolute;
+   top: 20px;
+   right: calc(100% - 1px);
+   width: 10px;
+   height: 10px;
+   z-index: 5;
+   background-color: rgb(191, 200, 240);
+   transform: translateX(50%) rotate(45deg);
+   -webkit-transform: translateX(50%) rotate(45deg);
+   -moz-transform: translateX(50%) rotate(45deg);
+   -ms-transform: translateX(50%) rotate(45deg);
+   -o-transform: translateX(50%) rotate(45deg);
+   border-radius: 2px;
+   -webkit-border-radius: 2px;
+   -moz-border-radius: 2px;
+   -ms-border-radius: 2px;
+   -o-border-radius: 2px;
+}
+
+.msg.sent .msg__content::after{
+   top: 20px;
+   right: 1px;
+}
+
+.rkg .rkg__content::after{
+   content: "";
+   position: absolute;
+   top: 0;
+   left: 15px;
+   width: 25px;
+   height: 25px;
+   z-index: 5;
+   border-radius: 50%;
+   -webkit-border-radius: 50%;
+   -moz-border-radius: 50%;
+   -ms-border-radius: 50%;
+   -o-border-radius: 50%;
+}
+
