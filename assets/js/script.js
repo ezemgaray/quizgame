@@ -1,8 +1,8 @@
 // var user = {
-   //     id: "",
-   //     name: "",
-   
-   // }
+//     id: "",
+//     name: "",
+
+// }
 var ws;
 var users = [];
 var currGame
@@ -30,7 +30,7 @@ elem("#usernameBtn").addEventListener("click", saveUser)
 elem("#chatBtn").addEventListener("click", showChat)
 elem("#profileBtn").addEventListener("click", showProfile)
 elem("#rankingBtn").addEventListener("click", showRanking)
-elem("#chatBtn").addEventListener("click", onSendChat)
+elem("#chatSendBtn").addEventListener("click", onSendChat)
 
 document.querySelector("#buttonId").addEventListener("click", onSendChat)
 
@@ -172,17 +172,18 @@ function showProfileData() {
     }, 100)
 }
 
-function showChat(){
-   setTimeout(() => {
-      elem("#chat").classList.toggle("open");
-   }, 200);
+function showChat() {
+    setTimeout(() => {
+        elem("#chat").classList.toggle("open");
+    }, 200);
     elem("#ranking").classList.remove("open");
 }
-function showRanking(){
-   setTimeout(() => {
-      elem("#ranking").classList.toggle("open");
-   }, 200);
-   elem("#chat").classList.remove("open");
+
+function showRanking() {
+    setTimeout(() => {
+        elem("#ranking").classList.toggle("open");
+    }, 200);
+    elem("#chat").classList.remove("open");
 }
 
 function animaProfileRatio() {
@@ -199,6 +200,7 @@ function animaProfileRatio() {
 }
 
 function onSendChat() {
+    console.log(ws)
     ws.send(`{"to":"quizGame", "user":${JSON.stringify(user)}, "content":"${elem("#chatInp").value}", "type":"messageU"}`);
 }
 
