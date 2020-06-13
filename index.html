@@ -11,6 +11,8 @@
 <body>
    <main>
       <div class="main__container p-0 m-0 d-flex flex-column align-items-center justify-content-center">
+         <input type="checkbox" name="" id="check" class="check" checked>
+
          <div class="login d-none flex-column align-items-center" id="login">
             <div class="login__title d-flex flex-column justify-content-center mb-3">
                <span class="title__span text-left">The</span>
@@ -53,7 +55,6 @@
 
             </div>
          </div>
-
 
          <div class="main__view d-none" id="main-view">
             <h1 class="section__title">quizGame</h1>
@@ -133,6 +134,62 @@
                <div class="logout"></div>
             </div> -->
          </div>
+         <div class="chat p-2 d-flex flex-column justify-content-center" id="chat">
+            <div class="chat__box">
+               <div class="msg received mb-2 p-1 d-flex justify-content-around">
+                  <div class="msg__user"></div>
+                  <div class="msg__content p-1">mensaje Lorem ipsum dolor sit amet consectetur adipisicing elit. Consequuntur corporis iste assumenda et itaque sunt temporibus iusto deserunt eos distinctio?</div>
+               </div>
+               <div class="msg sent mb-2 p-1 d-flex justify-content-around">
+                  <div class="msg__user"></div>
+                  <div class="msg__content p-1">mensaje Lorem ipsum, dolor sit amet consectetur adipisicing elit. Voluptas accusantium eligendi impedit explicabo id sequi officiis ratione omnis, consequatur voluptatibus?</div>
+               </div>
+            </div>
+            <div class="chat__form d-flex justify-content-around">
+               <input type="text" class="chat__form--message mb-4" id="chatInp" placeholder="YOUR MESSAGE">
+               <button class="chat__form--button" id="chatBtn">SEND</button>
+            </div>
+         </div>
+         <div class="ranking p-2 d-flex flex-column justify-content-center" id="ranking">
+            <div class="ranking__box">
+               <div class="rkg mb-2 p-1 d-flex justify-content-around">
+                  <div class="rkg__content p-1">
+                     <b>Name: </b><span id="rkgUser">USERNAME</span><br>
+                     <b>Level: </b><span id="rkgLevel">76</span>
+                  </div>
+                  <div class="rkg__user"></div>
+               </div>
+               <div class="rkg mb-2 p-1 d-flex justify-content-around">
+                  <div class="rkg__content p-1">
+                     <b>Name: </b><span id="rkgUser">USERNAME</span><br>
+                     <b>Level: </b><span id="rkgLevel">76</span>
+                  </div>
+                  <div class="rkg__user"></div>
+               </div>
+               <div class="rkg mb-2 p-1 d-flex justify-content-around">
+                  <div class="rkg__content p-1">
+                     <b>Name: </b><span id="rkgUser">USERNAME</span><br>
+                     <b>Level: </b><span id="rkgLevel">76</span>
+                  </div>
+                  <div class="rkg__user"></div>
+               </div>
+               <div class="rkg mb-2 p-1 d-flex justify-content-around">
+                  <div class="rkg__content p-1">
+                     <b>Name: </b><span id="rkgUser">USERNAME</span><br>
+                     <b>Level: </b><span id="rkgLevel">76</span>
+                  </div>
+                  <div class="rkg__user"></div>
+               </div>
+               <div class="rkg mb-2 p-1 d-flex justify-content-around">
+                  <div class="rkg__content p-1">
+                     <b>Name: </b><span id="rkgUser">USERNAME</span><br>
+                     <b>Level: </b><span id="rkgLevel">76</span>
+                  </div>
+                  <div class="rkg__user"></div>
+               </div>
+
+            </div>
+         </div>
       </div>
    </main>
 
@@ -141,6 +198,7 @@
    <div class="d-none">
       <input type="text" id="Mensaje">
       <input type="button" id="buttonId" value="Enviar Mensaje">
+      
    </div>
 <!--
    <div>
