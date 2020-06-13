@@ -115,6 +115,7 @@ function printMessage(userData, message) {
 
     msg.className = `msg ${userData.id == user.id ? "sent" : "received"} mb-2 p-1 d-flex justify-content-around`
     msgUser.classList.add("msg__user");
+    msgUser.style = `background-image: url(${userData.image}); background-size: cover;`;;
     msgContent.classList.add("msg__content", "p-1");
 
     msgContent.textContent = message;
@@ -126,20 +127,20 @@ function printMessage(userData, message) {
 
 function saveUser() {
     user.name = elem("#usernameInp").value
-    // var file = (elem("#imgImport").files[0]);
-    // var reader = new FileReader();
+    var file = (elem("#imgImport").files[0]);
+    var reader = new FileReader();
 
-    // reader.onloadend = function () {
-    //     // preview.src = reader.result;
-    //     user.image = reader.result;
-    // }
+    reader.onloadend = function () {
+        // preview.src = reader.result;
+        user.image = reader.result;
+    }
 
-    
-    // if (file) {
-    //     reader.readAsDataURL(file);
-    // } else {
-    //     user.image = "";
-    // }
+    if (file) {
+        reader.readAsDataURL(file);
+    } else {
+        user.image = "";
+    }
+
     if (user.name.length) {
         joinGame();
     }
@@ -193,8 +194,8 @@ function showProfileData() {
     elem("#profileLevel").innerText = user.win
     elem("#profileId").innerText = user.id
     elem("#profileGames").innerText = user.countGames
-    // elem("#profileUserImg").src = user.image;
-    // elem("#profileBtn > img").src = user.image;
+    elem(".profile__container__info--img").style = `background-image: url(${user.image}); background-size: cover;`;
+    elem("#profileBtn").style = `background-image: url(${user.image}); background-size: cover;`;
     setTimeout(function () {
         animaProfileRatio()
         elem("#winGraph").style.height = "80%"
