@@ -272,6 +272,33 @@ function showQuestions() {
    quest.addEventListener("transitionend", showCountDown)
 }
 
+function showCountDown(e) {
+   let countDown = document.createElement("div")
+   countDown.className = "countdown"
+   let countNumber = document.createElement("span")
+   countNumber.className = "countdown__number"
+   countNumber.id = "countdownNumber"
+   countDown.append(countNumber)
+   elem("#questions").append(countDown)
+
+   if (globalInterval) {
+      clearInterval(globalInterval)
+   }
+   let down = 3
+   elem("#countdownNumber").innerText = down
+   globalInterval = setInterval(() => {
+      down -= 1
+      elem("#countdownNumber").innerText = down
+      console.log()
+      if (!down) {
+         clearInterval(globalInterval)
+         countDown.remove()
+         showQuestion()
+      }
+   }, 1000);
+   elem("#questions").removeEventListener("transitionend", showCountDown)
+}
+
 function questionTime() {
    let clock = document.createElement("div")
    let bar = document.createElement("span")
