@@ -23,8 +23,8 @@ var user = JSON.parse(localStorage.getItem("user")) || {
     countGames: 0,
     win: 0,
     loose: 0,
-    currC: 0,
-    currW: 0,
+    totalC: 0,
+    totalW: 0,
     currR: "",
     ratio: 0, //(this.countGames == 0) ? 0 : ((this.win / this.countGames) * 100)
     level: 0,
@@ -223,7 +223,17 @@ function showConfirmUser() {
     confirm.classList.add("d-flex")
     profile.classList.add("d-none")
     profile.classList.remove("d-flex")
-    elem("#confirmN").onclick = showLogin
+    elem("#confirmN").onclick = ()=>{
+        showLogin();
+        user.countGames = 0;
+        user.totalC = 0;
+        user.totalW = 0;
+        user.ratio = 0;
+        user.win = 0;
+        user.loose = 0;
+        user.level = 0;
+        user.experience = 0;
+    }
     elem("#confirmY").onclick = joinGame
 }
 
@@ -251,8 +261,8 @@ function showProfileData() {
     elem("#profileBtn").style = `background-image: url(${user.image}); background-size: cover;`;
     setTimeout(function () {
         animaProfileRatio()
-        elem("#winGraph").style.height = "80%"
-        elem("#looseGraph").style.height = "55%"
+        elem("#winGraph").style.height = Math.floor((user.totalC/(user.totalC+user.totalW))*100) + "%";
+        elem("#looseGraph").style.height = Math.floor((user.totalW/(user.totalC+user.totalW))*100) + "%"
     }, 100)
     elem("#menuSmall").classList.replace("d-none", "d-flex");
     elem("#sideMenu").classList.replace("d-md-none", "d-md-flex");
@@ -449,11 +459,10 @@ function stopQuestion(next = true) {
     }, 1000);
 }
 
-// simulando la seccion al terminar la partida - definir seccion
 function checkResults() {
     if((correctAnswers/nQuestions)*100 >= 70){
         user.experience++;
-        user.won++
+        user.win++
     }else{
         user.loose++
     }
@@ -464,15 +473,14 @@ function checkResults() {
     }
 
     user.countGames++;
-    user.currC += correctAnswers;
-    user.currW += wrongAnswers;
+    user.totalC += correctAnswers;
+    user.totalW += wrongAnswers;
     user.ratio = (Math.floor((user.win/user.countGames)*100));
 
     showProfileData();
     localStorage.setItem("user", JSON.stringify(user))
 
     setTimeout(() => {
-        console.log("estoy en recuento")
         showSummary();
         correctAnswers = 0;
         wrongAnswers = 0;
@@ -483,7 +491,7 @@ function showSummary(){
     console.log("This is the summary:");
     console.log("user.experience:", user.experience);
     console.log("user.level: ", user.level);
-    console.log("user.currC: ", user.currC);
+    console.log("user.totalC: ", user.totalC);
     console.log("user.ratio: ", user.ratio);
     console.log("user.countGames: ", user.countGames);
 }
