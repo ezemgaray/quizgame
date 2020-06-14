@@ -13,7 +13,8 @@ let correctAnswers = 0;
 let wrongAnswers = 0;
 // let totalExperience = 0;
 
-let nQuestions = 5;
+let answerTime = 10; //time to answer the question
+let nQuestions = 5; //number of questions
 
 var globalInterval
 var user = JSON.parse(localStorage.getItem("user")) || {
@@ -427,7 +428,7 @@ function showQuestion() {
 function questionTime() {
     let bar = elem(".seconds")
     barW = bar.parentElement.clientWidth
-    wPerSecond = barW / 5 // Divido por la cantidad de segundo para responder
+    wPerSecond = barW / answerTime // Divido por la cantidad de segundo para responder
     if (globalInterval) {
         clearInterval(globalInterval)
     }
@@ -438,8 +439,9 @@ function questionTime() {
         else bar.style.width = barW + "px"
         sec++
 
-        if (sec > 5) { // si pasa la cantidad de segundos cierra la pregunta
+        if (sec > answerTime) { // si pasa la cantidad de segundos cierra la pregunta
             elem("#question .answers button", true).forEach(button => button.disabled = true)
+            wrongAnswers++;
             stopQuestion()
         }
     }, 1000);
