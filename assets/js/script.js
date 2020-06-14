@@ -135,6 +135,7 @@ function printUsers(userData) {
 
 function printMessage(userData, message) {
     if (!(elem("#chat").classList.contains("open"))) elem("#chatNot").classList.remove("d-none");
+    if (!(elem("#chat--big").classList.contains("open"))) elem("#chatNot--big").classList.remove("d-none");
     var msg = document.createElement("div");
     var msgUser = document.createElement("div");
     var msgContent = document.createElement("div");
@@ -259,7 +260,8 @@ function showChat(from) {
         }, 200);
         elem("#ranking").classList.remove("open");
     }else{
-        elem("#chat--big").classList.add("open")
+        elem("#chat--big").classList.add("open");
+        elem("#chatNot--big").classList.add("d-none");
         elem("#ranking--big").classList.remove("open")
     }
 }
