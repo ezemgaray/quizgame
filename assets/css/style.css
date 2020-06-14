@@ -408,9 +408,15 @@ div .title__span:nth-child(2) span:nth-child(4) {
 
 
 .chat__box,
-.ranking__box {
+.ranking__box,
+.chat__box2 {
    height: calc(100% - 50px);
    overflow-y: auto;
+   border: 1px solid red
+}
+
+.chat__box2{
+   width: 100%;
 }
 
 .chat__form {
@@ -522,6 +528,13 @@ div .title__span:nth-child(2) span:nth-child(4) {
 
 .self {
    text-align: right;
+}
+
+.chatBig{
+   width: 50%;
+   height: 100vh;
+   min-width: 300px;
+   background-color: white;
 }
 
 /*? ======== QUESTIONS ======== ?*/
