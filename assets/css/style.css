@@ -38,6 +38,12 @@ input:focus {
    width: 100vw;
 }
 
+.main__contentShow{
+   width: 100vw;
+   height: 100vh;
+   position: relative;
+}
+
 /*? ========= LOGIN SCREEN ========= ?*/
 
 .login {
@@ -96,6 +102,11 @@ div .title__span:nth-child(2) span:nth-child(4) {
    color: white;
    font-size: 24px;
    font-weight: 200;
+}
+
+.chat__form--message--big{
+   border: 1px solid #1675CE;
+   color: black;
 }
 
 .login__menu--username::placeholder,
@@ -336,7 +347,15 @@ div .title__span:nth-child(2) span:nth-child(4) {
    border-radius: 10px 10px 0 0;
    background: white;
    z-index: 100;
-   /* position: absolute; */
+   bottom: 0;
+   position: absolute;
+}
+
+.menu--big{
+   position: absolute;
+   max-height: 55px;
+   bottom: 0;
+   box-shadow: 0 10px 15px rgba(0, 0, 0, 1);
 }
 
 .menu button {
@@ -378,7 +397,7 @@ div .title__span:nth-child(2) span:nth-child(4) {
    position: absolute;
    border-radius: 50%;
    right: 10px;
-   top: 5px
+   top: 15px
 }
 
 
@@ -401,6 +420,10 @@ div .title__span:nth-child(2) span:nth-child(4) {
    -o-transition: top .7s ease-in-out;
 }
 
+.chat--big{
+   background-color: white;
+}
+
 .chat.open,
 .ranking.open {
    top: 0;
@@ -408,9 +431,14 @@ div .title__span:nth-child(2) span:nth-child(4) {
 
 
 .chat__box,
-.ranking__box {
+.ranking__box,
+.chat__box2 {
    height: calc(100% - 50px);
    overflow-y: auto;
+}
+
+.chat__box--big{
+   width: 100%;
 }
 
 .chat__form {
@@ -434,6 +462,10 @@ div .title__span:nth-child(2) span:nth-child(4) {
    background-color: #20C868;
 }
 
+.chat__form--button--big{
+   font-size: calc(10px + 0.5vw);
+}
+
 .msg,
 .rkg {
    width: 100%;
@@ -452,6 +484,7 @@ div .title__span:nth-child(2) span:nth-child(4) {
    background-size: cover;
    background-position: center;
    border-radius: 50%;
+   background-color: #F9DE41;
    -webkit-border-radius: 50%;
    -moz-border-radius: 50%;
    -ms-border-radius: 50%;
@@ -522,6 +555,15 @@ div .title__span:nth-child(2) span:nth-child(4) {
 
 .self {
    text-align: right;
+}
+
+.sideMenu{
+   width: 35%;
+   height: 100vh;
+   min-width: 300px;
+   background-color: white;
+   position: relative;
+   overflow: hidden;
 }
 
 /*? ======== QUESTIONS ======== ?*/
@@ -794,5 +836,15 @@ div .title__span:nth-child(2) span:nth-child(4) {
 
    .profile__container__info--graph>span {
       font-size: 32px;
+   }
+}
+
+@media (min-width: 768px){
+   /* .question__container{
+      right: 0;
+      width: 70%;
+   } */
+   .main__contentShow{
+      width: 70vw;
    }
 }

@@ -34,13 +34,19 @@ elem("#usernameInp").onkeyup = function (e) {
    if (e.keyCode == 13) saveUser()
 }
 elem("#usernameBtn").addEventListener("click", saveUser)
-elem("#chatBtn").addEventListener("click", showChat)
+elem("#chatBtn").addEventListener("click", ()=>showChat("small"))
+elem("#chatBtn2").addEventListener("click", ()=>showChat("big"))
 elem("#profileBtn").addEventListener("click", showProfile)
-elem("#rankingBtn").addEventListener("click", showRanking)
-elem("#chatSendBtn").addEventListener("click", onSendChat)
+elem("#rankingBtn").addEventListener("click", ()=>showRanking("small"))
+elem("#rankingBtn2").addEventListener("click", ()=>showRanking("big"))
+elem("#chatSendBtn").addEventListener("click", ()=>onSendChat("small"))
+elem("#chatSendBtn2").addEventListener("click", ()=>onSendChat("big"))
 elem("#enterGameBtn").addEventListener("click", showQuestions)
 elem("#chatInp").onkeyup = e => {
-   if (e.keyCode == 13) onSendChat()
+    if (e.keyCode == 13) onSendChat("small");
+}
+elem("#chatInp2").onkeyup = e => {
+    if (e.keyCode == 13) onSendChat("big");
 }
 elem("#buttonId").addEventListener("click", onSendChat);
 
@@ -48,16 +54,16 @@ elem("#buttonId").addEventListener("click", onSendChat);
 window.onbeforeunload = leaveGame;
 
 elem("#imgImport").addEventListener("change", () => {
-   var info = elem("#imgImportInfo");
-   var file = (elem("#imgImport").files[0]);
-   console.log(file)
-   info.textContent = truncate(file.name, 25, false);
-   info.style = "color: #20C868"
-   if (file.size > 40000) {
-      alert("File too big! Max size: 40kb");
-      info.textContent = truncate(file.name, 15, false) + " won't be uploaded";
-      info.style = "color: #F52631"
-   }
+    var info = elem("#imgImportInfo");
+    var file = (elem("#imgImport").files[0]);
+    console.log(file)
+    info.textContent = truncate(file.name, 25, false);
+    info.style = "color: #20C868"
+    if (file.size > 40000) {
+        alert("File too big! Max size: 40kb");
+        info.textContent = truncate(file.name, 15, false) + " won't be uploaded";
+        info.style = "color: #F52631"
+    }
 });
 
 
@@ -129,10 +135,11 @@ function printUsers(userData) {
 }
 
 function printMessage(userData, message) {
-   if (!(elem("#chat").classList.contains("open"))) elem("#chatNot").classList.remove("d-none");
-   var msg = document.createElement("div");
-   var msgUser = document.createElement("div");
-   var msgContent = document.createElement("div");
+    if (!(elem("#chat").classList.contains("open"))) elem("#chatNot").classList.remove("d-none");
+    if (!(elem("#chat--big").classList.contains("open"))) elem("#chatNot--big").classList.remove("d-none");
+    var msg = document.createElement("div");
+    var msgUser = document.createElement("div");
+    var msgContent = document.createElement("div");
 
    msg.className = `msg ${userData.id == user.id ? "sent" : "received"} mb-2 p-1 d-flex justify-content-around`
    msgUser.classList.add("msg__user");
@@ -141,9 +148,11 @@ function printMessage(userData, message) {
 
    msgContent.innerHTML = `<b>${userData.name}</b><br>${message}`;
 
-   msg.append(msgUser);
-   msg.append(msgContent);
-   elem(".chat__box").append(msg);
+    msg.append(msgUser);
+    msg.append(msgContent);
+    var msg2 = msg.cloneNode(true);
+    elem("#chatBox1").append(msg);
+    elem("#chatBox2").append(msg2);
 }
 
 function saveUser() {
@@ -225,36 +234,49 @@ function showProfile() {
 }
 
 function showProfileData() {
-   elem("#profileUsername").innerText = user.name
-   elem("#profileLevel").innerText = user.win
-   elem("#profileId").innerText = user.id
-   elem("#profileGames").innerText = user.countGames
-   elem(".profile__container__info--img").style = `background-image: url(${user.image}); background-size: cover;`;
-   elem("#profileBtn").style = `background-image: url(${user.image}); background-size: cover;`;
-   setTimeout(function () {
-      animaProfileRatio()
-      elem("#winGraph").style.height = "80%"
-      elem("#looseGraph").style.height = "55%"
-   }, 100)
-   elem(".menu").classList.replace("d-none", "d-flex");
+    elem("#profileUsername").innerText = user.name
+    elem("#profileLevel").innerText = user.win
+    elem("#profileId").innerText = user.id
+    elem("#profileGames").innerText = user.countGames
+    elem(".profile__container__info--img").style = `background-image: url(${user.image}); background-size: cover;`;
+    elem("#profileBtn").style = `background-image: url(${user.image}); background-size: cover;`;
+    setTimeout(function () {
+        animaProfileRatio()
+        elem("#winGraph").style.height = "80%"
+        elem("#looseGraph").style.height = "55%"
+    }, 100)
+    elem("#menuSmall").classList.replace("d-none", "d-flex");
+    elem("#sideMenu").classList.replace("d-md-none", "d-md-flex");
+    elem(".main__contentShow").classList.remove("d-none");
 }
 
-function showChat() {
-   setTimeout(() => {
-      elem("#chat").classList.toggle("open");
-      elem("#chatNot").classList.add("d-none");
-      setTimeout(() => {
-         if (elem("#chat").classList.contains("open")) elem("#chatInp").focus();
-      }, 1000)
-   }, 200);
-   elem("#ranking").classList.remove("open");
+function showChat(from) {
+    if(from === "small"){
+        setTimeout(() => {
+            elem("#chat").classList.toggle("open");
+            elem("#chatNot").classList.add("d-none");
+            setTimeout(() => {
+                if (elem("#chat").classList.contains("open")) elem("#chatInp").focus();
+            }, 1000)
+        }, 200);
+        elem("#ranking").classList.remove("open");
+    }else{
+        elem("#chat--big").classList.add("open");
+        elem("#chatNot--big").classList.add("d-none");
+        elem("#ranking--big").classList.remove("open")
+    }
 }
 
-function showRanking() {
-   setTimeout(() => {
-      elem("#ranking").classList.toggle("open");
-   }, 200);
-   elem("#chat").classList.remove("open");
+function showRanking(from) {
+    if(from === "small"){
+        setTimeout(() => {
+            elem("#ranking").classList.toggle("open");
+        }, 200);
+        elem("#chat").classList.remove("open");
+    }else{
+        // elem("#ranking--big").classList.add("open");
+        elem("#chat--big").classList.remove("open");
+    }
 }
 
 function animaProfileRatio() {
@@ -269,9 +291,9 @@ function animaProfileRatio() {
    }, 11);
 }
 
-function onSendChat() {
-   ws.send(`{"to":"quizGame", "user":${JSON.stringify(user)}, "content":"${elem("#chatInp").value}", "type":"messageU"}`);
-   elem("#chatInp").value = "";
+function onSendChat(from) {
+    ws.send(`{"to":"quizGame", "user":${JSON.stringify(user)}, "content":"${(from === "small") ? elem("#chatInp").value : elem("#chatInp2").value}", "type":"messageU"}`);
+    (from === "small") ? elem("#chatInp").value = "" : elem("#chatInp2").value = "";
 }
 
 function leaveGame() {
@@ -291,43 +313,43 @@ function getQuestions(amount = 5) {
 }
 
 function mixAnswers() {
-   answers = currGame[questionCount].incorrect_answers
-   answers.push(currGame[questionCount].correct_answer)
-   answers.sort(() => Math.random() - 0.5)
+    answers = currGame[questionCount].incorrect_answers
+    answers.push(currGame[questionCount].correct_answer)
+    answers.sort(() => Math.random() - 0.5)
 }
 
 function showQuestions() {
-   elem("#questions").classList.toggle("open")
-   getQuestions()
-   elem("#questions").addEventListener("transitionend", showCountDown)
+    elem("#questions").classList.toggle("open")
+    getQuestions()
+    elem("#questions").addEventListener("transitionend", showCountDown)
 }
 
 function showCountDown() {
-   let countDown = document.createElement("div")
-   countDown.className = "countdown"
-   let countNumber = document.createElement("span")
-   countNumber.className = "countdown__number"
-   countNumber.id = "countdownNumber"
-   countDown.append(countNumber)
-   elem("#questions").append(countDown)
+    let countDown = document.createElement("div")
+    countDown.className = "countdown"
+    let countNumber = document.createElement("span")
+    countNumber.className = "countdown__number"
+    countNumber.id = "countdownNumber"
+    countDown.append(countNumber)
+    elem("#questions").append(countDown)
 
-   if (globalInterval) {
-      clearInterval(globalInterval)
-   }
-   let down = 3
-   elem("#countdownNumber").innerText = down
-   elem("#countdownNumber").dataset.color = down
-   globalInterval = setInterval(() => {
-      down -= 1
-      elem("#countdownNumber").innerText = down
-      elem("#countdownNumber").dataset.color = down
-      if (!down) {
-         clearInterval(globalInterval)
-         countDown.remove()
-         showQuestion()
-      }
-   }, 1000);
-   elem("#questions").removeEventListener("transitionend", showCountDown)
+    if (globalInterval) {
+        clearInterval(globalInterval)
+    }
+    let down = 3
+    elem("#countdownNumber").innerText = down
+    elem("#countdownNumber").dataset.color = down
+    globalInterval = setInterval(() => {
+        down -= 1
+        elem("#countdownNumber").innerText = down
+        elem("#countdownNumber").dataset.color = down
+        if (!down) {
+            clearInterval(globalInterval)
+            countDown.remove()
+            showQuestion()
+        }
+    }, 1000);
+    elem("#questions").removeEventListener("transitionend", showCountDown)
 }
 
 function showQuestion() {
@@ -410,11 +432,11 @@ function stopQuestion(next = true) {
 
 // simulando la seccion al terminar la partida - definir seccion
 function recuento() {
-   setTimeout(() => {
-      alert("estoy en recuento")
-   }, 700);
+    setTimeout(() => {
+        alert("estoy en recuento")
+    }, 700);
 }
 
 function elem(selector, all = false) {
-   return all ? document.querySelectorAll(selector) : document.querySelector(selector)
+    return all ? document.querySelectorAll(selector) : document.querySelector(selector)
 }
