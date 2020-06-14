@@ -521,6 +521,10 @@ div .title__span:nth-child(2) span:nth-child(4) {
    -o-border-radius: 50%;
 }
 
+.self{
+   text-align: right;
+}
+
 /*? ======== QUESTIONS ======== ?*/
 
 .questions {

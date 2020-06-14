@@ -133,9 +133,9 @@ function printMessage(userData, message) {
     msg.className = `msg ${userData.id == user.id ? "sent" : "received"} mb-2 p-1 d-flex justify-content-around`
     msgUser.classList.add("msg__user");
     msgUser.style = `background-image: url(${userData.image}); background-size: cover;`;;
-    msgContent.classList.add("msg__content", "p-1");
+    msgContent.className = `msg__content p-2 pr-3 ${userData.id == user.id ? "self" : ""}`;
 
-    msgContent.textContent = message;
+    msgContent.innerHTML = `<b>${userData.name}</b><br>${message}`;
 
     msg.append(msgUser);
     msg.append(msgContent);
@@ -239,6 +239,9 @@ function showChat() {
     setTimeout(() => {
         elem("#chat").classList.toggle("open");
         elem("#chatNot").classList.add("d-none");
+        setTimeout(()=>{
+            if(elem("#chat").classList.contains("open")) elem("#chatInp").focus();
+        },1000)
     }, 200);
     elem("#ranking").classList.remove("open");
 }
