@@ -495,6 +495,7 @@ function showSummary(){
     console.log("user.totalC: ", user.totalC);
     console.log("user.ratio: ", user.ratio);
     console.log("user.countGames: ", user.countGames);
+    // elem("#summary").classList.toggle("open");
 }
 
 function elem(selector, all = false) {
