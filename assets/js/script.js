@@ -514,14 +514,13 @@ function showSummary(win){
     console.log("user.countGames: ", user.countGames);
 
     elem(".summary__container__info--img").style = `background-image: url(${user.image}); background-size: cover;`;
-    elem("#summaryWinGraph").style = "height: " + Math.floor((user.totalC/(user.totalC+user.totalW))*100) + "%;";
-    elem("#summaryLooseGraph").style = "height: " + Math.floor((user.totalW/(user.totalC+user.totalW))*100) + "%";;
-    elem("#summaryXPGraph").textContent = user.ratio + "%";;
+    elem("#summaryWinGraph").style = "height: " + Math.floor((correctAnswers/nQuestions)*100) + "%;";
+    elem("#summaryLooseGraph").style = "height: " + Math.floor((wrongAnswers/nQuestions)*100) + "%;";
+    elem("#summaryXPGraph").style = "height: " + Math.floor((user.experience/(user.level+1))*100) + "%;";
     elem("#summaryHits").textContent = correctAnswers;
     elem("#summaryMisses").textContent = wrongAnswers;
     elem("#summaryXP").textContent = win ? "+1" : "0";
-    elem("#summaryXPnext").textContent += (" " + (user.level+1));
-    elem("#summaryTotalXP").textContent = (user.level+1) - user.experience;
+    elem("#summaryTotalXP").textContent = user.experience;
     elem("#summary").classList.toggle("open");
 }
 
