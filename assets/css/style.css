@@ -816,6 +816,26 @@ div .title__span:nth-child(2) span:nth-child(4) {
    background-position: right center;
 }
 
+.resultsScreen{
+   height: 70px;
+   width: 130px;
+   border-radius: 10px;
+   background: white;
+   box-shadow: 2px 7px 10px rgba(0, 0, 0, 0.2);
+   position: absolute;
+   z-index: 150;
+}
+
+#answerPercentage{
+   font-size: 24px;
+   font-weight: 700;
+}
+
+#answerExplain{
+   font-size: 14px;
+   text-align: center;
+}
+
 /*? ======== KEYFRAMES ======== ?*/
 
 @keyframes countdown {

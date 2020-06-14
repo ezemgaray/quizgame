@@ -57,6 +57,12 @@ elem("#chatInp2").onkeyup = e => {
     if (e.keyCode == 13) onSendChat("big");
 }
 elem("#buttonId").addEventListener("click", onSendChat);
+elem("#winGraph").addEventListener("mouseover", ()=>showData("winGraph"));
+elem("#winGraph").addEventListener("mouseout", ()=>showData("winGraph"));
+elem("#winGraph").addEventListener("mousemove", (e)=>moveData(e, "winGraph"));
+elem("#looseGraph").addEventListener("mouseover", ()=>showData("looseGraph"));
+elem("#looseGraph").addEventListener("mouseout", ()=>showData("looseGraph"));
+elem("#looseGraph").addEventListener("mousemove", (e)=>moveData(e, "winGraph"));
 
 
 window.onbeforeunload = leaveGame;
@@ -500,4 +506,23 @@ function showSummary(){
 
 function elem(selector, all = false) {
     return all ? document.querySelectorAll(selector) : document.querySelector(selector)
+}
+
+function showData(source){
+    if(source === "winGraph"){
+        elem("#answerPercentage").textContent = Math.floor((user.totalC/(user.totalC+user.totalW))*100) + "%";
+        elem("#answerPercentage").style = "color: #20C868;"
+        elem("#answerExplain").textContent = "of correct answers";
+        
+    }else{
+        elem("#answerPercentage").textContent = Math.floor((user.totalW/(user.totalC+user.totalW))*100) + "%";
+        elem("#answerPercentage").style = "color: #F52631;"
+        elem("#answerExplain").textContent = "of wronged answers"
+    }
+    elem(".resultsScreen").classList.toggle("d-flex");
+    elem(".resultsScreen").classList.toggle("d-none");
+}
+
+function moveData(e, source){
+    elem(".resultsScreen").style = `top: ${e.clientY - 85}px; left: ${e.clientX + 15}px;`
 }
