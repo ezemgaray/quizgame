@@ -291,7 +291,7 @@ div .title__span:nth-child(2) span:nth-child(4) {
 
 .profile__container__info--graph>div>div,
 .summary__container__info--graph>div>div {
-   width: 20px;
+   width: 40px;
    transition: height 1s ease-in-out;
    -webkit-transition: height 1s ease-in-out;
    -moz-transition: height 1s ease-in-out;
@@ -875,36 +875,50 @@ div .title__span:nth-child(2) span:nth-child(4) {
       flex-direction: row !important;
    }
 
-   .profile__container__info--img {
+   .profile__container__info--img,
+   .summary__container__info--img {
       height: 50px;
       width: 50px;
    }
 
-   .profile__container__info--values {
+   .profile__container__info--values,
+   .summary__container__info--values {
       max-width: 120px;
    }
 
-   .profile__container__info--graph {
+   .profile__container__info--graph,
+   .summary__container__info--graph {
       height: 60px;
       max-width: 250px;
    }
 
-   .profile__container__info--graph>span {
+   .profile__container__info--graph>span,
+   .summary__container__info--graph>span {
       font-size: 32px;
    }
 }
 
 @media (max-height: 668px) {
-   .profile__container__info--values {
+
+   .profile__container__info--img,
+   .summary__container__info--img {
+      height: 75px;
+      width: 75px;
+   }
+
+   .profile__container__info--values,
+   .summary__container__info--values {
       font-size: 15px;
    }
 
-   .profile__container__info--graph {
+   .profile__container__info--graph,
+   .summary__container__info--graph {
       height: 60px;
       max-width: 250px;
    }
 
-   .profile__container__info--graph>span {
+   .profile__container__info--graph>span,
+   .summary__container__info--graph>span {
       font-size: 32px;
    }
 }
