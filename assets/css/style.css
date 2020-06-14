@@ -38,6 +38,12 @@ input:focus {
    width: 100vw;
 }
 
+.main__contentShow{
+   width: 100vw;
+   height: 100vh;
+   position: relative;
+}
+
 /*? ========= LOGIN SCREEN ========= ?*/
 
 .login {
@@ -336,7 +342,7 @@ div .title__span:nth-child(2) span:nth-child(4) {
 
 .menu {
    height: 10%;
-   max-height: 55px;
+   min-height: 55px;
    width: 100%;
    border-radius: 10px 10px 0 0;
    background: white;
@@ -346,6 +352,7 @@ div .title__span:nth-child(2) span:nth-child(4) {
 
 .menu--big{
    position: absolute;
+   max-height: 55px;
    bottom: 0;
    box-shadow: 0 10px 15px rgba(0, 0, 0, 1);
 }
@@ -549,7 +556,7 @@ div .title__span:nth-child(2) span:nth-child(4) {
 }
 
 .sideMenu{
-   width: 50%;
+   width: 35%;
    height: 100vh;
    min-width: 300px;
    background-color: white;
@@ -827,5 +834,15 @@ div .title__span:nth-child(2) span:nth-child(4) {
 
    .profile__container__info--graph>span {
       font-size: 32px;
+   }
+}
+
+@media (min-width: 768px){
+   /* .question__container{
+      right: 0;
+      width: 70%;
+   } */
+   .main__contentShow{
+      width: 70vw;
    }
 }

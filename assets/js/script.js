@@ -245,6 +245,7 @@ function showProfileData() {
     }, 100)
     elem("#menuSmall").classList.replace("d-none", "d-flex");
     elem("#sideMenu").classList.replace("d-md-none", "d-md-flex");
+    elem(".main__contentShow").classList.remove("d-none");
 }
 
 function showChat(from) {
