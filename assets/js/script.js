@@ -422,7 +422,6 @@ function showQuestion() {
     }, 200)
     questionCount++
     console.log(selectedAnswers);
-
 }
 
 function questionTime() {
