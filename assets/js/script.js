@@ -9,6 +9,12 @@ var currGame
 var answers
 var selectedAnswers = []
 let questionCount = 0 // cuenta ascendente de preguntas, al cargar preguntas que manejar el contador por el length del array de preguntas
+let correctAnswers = 0;
+let wrongAnswers = 0;
+// let totalExperience = 0;
+
+let answerTime = 10; //time to answer the question
+let nQuestions = 5; //number of questions
 
 var globalInterval
 var user = JSON.parse(localStorage.getItem("user")) || {
@@ -18,10 +24,12 @@ var user = JSON.parse(localStorage.getItem("user")) || {
     countGames: 0,
     win: 0,
     loose: 0,
-    currC: 0,
-    currW: 0,
+    totalC: 0,
+    totalW: 0,
     currR: "",
-    ratio: 0 //(this.countGames == 0) ? 0 : ((this.win / this.countGames) * 100)
+    ratio: 0, //(this.countGames == 0) ? 0 : ((this.win / this.countGames) * 100)
+    level: 0,
+    experience: 0
 }
 
 var anonymousUser = ["quagga", "kiwi", "nyancat", "dragon", "anteater", "blobfish", "chupacabra", "bat", "ifrit", "kraken", "manatee", "ferret", "llama", "koala", "platypus", "wombat", "iguana", "mink", "narwhal", "liger"];
@@ -49,6 +57,15 @@ elem("#chatInp2").onkeyup = e => {
     if (e.keyCode == 13) onSendChat("big");
 }
 elem("#buttonId").addEventListener("click", onSendChat);
+elem("#winGraph").addEventListener("mouseover", ()=>showData("winGraph"));
+elem("#winGraph").addEventListener("mouseout", ()=>showData("winGraph"));
+elem("#winGraph").addEventListener("mousemove", (e)=>moveData(e));
+elem("#looseGraph").addEventListener("mouseover", ()=>showData("looseGraph"));
+elem("#looseGraph").addEventListener("mouseout", ()=>showData("looseGraph"));
+elem("#looseGraph").addEventListener("mousemove", (e)=>moveData(e));
+elem("#profileRatio").addEventListener("mouseover", ()=>showData("profileRatio"));
+elem("#profileRatio").addEventListener("mouseout", ()=>showData("profileRatio"));
+elem("#profileRatio").addEventListener("mousemove", (e)=>moveData(e, "profileRatio"));
 
 
 window.onbeforeunload = leaveGame;
@@ -216,7 +233,17 @@ function showConfirmUser() {
     confirm.classList.add("d-flex")
     profile.classList.add("d-none")
     profile.classList.remove("d-flex")
-    elem("#confirmN").onclick = showLogin
+    elem("#confirmN").onclick = ()=>{
+        showLogin();
+        user.countGames = 0;
+        user.totalC = 0;
+        user.totalW = 0;
+        user.ratio = 0;
+        user.win = 0;
+        user.loose = 0;
+        user.level = 0;
+        user.experience = 0;
+    }
     elem("#confirmY").onclick = joinGame
 }
 
@@ -244,8 +271,8 @@ function showProfileData() {
     elem("#profileBtn").style = `background-image: url(${user.image}); background-size: cover;`;
     setTimeout(function () {
         animaProfileRatio()
-        elem("#winGraph").style.height = "80%"
-        elem("#looseGraph").style.height = "55%"
+        elem("#winGraph").style.height = Math.floor((user.totalC/(user.totalC+user.totalW))*100) + "%";
+        elem("#looseGraph").style.height = Math.floor((user.totalW/(user.totalC+user.totalW))*100) + "%"
     }, 100)
     elem("#menuSmall").classList.replace("d-none", "d-flex");
     elem("#sideMenu").classList.replace("d-md-none", "d-md-flex");
@@ -306,7 +333,7 @@ function leaveGame() {
     ws.close();
 }
 
-function getQuestions(amount = 5) {
+function getQuestions(amount) {
     axios
         .get("https://opentdb.com/api.php?difficulty=easy&amount=" + amount)
         .then(function (response) {
@@ -323,7 +350,7 @@ function mixAnswers() {
 function showQuestions() {
 
     elem("#questions").classList.toggle("open")
-    getQuestions()
+    getQuestions(nQuestions)
     elem("#questions").addEventListener("transitionend", showCountDown)
 }
 
@@ -357,11 +384,10 @@ function showCountDown() {
 
 function showQuestion() {
 
-
     if (questionCount + 1 > currGame.length) {
         elem("#questions").classList.toggle("open")
         elem("#question").remove()
-        recuento()
+        checkResults()
         questionCount = 0
         return
     }
@@ -391,9 +417,11 @@ function showQuestion() {
             button.onclick = () => {
                 selectedAnswers.push(btn)
                 if (btn == currGame[questionCount - 1].correct_answer) {
-                    button.style.backgroundColor = "rgb(32, 200, 104)"
+                    button.style.backgroundColor = "rgb(32, 200, 104)";
+                    correctAnswers++;
                 } else {
-                    button.style.backgroundColor = "rgb(245, 38, 49)"
+                    button.style.backgroundColor = "rgb(245, 38, 49)";
+                    wrongAnswers++;
                 }
                 stopQuestion()
                 button.disabled = true
@@ -404,13 +432,12 @@ function showQuestion() {
     }, 200)
     questionCount++
     console.log(selectedAnswers);
-
 }
 
 function questionTime() {
     let bar = elem(".seconds")
     barW = bar.parentElement.clientWidth
-    wPerSecond = barW / 5 // Divido por la cantidad de segundo para responder
+    wPerSecond = barW / answerTime // Divido por la cantidad de segundo para responder
     if (globalInterval) {
         clearInterval(globalInterval)
     }
@@ -421,8 +448,9 @@ function questionTime() {
         else bar.style.width = barW + "px"
         sec++
 
-        if (sec > 5) { // si pasa la cantidad de segundos cierra la pregunta
+        if (sec > answerTime) { // si pasa la cantidad de segundos cierra la pregunta
             elem("#question .answers button", true).forEach(button => button.disabled = true)
+            wrongAnswers++;
             stopQuestion()
         }
     }, 1000);
@@ -441,13 +469,69 @@ function stopQuestion(next = true) {
     }, 1000);
 }
 
-// simulando la seccion al terminar la partida - definir seccion
-function recuento() {
+function checkResults() {
+    if((correctAnswers/nQuestions)*100 >= 70){
+        user.experience++;
+        user.win++
+    }else{
+        user.loose++
+    }
+
+    if(user.experience >= user.level && user.experience != 0){
+        user.level++;
+        user.experience = 0;
+    }
+
+    user.countGames++;
+    user.totalC += correctAnswers;
+    user.totalW += wrongAnswers;
+    user.ratio = (Math.floor((user.win/user.countGames)*100));
+
+    showProfileData();
+    localStorage.setItem("user", JSON.stringify(user))
+
     setTimeout(() => {
-        alert("estoy en recuento")
+        showSummary();
+        correctAnswers = 0;
+        wrongAnswers = 0;
     }, 700);
+}
+
+function showSummary(){
+    console.log("This is the summary:");
+    console.log("user.experience:", user.experience);
+    console.log("user.level: ", user.level);
+    console.log("user.totalC: ", user.totalC);
+    console.log("user.ratio: ", user.ratio);
+    console.log("user.countGames: ", user.countGames);
+    // elem("#summary").classList.toggle("open");
 }
 
 function elem(selector, all = false) {
     return all ? document.querySelectorAll(selector) : document.querySelector(selector)
+}
+
+function showData(source){
+    if(source === "winGraph"){
+        elem("#answerPercentage").textContent = Math.floor((user.totalC/(user.totalC+user.totalW))*100) + "%";
+        elem("#answerPercentage").style = "color: #20C868;"
+        elem("#answerExplain").textContent = "of correct answers";
+        
+    }else if(source === "profileRatio"){
+        elem("#answerPercentage").textContent = user.ratio + "%";
+        elem("#answerPercentage").style = "color: #20C868;"
+        elem("#answerExplain").textContent = "of won games";
+    }else{
+        elem("#answerPercentage").textContent = Math.floor((user.totalW/(user.totalC+user.totalW))*100) + "%";
+        elem("#answerPercentage").style = "color: #F52631;"
+        elem("#answerExplain").textContent = "of wronged answers"
+    }
+    elem(".resultsScreen").classList.toggle("d-flex");
+    elem(".resultsScreen").classList.toggle("d-none");
+}
+
+function moveData(e, source){
+    var sumX = 0;
+    source === "profileRatio" ? sumX = -135 : sumX = 15;
+    elem(".resultsScreen").style = `top: ${e.clientY - 85}px; left: ${e.clientX + sumX}px;`
 }
