@@ -153,6 +153,8 @@ function printMessage(userData, message) {
     var msg2 = msg.cloneNode(true);
     elem("#chatBox1").append(msg);
     elem("#chatBox2").append(msg2);
+    elem("#chatBox1").scrollTop = elem("#chatBox1").scrollHeight;
+    elem("#chatBox2").scrollTop = elem("#chatBox2").scrollHeight;
 }
 
 function saveUser() {
