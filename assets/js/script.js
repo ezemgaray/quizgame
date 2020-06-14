@@ -366,8 +366,6 @@ function showQuestion() {
       return
    }
    mixAnswers()
-   console.log(currGame[questionCount]);
-   console.log(answers);
 
    if (elem("#question")) elem("#question").remove()
    elem("#questions").innerHTML = elem("#templateQuestion").innerHTML
@@ -403,7 +401,6 @@ function showQuestion() {
       questionTime()
    }, 200)
    questionCount++
-   console.log(selectedAnswers);
 
 }
 
