@@ -385,9 +385,11 @@ function showCountDown() {
 function showQuestion() {
 
     if (questionCount + 1 > currGame.length) {
-        elem("#questions").classList.toggle("open")
-        elem("#question").remove()
-        checkResults()
+        setTimeout(() => {
+            elem("#questions").classList.toggle("open")
+            elem("#question").remove()
+        }, 700);
+        checkResults();
         questionCount = 0
         return
     }
@@ -491,10 +493,10 @@ function checkResults() {
     localStorage.setItem("user", JSON.stringify(user))
 
     setTimeout(() => {
-        showSummary();
         correctAnswers = 0;
         wrongAnswers = 0;
     }, 700);
+    showSummary();
 }
 
 function showSummary(){
@@ -516,7 +518,7 @@ function showData(source){
         elem("#answerPercentage").textContent = Math.floor((user.totalC/(user.totalC+user.totalW))*100) + "%";
         elem("#answerPercentage").style = "color: #20C868;"
         elem("#answerExplain").textContent = "of correct answers";
-        
+
     }else if(source === "profileRatio"){
         elem("#answerPercentage").textContent = user.ratio + "%";
         elem("#answerPercentage").style = "color: #20C868;"
