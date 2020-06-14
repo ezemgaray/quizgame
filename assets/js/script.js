@@ -400,7 +400,7 @@ function showQuestion() {
 function questionTime() {
    let bar = elem(".seconds")
    barW = bar.parentElement.clientWidth
-   wPerSecond = barW / 4 // Divido por la cantidad de segundo para responder
+   wPerSecond = barW / 5 // Divido por la cantidad de segundo para responder
    if (globalInterval) {
       clearInterval(globalInterval)
    }
@@ -411,7 +411,8 @@ function questionTime() {
       else bar.style.width = barW + "px"
       sec++
 
-      if (sec > 4) { // si pasa la cantidad de segundos cierra la pregunta
+      if (sec > 5) { // si pasa la cantidad de segundos cierra la pregunta
+         elem("#question .answers button", true).forEach(button => button.disabled = true)
          stopQuestion()
       }
    }, 1000);
