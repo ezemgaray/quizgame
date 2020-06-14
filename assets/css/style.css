@@ -104,14 +104,16 @@ div .title__span:nth-child(2) span:nth-child(4) {
    font-weight: 200;
 }
 
-.chat__form--message--big{
+.chat__form--message{
    border: 1px solid #1675CE;
    color: black;
 }
 
-.login__menu--username::placeholder,
-.chat__form--message::placeholder {
+.login__menu--username::placeholder{
    color: rgba(255, 255, 255, 0.5);
+}
+.chat__form--message::placeholder {
+   color: rgba(0, 0, 0, 0.5);
 }
 
 .login__menu--button,
@@ -340,7 +342,7 @@ div .title__span:nth-child(2) span:nth-child(4) {
 
 /*? ======== MENU ======== ?*/
 
-.menu {
+.menu, .menu--big {
    height: 10%;
    max-height: 55px;
    width: 100%;
@@ -349,14 +351,14 @@ div .title__span:nth-child(2) span:nth-child(4) {
    z-index: 100;
    bottom: 0;
    position: absolute;
+   box-shadow: 0 10px 15px rgba(0, 0, 0, 1);
 }
 
-.menu--big{
+/* .menu--big{
    position: absolute;
    max-height: 55px;
    bottom: 0;
-   box-shadow: 0 10px 15px rgba(0, 0, 0, 1);
-}
+} */
 
 .menu button {
    background: none;
@@ -411,7 +413,7 @@ div .title__span:nth-child(2) span:nth-child(4) {
    top: 100%;
    width: 100%;
    z-index: 90;
-   height: calc(100% - 75px);
+   height: calc(100% - 48px);
    background-color: #1675CE;
    transition: top .7s ease-in-out;
    -webkit-transition: top .7s ease-in-out;
@@ -420,7 +422,11 @@ div .title__span:nth-child(2) span:nth-child(4) {
    -o-transition: top .7s ease-in-out;
 }
 
-.chat--big{
+.questions{
+   height: calc(100% - 75px);
+}
+
+.chat--big, .chat{
    background-color: white;
 }
 
@@ -509,6 +515,10 @@ div .title__span:nth-child(2) span:nth-child(4) {
    -o-border-radius: 10px;
 }
 
+.msg__content{
+   background-color: rgb(220, 220, 240);
+}
+
 .rkg__content {
    text-align: center;
 }
@@ -521,7 +531,7 @@ div .title__span:nth-child(2) span:nth-child(4) {
    right: calc(100% - 1px);
    width: 10px;
    height: 10px;
-   background-color: rgb(191, 200, 240);
+   background-color: rgb(220, 220, 240);
    transform: translateX(50%) rotate(45deg);
    -webkit-transform: translateX(50%) rotate(45deg);
    -moz-transform: translateX(50%) rotate(45deg);
@@ -537,6 +547,7 @@ div .title__span:nth-child(2) span:nth-child(4) {
 .msg.sent .msg__content::after {
    top: 20px;
    right: 1px;
+   background-color: #1675CE;
 }
 
 .rkg .rkg__content::after {
@@ -555,6 +566,12 @@ div .title__span:nth-child(2) span:nth-child(4) {
 
 .self {
    text-align: right;
+   background-color: #1675CE;
+   color: white;
+}
+
+.self::after{
+   background-color: #1675CE;
 }
 
 .sideMenu{
