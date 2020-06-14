@@ -342,12 +342,13 @@ div .title__span:nth-child(2) span:nth-child(4) {
 
 .menu {
    height: 10%;
-   min-height: 55px;
+   max-height: 55px;
    width: 100%;
    border-radius: 10px 10px 0 0;
    background: white;
    z-index: 100;
-   /* position: absolute; */
+   bottom: 0;
+   position: absolute;
 }
 
 .menu--big{
