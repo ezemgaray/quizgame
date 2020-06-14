@@ -9,6 +9,11 @@ var currGame
 var answers
 var selectedAnswers = []
 let questionCount = 0 // cuenta ascendente de preguntas, al cargar preguntas que manejar el contador por el length del array de preguntas
+let correctAnswers = 0;
+let wrongAnswers = 0;
+// let totalExperience = 0;
+
+let nQuestions = 5;
 
 var globalInterval
 var user = JSON.parse(localStorage.getItem("user")) || {
@@ -21,7 +26,9 @@ var user = JSON.parse(localStorage.getItem("user")) || {
     currC: 0,
     currW: 0,
     currR: "",
-    ratio: 0 //(this.countGames == 0) ? 0 : ((this.win / this.countGames) * 100)
+    ratio: 0, //(this.countGames == 0) ? 0 : ((this.win / this.countGames) * 100)
+    level: 0,
+    experience: 0
 }
 
 var anonymousUser = ["quagga", "kiwi", "nyancat", "dragon", "anteater", "blobfish", "chupacabra", "bat", "ifrit", "kraken", "manatee", "ferret", "llama", "koala", "platypus", "wombat", "iguana", "mink", "narwhal", "liger"];
@@ -306,7 +313,7 @@ function leaveGame() {
     ws.close();
 }
 
-function getQuestions(amount = 5) {
+function getQuestions(amount) {
     axios
         .get("https://opentdb.com/api.php?difficulty=easy&amount=" + amount)
         .then(function (response) {
@@ -323,7 +330,7 @@ function mixAnswers() {
 function showQuestions() {
 
     elem("#questions").classList.toggle("open")
-    getQuestions()
+    getQuestions(nQuestions)
     elem("#questions").addEventListener("transitionend", showCountDown)
 }
 
@@ -360,7 +367,7 @@ function showQuestion() {
     if (questionCount + 1 > currGame.length) {
         elem("#questions").classList.toggle("open")
         elem("#question").remove()
-        recuento()
+        checkResults()
         questionCount = 0
         return
     }
@@ -390,9 +397,11 @@ function showQuestion() {
             button.onclick = () => {
                 selectedAnswers.push(btn)
                 if (btn == currGame[questionCount - 1].correct_answer) {
-                    button.style.backgroundColor = "rgb(32, 200, 104)"
+                    button.style.backgroundColor = "rgb(32, 200, 104)";
+                    correctAnswers++;
                 } else {
-                    button.style.backgroundColor = "rgb(245, 38, 49)"
+                    button.style.backgroundColor = "rgb(245, 38, 49)";
+                    wrongAnswers++;
                 }
                 stopQuestion()
                 button.disabled = true
@@ -441,10 +450,42 @@ function stopQuestion(next = true) {
 }
 
 // simulando la seccion al terminar la partida - definir seccion
-function recuento() {
+function checkResults() {
+    if((correctAnswers/nQuestions)*100 >= 70){
+        user.experience++;
+        user.won++
+    }else{
+        user.loose++
+    }
+
+    if(user.experience >= user.level && user.experience != 0){
+        user.level++;
+        user.experience = 0;
+    }
+
+    user.countGames++;
+    user.currC += correctAnswers;
+    user.currW += wrongAnswers;
+    user.ratio = (Math.floor((user.win/user.countGames)*100));
+
+    showProfileData();
+    localStorage.setItem("user", JSON.stringify(user))
+
     setTimeout(() => {
-        alert("estoy en recuento")
+        console.log("estoy en recuento")
+        showSummary();
+        correctAnswers = 0;
+        wrongAnswers = 0;
     }, 700);
+}
+
+function showSummary(){
+    console.log("This is the summary:");
+    console.log("user.experience:", user.experience);
+    console.log("user.level: ", user.level);
+    console.log("user.currC: ", user.currC);
+    console.log("user.ratio: ", user.ratio);
+    console.log("user.countGames: ", user.countGames);
 }
 
 function elem(selector, all = false) {
