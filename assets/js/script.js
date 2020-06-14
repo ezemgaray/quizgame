@@ -12,16 +12,16 @@ let questionCount = 0 // cuenta ascendente de preguntas, al cargar preguntas que
 
 var globalInterval
 var user = JSON.parse(localStorage.getItem("user")) || {
-   id: "",
-   name: "",
-   image: "",
-   countGames: 0,
-   win: 0,
-   loose: 0,
-   currC: 0,
-   currW: 0,
-   currR: "",
-   ratio: 0 //(this.countGames == 0) ? 0 : ((this.win / this.countGames) * 100)
+    id: "",
+    name: "",
+    image: "",
+    countGames: 0,
+    win: 0,
+    loose: 0,
+    currC: 0,
+    currW: 0,
+    currR: "",
+    ratio: 0 //(this.countGames == 0) ? 0 : ((this.win / this.countGames) * 100)
 }
 
 var anonymousUser = ["quagga", "kiwi", "nyancat", "dragon", "anteater", "blobfish", "chupacabra", "bat", "ifrit", "kraken", "manatee", "ferret", "llama", "koala", "platypus", "wombat", "iguana", "mink", "narwhal", "liger"];
@@ -31,7 +31,7 @@ var anonymousUser = ["quagga", "kiwi", "nyancat", "dragon", "anteater", "blobfis
  */
 
 elem("#usernameInp").onkeyup = function (e) {
-   if (e.keyCode == 13) saveUser()
+    if (e.keyCode == 13) saveUser()
 }
 elem("#usernameBtn").addEventListener("click", saveUser)
 elem("#chatBtn").addEventListener("click", () => showChat("small"))
@@ -75,63 +75,63 @@ init();
 
 
 function joinGame() {
-   ws = new WebSocket("wss://cloud.achex.ca");
-   ws.onopen = function (e) {
-      ws.send(`{"setID":"quizGame", "passwd":"12345"}`);
+    ws = new WebSocket("wss://cloud.achex.ca");
+    ws.onopen = function (e) {
+        ws.send(`{"setID":"quizGame", "passwd":"12345"}`);
 
-   }
-   ws.onmessage = function (response) {
-      let responseUser = JSON.parse(response.data);
+    }
+    ws.onmessage = function (response) {
+        let responseUser = JSON.parse(response.data);
 
-      if (responseUser.auth == "OK") {
-         console.log(response)
-         ws.send(`{"to":"quizGame", "user":"${responseUser.SID}", "type":"connect"}`);
-         user.id = responseUser.SID;
-         localStorage.setItem("user", JSON.stringify(user))
-         showProfile()
-      }
+        if (responseUser.auth == "OK") {
+            console.log(response)
+            ws.send(`{"to":"quizGame", "user":"${responseUser.SID}", "type":"connect"}`);
+            user.id = responseUser.SID;
+            localStorage.setItem("user", JSON.stringify(user))
+            showProfile()
+        }
 
-      switch (responseUser.type) {
-         case "connect":
-            sendUser(JSON.stringify(user))
-            break
-         case "messageU":
-            printMessage(responseUser.user, responseUser.content)
-            break
-         case "disconnect":
-            sendUser(JSON.stringify(user))
-            break
-         case "user":
-            printUsers(responseUser.user)
-            break
-      }
-   }
-   ws.onclose = function (e) {
-      console.log("onclose")
-   }
+        switch (responseUser.type) {
+            case "connect":
+                sendUser(JSON.stringify(user))
+                break
+            case "messageU":
+                printMessage(responseUser.user, responseUser.content)
+                break
+            case "disconnect":
+                sendUser(JSON.stringify(user))
+                break
+            case "user":
+                printUsers(responseUser.user)
+                break
+        }
+    }
+    ws.onclose = function (e) {
+        console.log("onclose")
+    }
 }
 
 function init() {
-   if (!user.name.length || !user.name) {
-      showLogin()
-   } else {
-      showConfirmUser()
-   }
+    if (!user.name.length || !user.name) {
+        showLogin()
+    } else {
+        showConfirmUser()
+    }
 }
 
 function sendUser(user) {
-   users = [];
-   ws.send(`{"to":"quizGame", "user":${user}, "type":"user"}`);
+    users = [];
+    ws.send(`{"to":"quizGame", "user":${user}, "type":"user"}`);
 }
 
 function printUsers(userData) {
-   if (userData.name != "" && userData.id != "") {
-      users.push({
-         name: userData.name,
-         userId: userData.id
-      });
-   }
-   console.log(users);
+    if (userData.name != "" && userData.id != "") {
+        users.push({
+            name: userData.name,
+            userId: userData.id
+        });
+    }
+    console.log(users);
 }
 
 function printMessage(userData, message) {
@@ -141,96 +141,98 @@ function printMessage(userData, message) {
    var msgUser = document.createElement("div");
    var msgContent = document.createElement("div");
 
-   msg.className = `msg ${userData.id == user.id ? "sent" : "received"} mb-2 p-1 d-flex justify-content-around`
-   msgUser.classList.add("msg__user");
-   msgUser.style = `background-image: url(${userData.image}); background-size: cover;`;;
-   msgContent.className = `msg__content p-2 pr-3 ${userData.id == user.id ? "self" : ""}`;
+    msg.className = `msg ${userData.id == user.id ? "sent" : "received"} mb-2 p-1 d-flex justify-content-around`
+    msgUser.classList.add("msg__user");
+    msgUser.style = `background-image: url(${userData.image}); background-size: cover;`;;
+    msgContent.className = `msg__content p-2 pr-3 ${userData.id == user.id ? "self" : ""}`;
 
-   msgContent.innerHTML = `<b>${userData.name}</b><br>${message}`;
+    msgContent.innerHTML = `<b>${userData.name}</b><br>${message}`;
 
-   msg.append(msgUser);
-   msg.append(msgContent);
-   var msg2 = msg.cloneNode(true);
-   elem("#chatBox1").append(msg);
-   elem("#chatBox2").append(msg2);
+    msg.append(msgUser);
+    msg.append(msgContent);
+    var msg2 = msg.cloneNode(true);
+    elem("#chatBox1").append(msg);
+    elem("#chatBox2").append(msg2);
+    elem("#chatBox1").scrollTop = elem("#chatBox1").scrollHeight;
+    elem("#chatBox2").scrollTop = elem("#chatBox2").scrollHeight;
 }
 
 function saveUser() {
-   user.name = elem("#usernameInp").value
+    user.name = elem("#usernameInp").value
 
-   if (elem("#imgImport").value.length) {
+    if (elem("#imgImport").value.length) {
 
-      var file = (elem("#imgImport").files[0]);
-      var reader = new FileReader();
+        var file = (elem("#imgImport").files[0]);
+        var reader = new FileReader();
 
-      reader.onloadend = function () {
-         (file.size < 40000) ? user.image = reader.result: user.image = `https://ssl.gstatic.com/docs/common/profile/${anonymousUser[Math.floor(Math.random() * (anonymousUser.length))]}_lg.png`;
-      }
+        reader.onloadend = function () {
+            (file.size < 40000) ? user.image = reader.result: user.image = `https://ssl.gstatic.com/docs/common/profile/${anonymousUser[Math.floor(Math.random() * (anonymousUser.length))]}_lg.png`;
+        }
 
-      if (file) {
-         reader.readAsDataURL(file);
-      } else {
-         user.image = "";
-      }
-   } else {
-      user.image = `https://ssl.gstatic.com/docs/common/profile/${anonymousUser[Math.floor(Math.random() * (anonymousUser.length))]}_lg.png`
-   }
+        if (file) {
+            reader.readAsDataURL(file);
+        } else {
+            user.image = "";
+        }
+    } else {
+        user.image = `https://ssl.gstatic.com/docs/common/profile/${anonymousUser[Math.floor(Math.random() * (anonymousUser.length))]}_lg.png`
+    }
 
-   if (user.name.length) {
-      joinGame();
-   }
+    if (user.name.length) {
+        joinGame();
+    }
 }
 
 function truncate(str, n, useWordBoundary) {
-   if (str.length <= n) {
-      return str;
-   }
+    if (str.length <= n) {
+        return str;
+    }
 
-   var subString = str.substr(0, n - 1);
-   return (useWordBoundary ? subString.substr(0, subString.lastIndexOf(" ")) : subString) + " (...)";
+    var subString = str.substr(0, n - 1);
+    return (useWordBoundary ? subString.substr(0, subString.lastIndexOf(" ")) : subString) + " (...)";
 }
 
 function showLogin() {
-   let register = elem("#login")
-   let confirm = elem("#confirm")
-   let profile = elem("#profile")
-   register.classList.add("d-flex")
-   register.classList.remove("d-none")
-   confirm.classList.add("d-none")
-   confirm.classList.remove("d-flex")
-   profile.classList.add("d-none")
-   profile.classList.remove("d-flex")
-   elem("#usernameInp").focus()
+    let register = elem("#login")
+    let confirm = elem("#confirm")
+    let profile = elem("#profile")
+    register.classList.add("d-flex")
+    register.classList.remove("d-none")
+    confirm.classList.add("d-none")
+    confirm.classList.remove("d-flex")
+    profile.classList.add("d-none")
+    profile.classList.remove("d-flex")
+    elem("#usernameInp").focus()
 }
 
 function showConfirmUser() {
-   elem("#name-confirm").innerText = `"${user.name}"`
-   let register = elem("#login")
-   let confirm = elem("#confirm")
-   let profile = elem("#profile")
-   register.classList.remove("d-flex")
-   register.classList.add("d-none")
-   confirm.classList.remove("d-none")
-   confirm.classList.add("d-flex")
-   profile.classList.add("d-none")
-   profile.classList.remove("d-flex")
-   elem("#confirmN").onclick = showLogin
-   elem("#confirmY").onclick = joinGame
+    elem("#name-confirm").innerText = `"${user.name}"`
+    let register = elem("#login")
+    let confirm = elem("#confirm")
+    let profile = elem("#profile")
+    register.classList.remove("d-flex")
+    register.classList.add("d-none")
+    confirm.classList.remove("d-none")
+    confirm.classList.add("d-flex")
+    profile.classList.add("d-none")
+    profile.classList.remove("d-flex")
+    elem("#confirmN").onclick = showLogin
+    elem("#confirmY").onclick = joinGame
 }
 
 function showProfile() {
-   let register = elem("#login")
-   let confirm = elem("#confirm")
-   let profile = elem("#profile")
-   register.classList.remove("d-flex")
-   register.classList.add("d-none")
-   confirm.classList.add("d-none")
-   confirm.classList.remove("d-flex")
-   profile.classList.remove("d-none")
-   profile.classList.add("d-flex")
-   elem("#ranking").classList.remove("open");
-   elem("#chat").classList.remove("open");
-   showProfileData()
+    let register = elem("#login")
+    let confirm = elem("#confirm")
+    let profile = elem("#profile")
+    register.classList.remove("d-flex")
+    register.classList.add("d-none")
+    confirm.classList.add("d-none")
+    confirm.classList.remove("d-flex")
+    profile.classList.remove("d-none")
+    profile.classList.add("d-flex")
+    elem("#ranking").classList.remove("open");
+    elem("#chat").classList.remove("open");
+    showProfileData()
 }
 
 function showProfileData() {
@@ -251,65 +253,65 @@ function showProfileData() {
 }
 
 function showChat(from) {
-   if (from === "small") {
-      setTimeout(() => {
-         elem("#chat").classList.toggle("open");
-         elem("#chatNot").classList.add("d-none");
-         setTimeout(() => {
-            if (elem("#chat").classList.contains("open")) elem("#chatInp").focus();
-         }, 1000)
-      }, 200);
-      elem("#ranking").classList.remove("open");
-   } else {
-      elem("#chat--big").classList.add("open");
-      elem("#chatNot--big").classList.add("d-none");
-      elem("#ranking--big").classList.remove("open")
-   }
+    if (from === "small") {
+        setTimeout(() => {
+            elem("#chat").classList.toggle("open");
+            elem("#chatNot").classList.add("d-none");
+            setTimeout(() => {
+                if (elem("#chat").classList.contains("open")) elem("#chatInp").focus();
+            }, 1000)
+        }, 200);
+        elem("#ranking").classList.remove("open");
+    } else {
+        elem("#chat--big").classList.add("open");
+        elem("#chatNot--big").classList.add("d-none");
+        elem("#ranking--big").classList.remove("open")
+    }
 }
 
 function showRanking(from) {
-   if (from === "small") {
-      setTimeout(() => {
-         elem("#ranking").classList.toggle("open");
-      }, 200);
-      elem("#chat").classList.remove("open");
-   } else {
-      // elem("#ranking--big").classList.add("open");
-      elem("#chat--big").classList.remove("open");
-   }
+    if (from === "small") {
+        setTimeout(() => {
+            elem("#ranking").classList.toggle("open");
+        }, 200);
+        elem("#chat").classList.remove("open");
+    } else {
+        // elem("#ranking--big").classList.add("open");
+        elem("#chat--big").classList.remove("open");
+    }
 }
 
 function animaProfileRatio() {
-   let count = 0
-   if (globalInterval) {
-      clearInterval(globalInterval)
-   }
-   globalInterval = setInterval(() => {
-      elem("#profileRatio").innerText = count + "%"
-      if (count >= user.ratio) clearInterval(globalInterval)
-      else count++
-   }, 11);
+    let count = 0
+    if (globalInterval) {
+        clearInterval(globalInterval)
+    }
+    globalInterval = setInterval(() => {
+        elem("#profileRatio").innerText = count + "%"
+        if (count >= user.ratio) clearInterval(globalInterval)
+        else count++
+    }, 11);
 }
 
 function onSendChat(from) {
-   ws.send(`{"to":"quizGame", "user":${JSON.stringify(user)}, "content":"${(from === "small") ? elem("#chatInp").value : elem("#chatInp2").value}", "type":"messageU"}`);
-   (from === "small") ? elem("#chatInp").value = "": elem("#chatInp2").value = "";
+    ws.send(`{"to":"quizGame", "user":${JSON.stringify(user)}, "content":"${(from === "small") ? elem("#chatInp").value : elem("#chatInp2").value}", "type":"messageU"}`);
+    (from === "small") ? elem("#chatInp").value = "": elem("#chatInp2").value = "";
 }
 
 function leaveGame() {
-   user.id = ""
-   user.name = ""
-   user.image = ""
-   ws.send(`{"to":"quizGame", "userId":"", "username":"", "type":"disconnect"}`);
-   ws.close();
+    user.id = ""
+    user.name = ""
+    user.image = ""
+    ws.send(`{"to":"quizGame", "userId":"", "username":"", "type":"disconnect"}`);
+    ws.close();
 }
 
 function getQuestions(amount = 5) {
-   axios
-      .get("https://opentdb.com/api.php?difficulty=easy&amount=" + amount)
-      .then(function (response) {
-         currGame = response.data.results
-      })
+    axios
+        .get("https://opentdb.com/api.php?difficulty=easy&amount=" + amount)
+        .then(function (response) {
+            currGame = response.data.results
+        })
 }
 
 function mixAnswers() {
@@ -429,16 +431,16 @@ function questionTime() {
 }
 
 function stopQuestion(next = true) {
-   clearInterval(globalInterval)
+    clearInterval(globalInterval)
 
-   setTimeout(() => {
-      elem("#question").classList.toggle("open")
-      if (next) {
-         setTimeout(function () {
-            showQuestion()
-         }, 700)
-      }
-   }, 1000);
+    setTimeout(() => {
+        elem("#question").classList.toggle("open")
+        if (next) {
+            setTimeout(function () {
+                showQuestion()
+            }, 700)
+        }
+    }, 1000);
 }
 
 // simulando la seccion al terminar la partida - definir seccion
