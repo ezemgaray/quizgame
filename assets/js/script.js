@@ -476,11 +476,14 @@ function stopQuestion(next = true) {
 }
 
 function checkResults() {
+    var winner;
     if((correctAnswers/nQuestions)*100 >= 70){
         user.experience++;
         user.win++
+        winner = true;
     }else{
         user.loose++
+        winner = false;
     }
 
     if(user.experience >= user.level && user.experience != 0){
@@ -496,20 +499,30 @@ function checkResults() {
     showProfileData();
     localStorage.setItem("user", JSON.stringify(user))
 
-    setTimeout(() => {
+    showSummary(winner);
+    // setTimeout(() => {
         correctAnswers = 0;
         wrongAnswers = 0;
-    }, 700);
-    showSummary();
+    // }, 700);
 }
 
-function showSummary(){
+function showSummary(win){
     console.log("This is the summary:");
     console.log("user.experience:", user.experience);
     console.log("user.level: ", user.level);
     console.log("user.totalC: ", user.totalC);
     console.log("user.ratio: ", user.ratio);
     console.log("user.countGames: ", user.countGames);
+
+    elem(".summary__container__info--img").style = `background-image: url(${user.image}); background-size: cover;`;
+    elem("#summaryWinGraph").style = "height: " + Math.floor((user.totalC/(user.totalC+user.totalW))*100) + "%;";
+    elem("#summaryLooseGraph").style = "height: " + Math.floor((user.totalW/(user.totalC+user.totalW))*100) + "%";;
+    elem("#summaryXPGraph").textContent = user.ratio + "%";;
+    elem("#summaryHits").textContent = correctAnswers;
+    elem("#summaryMisses").textContent = wrongAnswers;
+    elem("#summaryXP").textContent = win ? "+1" : "0";
+    elem("#summaryXPnext").textContent += (" " + (user.level+1));
+    elem("#summaryTotalXP").textContent = (user.level+1) - user.experience;
     elem("#summary").classList.toggle("open");
 }
 
