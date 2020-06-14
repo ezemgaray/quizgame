@@ -441,7 +441,6 @@ function stopQuestion(next = true) {
     }, 1000);
 }
 
-// simulando la seccion al terminar la partida - definir seccion
 function recuento() {
     setTimeout(() => {
         alert("estoy en recuento")
