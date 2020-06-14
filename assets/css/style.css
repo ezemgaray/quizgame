@@ -319,6 +319,10 @@ div .title__span:nth-child(2) span:nth-child(4) {
 .summary__container__info--graph>span {
    font-size: 48px;
    font-weight: 100;
+   -webkit-user-select: none;
+   -moz-user-select: none;
+   -ms-user-select: none;
+   user-select: none;
 }
 
 .profile__container__info--values,

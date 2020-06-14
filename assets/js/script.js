@@ -59,10 +59,13 @@ elem("#chatInp2").onkeyup = e => {
 elem("#buttonId").addEventListener("click", onSendChat);
 elem("#winGraph").addEventListener("mouseover", ()=>showData("winGraph"));
 elem("#winGraph").addEventListener("mouseout", ()=>showData("winGraph"));
-elem("#winGraph").addEventListener("mousemove", (e)=>moveData(e, "winGraph"));
+elem("#winGraph").addEventListener("mousemove", (e)=>moveData(e));
 elem("#looseGraph").addEventListener("mouseover", ()=>showData("looseGraph"));
 elem("#looseGraph").addEventListener("mouseout", ()=>showData("looseGraph"));
-elem("#looseGraph").addEventListener("mousemove", (e)=>moveData(e, "winGraph"));
+elem("#looseGraph").addEventListener("mousemove", (e)=>moveData(e));
+elem("#profileRatio").addEventListener("mouseover", ()=>showData("profileRatio"));
+elem("#profileRatio").addEventListener("mouseout", ()=>showData("profileRatio"));
+elem("#profileRatio").addEventListener("mousemove", (e)=>moveData(e, "profileRatio"));
 
 
 window.onbeforeunload = leaveGame;
@@ -514,6 +517,10 @@ function showData(source){
         elem("#answerPercentage").style = "color: #20C868;"
         elem("#answerExplain").textContent = "of correct answers";
         
+    }else if(source === "profileRatio"){
+        elem("#answerPercentage").textContent = user.ratio + "%";
+        elem("#answerPercentage").style = "color: #20C868;"
+        elem("#answerExplain").textContent = "of won games";
     }else{
         elem("#answerPercentage").textContent = Math.floor((user.totalW/(user.totalC+user.totalW))*100) + "%";
         elem("#answerPercentage").style = "color: #F52631;"
@@ -524,5 +531,7 @@ function showData(source){
 }
 
 function moveData(e, source){
-    elem(".resultsScreen").style = `top: ${e.clientY - 85}px; left: ${e.clientX + 15}px;`
+    var sumX = 0;
+    source === "profileRatio" ? sumX = -135 : sumX = 15;
+    elem(".resultsScreen").style = `top: ${e.clientY - 85}px; left: ${e.clientX + sumX}px;`
 }
