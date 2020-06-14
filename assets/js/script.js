@@ -33,13 +33,19 @@ elem("#usernameInp").onkeyup = function (e) {
     if (e.keyCode == 13) saveUser()
 }
 elem("#usernameBtn").addEventListener("click", saveUser)
-elem("#chatBtn").addEventListener("click", showChat)
+elem("#chatBtn").addEventListener("click", ()=>showChat("small"))
+elem("#chatBtn2").addEventListener("click", ()=>showChat("big"))
 elem("#profileBtn").addEventListener("click", showProfile)
-elem("#rankingBtn").addEventListener("click", showRanking)
-elem("#chatSendBtn").addEventListener("click", onSendChat)
+elem("#rankingBtn").addEventListener("click", ()=>showRanking("small"))
+elem("#rankingBtn2").addEventListener("click", ()=>showRanking("big"))
+elem("#chatSendBtn").addEventListener("click", ()=>onSendChat("small"))
+elem("#chatSendBtn2").addEventListener("click", ()=>onSendChat("big"))
 elem("#enterGameBtn").addEventListener("click", showQuestions)
 elem("#chatInp").onkeyup = e => {
-    if (e.keyCode == 13) onSendChat()
+    if (e.keyCode == 13) onSendChat("small");
+}
+elem("#chatInp2").onkeyup = e => {
+    if (e.keyCode == 13) onSendChat("big");
 }
 elem("#buttonId").addEventListener("click", onSendChat);
 
@@ -52,7 +58,7 @@ elem("#imgImport").addEventListener("change", () => {
     console.log(file)
     info.textContent = truncate(file.name, 25, false);
     info.style = "color: #20C868"
-    if (file.size > 40000){
+    if (file.size > 40000) {
         alert("File too big! Max size: 40kb");
         info.textContent = truncate(file.name, 15, false) + " won't be uploaded";
         info.style = "color: #F52631"
@@ -142,7 +148,9 @@ function printMessage(userData, message) {
 
     msg.append(msgUser);
     msg.append(msgContent);
-    elem(".chat__box").append(msg);
+    var msg2 = msg.cloneNode(true);
+    elem("#chatBox1").append(msg);
+    elem("#chatBox2").append(msg2);
 }
 
 function saveUser() {
@@ -235,25 +243,36 @@ function showProfileData() {
         elem("#winGraph").style.height = "80%"
         elem("#looseGraph").style.height = "55%"
     }, 100)
-    elem(".menu").classList.replace("d-none", "d-flex");
+    elem("#menuSmall").classList.replace("d-none", "d-flex");
+    elem("#sideMenu").classList.replace("d-md-none", "d-md-flex");
 }
 
-function showChat() {
-    setTimeout(() => {
-        elem("#chat").classList.toggle("open");
-        elem("#chatNot").classList.add("d-none");
-        setTimeout(()=>{
-            if(elem("#chat").classList.contains("open")) elem("#chatInp").focus();
-        },1000)
-    }, 200);
-    elem("#ranking").classList.remove("open");
+function showChat(from) {
+    if(from === "small"){
+        setTimeout(() => {
+            elem("#chat").classList.toggle("open");
+            elem("#chatNot").classList.add("d-none");
+            setTimeout(() => {
+                if (elem("#chat").classList.contains("open")) elem("#chatInp").focus();
+            }, 1000)
+        }, 200);
+        elem("#ranking").classList.remove("open");
+    }else{
+        elem("#chat--big").classList.add("open")
+        elem("#ranking--big").classList.remove("open")
+    }
 }
 
-function showRanking() {
-    setTimeout(() => {
-        elem("#ranking").classList.toggle("open");
-    }, 200);
-    elem("#chat").classList.remove("open");
+function showRanking(from) {
+    if(from === "small"){
+        setTimeout(() => {
+            elem("#ranking").classList.toggle("open");
+        }, 200);
+        elem("#chat").classList.remove("open");
+    }else{
+        // elem("#ranking--big").classList.add("open");
+        elem("#chat--big").classList.remove("open");
+    }
 }
 
 function animaProfileRatio() {
@@ -268,9 +287,9 @@ function animaProfileRatio() {
     }, 11);
 }
 
-function onSendChat() {
-    ws.send(`{"to":"quizGame", "user":${JSON.stringify(user)}, "content":"${elem("#chatInp").value}", "type":"messageU"}`);
-    elem("#chatInp").value = "";
+function onSendChat(from) {
+    ws.send(`{"to":"quizGame", "user":${JSON.stringify(user)}, "content":"${(from === "small") ? elem("#chatInp").value : elem("#chatInp2").value}", "type":"messageU"}`);
+    (from === "small") ? elem("#chatInp").value = "" : elem("#chatInp2").value = "";
 }
 
 function leaveGame() {
@@ -290,115 +309,115 @@ function getQuestions(amount = 5) {
 }
 
 function mixAnswers() {
-   answers = currGame[questionCount].incorrect_answers
-   answers.push(currGame[questionCount].correct_answer)
-   answers.sort(() => Math.random() - 0.5)
+    answers = currGame[questionCount].incorrect_answers
+    answers.push(currGame[questionCount].correct_answer)
+    answers.sort(() => Math.random() - 0.5)
 }
 
 function showQuestions() {
-   elem("#questions").classList.toggle("open")
-   getQuestions()
-   elem("#questions").addEventListener("transitionend", showCountDown)
+    elem("#questions").classList.toggle("open")
+    getQuestions()
+    elem("#questions").addEventListener("transitionend", showCountDown)
 }
 
 function showCountDown() {
-   let countDown = document.createElement("div")
-   countDown.className = "countdown"
-   let countNumber = document.createElement("span")
-   countNumber.className = "countdown__number"
-   countNumber.id = "countdownNumber"
-   countDown.append(countNumber)
-   elem("#questions").append(countDown)
+    let countDown = document.createElement("div")
+    countDown.className = "countdown"
+    let countNumber = document.createElement("span")
+    countNumber.className = "countdown__number"
+    countNumber.id = "countdownNumber"
+    countDown.append(countNumber)
+    elem("#questions").append(countDown)
 
-   if (globalInterval) {
-      clearInterval(globalInterval)
-   }
-   let down = 3
-   elem("#countdownNumber").innerText = down
-   elem("#countdownNumber").dataset.color = down
-   globalInterval = setInterval(() => {
-      down -= 1
-      elem("#countdownNumber").innerText = down
-      elem("#countdownNumber").dataset.color = down
-      if (!down) {
-         clearInterval(globalInterval)
-         countDown.remove()
-         showQuestion()
-      }
-   }, 1000);
-   elem("#questions").removeEventListener("transitionend", showCountDown)
+    if (globalInterval) {
+        clearInterval(globalInterval)
+    }
+    let down = 3
+    elem("#countdownNumber").innerText = down
+    elem("#countdownNumber").dataset.color = down
+    globalInterval = setInterval(() => {
+        down -= 1
+        elem("#countdownNumber").innerText = down
+        elem("#countdownNumber").dataset.color = down
+        if (!down) {
+            clearInterval(globalInterval)
+            countDown.remove()
+            showQuestion()
+        }
+    }, 1000);
+    elem("#questions").removeEventListener("transitionend", showCountDown)
 }
 
 function showQuestion() {
 
-   if (questionCount + 1 > currGame.length) {
-      elem("#questions").classList.toggle("open")
-      elem("#question").remove()
-      recuento()
-      questionCount = 0
-      return
-   }
-   mixAnswers()
+    if (questionCount + 1 > currGame.length) {
+        elem("#questions").classList.toggle("open")
+        elem("#question").remove()
+        recuento()
+        questionCount = 0
+        return
+    }
+    mixAnswers()
 
-   if (elem("#question")) elem("#question").remove()
-   elem("#questions").innerHTML = elem("#templateQuestion").innerHTML
-   //Insert question
-   elem("#question .question__category").innerText = currGame[questionCount].category
-   elem("#question .question__number").innerText = (questionCount + 1) + "/" + currGame.length
-   elem("#question h2").innerHTML = currGame[questionCount].question
-   //Adaptar posibles respuestas en base a la api de preguntas.
+    if (elem("#question")) elem("#question").remove()
+    elem("#questions").innerHTML = elem("#templateQuestion").innerHTML
+    //Insert question
+    elem("#question .question__category").innerText = currGame[questionCount].category
+    elem("#question .question__number").innerText = (questionCount + 1) + "/" + currGame.length
+    elem("#question h2").innerHTML = currGame[questionCount].question
+    //Adaptar posibles respuestas en base a la api de preguntas.
 
-   setTimeout(function () {
-      elem("#question").classList.toggle("open")
-      let buttons = elem(".answers button", true)
-      let transition = 0.9
-      answers.forEach((btn, index) => {
-         let button = document.createElement("button")
-         button.className = "question__btn btn-grad"
-         button.dataset.answers = index
-         button.innerHTML = btn
-         elem("#question .answers").append(button)
-         button.style.animation = `appear ${transition += 0.2}s ease-in-out forwards`
-      })
-      questionTime()
-   }, 200)
-   questionCount++
+    setTimeout(function () {
+        elem("#question").classList.toggle("open")
+        let buttons = elem(".answers button", true)
+        let transition = 0.9
+        answers.forEach((btn, index) => {
+            let button = document.createElement("button")
+            button.className = "question__btn btn-grad"
+            button.dataset.answers = index
+            button.innerHTML = btn
+            elem("#question .answers").append(button)
+            button.style.animation = `appear ${transition += 0.2}s ease-in-out forwards`
+        })
+        questionTime()
+    }, 200)
+    questionCount++
 }
 
 function questionTime() {
-   let bar = elem(".seconds")
-   barW = bar.parentElement.clientWidth
-   wPerSecond = barW / 5 // Divido por la cantidad de segundo para responder
-   if (globalInterval) {
-      clearInterval(globalInterval)
-   }
-   let sec = 0
-   globalInterval = setInterval(() => {
-      barW -= wPerSecond
-      if (barW < 0) bar.style.width = "0px"
-      else bar.style.width = barW + "px"
-      sec++
+    let bar = elem(".seconds")
+    barW = bar.parentElement.clientWidth
+    wPerSecond = barW / 5 // Divido por la cantidad de segundo para responder
+    if (globalInterval) {
+        clearInterval(globalInterval)
+    }
+    let sec = 0
+    globalInterval = setInterval(() => {
+        barW -= wPerSecond
+        if (barW < 0) bar.style.width = "0px"
+        else bar.style.width = barW + "px"
+        sec++
 
-      if (sec > 5) { // si pasa la cantidad de segundos cierra la pregunta
-         clearInterval(globalInterval)
+        if (sec > 5) { // si pasa la cantidad de segundos cierra la pregunta
+            clearInterval(globalInterval)
 
-         elem("#question").classList.toggle("open")
-         setTimeout(function () {
+            elem("#question").classList.toggle("open")
+            setTimeout(function () {
 
-            bar.removeAttribute("style")
-            showQuestion()
-         }, 700)
-      }
-   }, 1000);
+                bar.removeAttribute("style")
+                showQuestion()
+            }, 700)
+        }
+    }, 1000);
 }
 
 // simulando la seccion al terminar la partida - definir seccion
 function recuento() {
-   setTimeout(() => {
-      alert("estoy en recuento")
-   }, 700);
+    setTimeout(() => {
+        alert("estoy en recuento")
+    }, 700);
 }
 
 function elem(selector, all = false) {
-   return all ? document.querySelectorAll(selector) : document.querySelector(selector)
+    return all ? document.querySelectorAll(selector) : document.querySelector(selector)
 }

@@ -98,6 +98,11 @@ div .title__span:nth-child(2) span:nth-child(4) {
    font-weight: 200;
 }
 
+.chat__form--message--big{
+   border: 1px solid #1675CE;
+   color: black;
+}
+
 .login__menu--username::placeholder,
 .chat__form--message::placeholder {
    color: rgba(255, 255, 255, 0.5);
@@ -339,6 +344,12 @@ div .title__span:nth-child(2) span:nth-child(4) {
    /* position: absolute; */
 }
 
+.menu--big{
+   position: absolute;
+   bottom: 0;
+   box-shadow: 0 10px 15px rgba(0, 0, 0, 1);
+}
+
 .menu button {
    background: none;
    border: none;
@@ -401,6 +412,10 @@ div .title__span:nth-child(2) span:nth-child(4) {
    -o-transition: top .7s ease-in-out;
 }
 
+.chat--big{
+   background-color: white;
+}
+
 .chat.open,
 .ranking.open {
    top: 0;
@@ -412,10 +427,9 @@ div .title__span:nth-child(2) span:nth-child(4) {
 .chat__box2 {
    height: calc(100% - 50px);
    overflow-y: auto;
-   border: 1px solid red
 }
 
-.chat__box2{
+.chat__box--big{
    width: 100%;
 }
 
@@ -438,6 +452,10 @@ div .title__span:nth-child(2) span:nth-child(4) {
    height: 100%;
    font-size: calc(10px + 1.5vw);
    background-color: #20C868;
+}
+
+.chat__form--button--big{
+   font-size: calc(10px + 0.5vw);
 }
 
 .msg,
@@ -530,11 +548,13 @@ div .title__span:nth-child(2) span:nth-child(4) {
    text-align: right;
 }
 
-.chatBig{
+.sideMenu{
    width: 50%;
    height: 100vh;
    min-width: 300px;
    background-color: white;
+   position: relative;
+   overflow: hidden;
 }
 
 /*? ======== QUESTIONS ======== ?*/
