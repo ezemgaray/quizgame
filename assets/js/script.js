@@ -50,13 +50,17 @@ elem("#rankingBtn2").addEventListener("click", () => showRanking("big"))
 elem("#chatSendBtn").addEventListener("click", () => onSendChat("small"))
 elem("#chatSendBtn2").addEventListener("click", () => onSendChat("big"))
 elem("#enterGameBtn").addEventListener("click", showQuestions)
-elem("#chatInp").onkeyup = e => {
-    if (e.keyCode == 13) onSendChat("small");
-}
-elem("#chatInp2").onkeyup = e => {
-    if (e.keyCode == 13) onSendChat("big");
-}
+elem("#chatInp").onkeyup = e => {if (e.keyCode == 13) onSendChat("small");}
+elem("#chatInp2").onkeyup = e => {if (e.keyCode == 13) onSendChat("big");}
 elem("#buttonId").addEventListener("click", onSendChat);
+elem("#summaryBackProfile").addEventListener("click", ()=>elem("#summary").classList.remove("open"));
+elem("#summaryNewGame").addEventListener("click", ()=>{
+    setTimeout(() => {
+        elem("#summary").classList.remove("open");
+    }, 400);
+    showQuestions();
+});
+
 elem("#winGraph").addEventListener("mouseover", ()=>showData("winGraph"));
 elem("#winGraph").addEventListener("mouseout", ()=>showData("winGraph"));
 elem("#winGraph").addEventListener("mousemove", (e)=>moveData(e));
@@ -264,7 +268,7 @@ function showProfile() {
 
 function showProfileData() {
     elem("#profileUsername").innerText = user.name
-    elem("#profileLevel").innerText = user.win
+    elem("#profileLevel").innerText = user.level
     elem("#profileId").innerText = user.id
     elem("#profileGames").innerText = user.countGames
     elem(".profile__container__info--img").style = `background-image: url(${user.image}); background-size: cover;`;
