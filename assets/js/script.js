@@ -7,6 +7,7 @@ var ws;
 var users = [];
 var currGame
 var answers
+var selectedAnswers
 let questionCount = 0 // cuenta ascendente de preguntas, al cargar preguntas que manejar el contador por el length del array de preguntas
 
 var globalInterval
