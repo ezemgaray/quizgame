@@ -6,6 +6,9 @@
 var ws;
 var users = [];
 var currGame
+var answers
+let questionCount = 0 // cuenta ascendente de preguntas, al cargar preguntas que manejar el contador por el length del array de preguntas
+
 var globalInterval
 var user = JSON.parse(localStorage.getItem("user")) || {
     id: "",
@@ -286,100 +289,116 @@ function getQuestions(amount = 5) {
         })
 }
 
+function mixAnswers() {
+   answers = currGame[questionCount].incorrect_answers
+   answers.push(currGame[questionCount].correct_answer)
+   answers.sort(() => Math.random() - 0.5)
+}
+
 function showQuestions() {
-    elem("#questions").classList.toggle("open")
-    let quest = elem("#questions")
-    quest.addEventListener("transitionend", showCountDown)
+   elem("#questions").classList.toggle("open")
+   getQuestions()
+   elem("#questions").addEventListener("transitionend", showCountDown)
 }
 
-function showCountDown(e) {
-    let countDown = document.createElement("div")
-    countDown.className = "countdown"
-    let countNumber = document.createElement("span")
-    countNumber.className = "countdown__number"
-    countNumber.id = "countdownNumber"
-    countDown.append(countNumber)
-    elem("#questions").append(countDown)
+function showCountDown() {
+   let countDown = document.createElement("div")
+   countDown.className = "countdown"
+   let countNumber = document.createElement("span")
+   countNumber.className = "countdown__number"
+   countNumber.id = "countdownNumber"
+   countDown.append(countNumber)
+   elem("#questions").append(countDown)
 
-    if (globalInterval) {
-        clearInterval(globalInterval)
-    }
-    let down = 3
-    elem("#countdownNumber").innerText = down
-    elem("#countdownNumber").dataset.color = down
-    globalInterval = setInterval(() => {
-        down -= 1
-        elem("#countdownNumber").innerText = down
-        elem("#countdownNumber").dataset.color = down
-        if (!down) {
-            clearInterval(globalInterval)
-            countDown.remove()
-            showQuestion()
-        }
-    }, 1000);
-    elem("#questions").removeEventListener("transitionend", showCountDown)
+   if (globalInterval) {
+      clearInterval(globalInterval)
+   }
+   let down = 3
+   elem("#countdownNumber").innerText = down
+   elem("#countdownNumber").dataset.color = down
+   globalInterval = setInterval(() => {
+      down -= 1
+      elem("#countdownNumber").innerText = down
+      elem("#countdownNumber").dataset.color = down
+      if (!down) {
+         clearInterval(globalInterval)
+         countDown.remove()
+         showQuestion()
+      }
+   }, 1000);
+   elem("#questions").removeEventListener("transitionend", showCountDown)
 }
 
-let questionCount = 0 // cuenta ascendente de preguntas, al cargar preguntas que manejar el contador por el length del array de preguntas
 function showQuestion() {
-    questionCount++
-    if (questionCount > 2) {
-        elem("#questions").classList.toggle("open")
-        elem("#question").remove()
-        recuento()
-        questionCount = 0
-        return
-    }
 
-    if (elem("#question")) elem("#question").remove()
-    elem("#questions").innerHTML = elem("#templateQuestion").innerHTML
+   if (questionCount + 1 > currGame.length) {
+      elem("#questions").classList.toggle("open")
+      elem("#question").remove()
+      recuento()
+      questionCount = 0
+      return
+   }
+   mixAnswers()
 
-    //Adaptar posibles respuestas en base a la api de preguntas.
-    setTimeout(function () {
-        elem("#question").classList.toggle("open")
-        let buttons = elem(".answers button", true)
-        let transition = 0.9
-        for (btn of buttons) {
-            btn.style.animation = `appear ${transition += 0.2}s ease-in-out forwards`
-        }
-        questionTime()
-    }, 200)
+   if (elem("#question")) elem("#question").remove()
+   elem("#questions").innerHTML = elem("#templateQuestion").innerHTML
+   //Insert question
+   elem("#question .question__category").innerText = currGame[questionCount].category
+   elem("#question .question__number").innerText = (questionCount + 1) + "/" + currGame.length
+   elem("#question h2").innerHTML = currGame[questionCount].question
+   //Adaptar posibles respuestas en base a la api de preguntas.
+
+   setTimeout(function () {
+      elem("#question").classList.toggle("open")
+      let buttons = elem(".answers button", true)
+      let transition = 0.9
+      answers.forEach((btn, index) => {
+         let button = document.createElement("button")
+         button.className = "question__btn btn-grad"
+         button.dataset.answers = index
+         button.innerHTML = btn
+         elem("#question .answers").append(button)
+         button.style.animation = `appear ${transition += 0.2}s ease-in-out forwards`
+      })
+      questionTime()
+   }, 200)
+   questionCount++
 }
 
 function questionTime() {
-    let bar = elem(".seconds")
-    barW = bar.parentElement.clientWidth
-    wPerSecond = barW / 5 // Divido por la cantidad de segundo para responder
-    if (globalInterval) {
-        clearInterval(globalInterval)
-    }
-    let sec = 0
-    globalInterval = setInterval(() => {
-        barW -= wPerSecond
-        if (barW < 0) bar.style.width = "0px"
-        else bar.style.width = barW + "px"
-        sec++
+   let bar = elem(".seconds")
+   barW = bar.parentElement.clientWidth
+   wPerSecond = barW / 5 // Divido por la cantidad de segundo para responder
+   if (globalInterval) {
+      clearInterval(globalInterval)
+   }
+   let sec = 0
+   globalInterval = setInterval(() => {
+      barW -= wPerSecond
+      if (barW < 0) bar.style.width = "0px"
+      else bar.style.width = barW + "px"
+      sec++
 
-        if (sec > 5) { // si pasa la cantidad de segundos cierra la pregunta
-            clearInterval(globalInterval)
+      if (sec > 5) { // si pasa la cantidad de segundos cierra la pregunta
+         clearInterval(globalInterval)
 
-            elem("#question").classList.toggle("open")
-            setTimeout(function () {
+         elem("#question").classList.toggle("open")
+         setTimeout(function () {
 
-                bar.removeAttribute("style")
-                showQuestion()
-            }, 700)
-        }
-    }, 1000);
+            bar.removeAttribute("style")
+            showQuestion()
+         }, 700)
+      }
+   }, 1000);
 }
 
 // simulando la seccion al terminar la partida - definir seccion
 function recuento() {
-    setTimeout(() => {
-        alert("estoy en recuento")
-    }, 700);
+   setTimeout(() => {
+      alert("estoy en recuento")
+   }, 700);
 }
 
 function elem(selector, all = false) {
-    return all ? document.querySelectorAll(selector) : document.querySelector(selector)
+   return all ? document.querySelectorAll(selector) : document.querySelector(selector)
 }
