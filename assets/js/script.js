@@ -52,11 +52,17 @@ elem("#enterGameBtn").addEventListener("click", showQuestions)
 elem("#chatInp").onkeyup = e => {if (e.keyCode == 13) onSendChat("small");}
 elem("#chatInp2").onkeyup = e => {if (e.keyCode == 13) onSendChat("big");}
 elem("#buttonId").addEventListener("click", onSendChat);
-elem("#summaryBackProfile").addEventListener("click", ()=>elem("#summary").classList.remove("open"));
+elem("#summaryBackProfile").addEventListener("click", ()=>{
+    elem("#summary").classList.remove("open");
+    correctAnswers = 0;
+    wrongAnswers = 0;
+});
 elem("#summaryNewGame").addEventListener("click", ()=>{
     setTimeout(() => {
         elem("#summary").classList.remove("open");
     }, 400);
+    correctAnswers = 0;
+    wrongAnswers = 0;
     showQuestions();
 });
 
@@ -69,6 +75,15 @@ elem("#looseGraph").addEventListener("mousemove", (e)=>moveData(e));
 elem("#profileRatio").addEventListener("mouseover", ()=>showData("profileRatio"));
 elem("#profileRatio").addEventListener("mouseout", ()=>showData("profileRatio"));
 elem("#profileRatio").addEventListener("mousemove", (e)=>moveData(e, "profileRatio"));
+elem("#summaryWinGraph").addEventListener("mouseover", ()=>showData("summaryWinGraph"));
+elem("#summaryWinGraph").addEventListener("mouseout", ()=>showData("summaryWinGraph"));
+elem("#summaryWinGraph").addEventListener("mousemove", (e)=>moveData(e, "summaryWinGraph"));
+elem("#summaryLooseGraph").addEventListener("mouseover", ()=>showData("summaryLooseGraph"));
+elem("#summaryLooseGraph").addEventListener("mouseout", ()=>showData("summaryLooseGraph"));
+elem("#summaryLooseGraph").addEventListener("mousemove", (e)=>moveData(e, "summaryLooseGraph"));
+elem("#summaryXPGraph").addEventListener("mouseover", ()=>showData("summaryXPGraph"));
+elem("#summaryXPGraph").addEventListener("mouseout", ()=>showData("summaryXPGraph"));
+elem("#summaryXPGraph").addEventListener("mousemove", (e)=>moveData(e, "summaryXPGraph"));
 
 
 window.onbeforeunload = leaveGame;
@@ -499,10 +514,6 @@ function checkResults() {
     localStorage.setItem("user", JSON.stringify(user))
 
     showSummary(winner);
-    // setTimeout(() => {
-        correctAnswers = 0;
-        wrongAnswers = 0;
-    // }, 700);
 }
 
 function showSummary(win){
@@ -538,6 +549,18 @@ function showData(source){
         elem("#answerPercentage").textContent = user.ratio + "%";
         elem("#answerPercentage").style = "color: #20C868;"
         elem("#answerExplain").textContent = "of won games";
+    }else if(source === "summaryWinGraph"){
+        elem("#answerPercentage").textContent = Math.floor((correctAnswers/nQuestions)*100) + "%";
+        elem("#answerPercentage").style = "color: #20C868;"
+        elem("#answerExplain").textContent = "of correct aswers";
+    }else if(source === "summaryLooseGraph"){
+        elem("#answerPercentage").textContent = Math.floor((wrongAnswers/nQuestions)*100) + "%";
+        elem("#answerPercentage").style = "color: #F52631;"
+        elem("#answerExplain").textContent = "of wronged aswers";
+    }else if(source === "summaryXPGraph"){
+        elem("#answerPercentage").textContent = Math.floor((user.experience/(user.level+1))*100) + "%";
+        elem("#answerPercentage").style = "color: #20C868;"
+        elem("#answerExplain").textContent = "XP for next lvl";
     }else{
         elem("#answerPercentage").textContent = Math.floor((user.totalW/(user.totalC+user.totalW))*100) + "%";
         elem("#answerPercentage").style = "color: #F52631;"
