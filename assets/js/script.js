@@ -18,6 +18,8 @@ let createBtn = elem("#createGameBtn");
 let joinBtn = elem("#joinGameBtn");
 let soloBtn = elem("#enterGameBtn");
 let nPlayers = 1;
+let nFinished = 0;
+let sendConfrim = false;
 
 let answerTime = 10; //time to answer the question
 let nQuestions = 5; //number of questions
@@ -165,6 +167,11 @@ function joinGame() {
             case "joinGame":
                 nPlayers++;
                 console.log(nPlayers);
+                break
+            case "finished":
+                nFinished++;
+                checkOtherUsers("from switcha")
+                console.log(nPlayers, nFinished);
                 break
         }
     }
@@ -471,12 +478,17 @@ function showCountDown() {
 function showQuestion() {
 
     if (questionCount + 1 > currGame.length) {
-        setTimeout(() => {
-            elem("#questions").classList.toggle("open")
-            elem("#question").remove()
-        }, 700);
-        checkResults();
-        questionCount = 0
+        if(!joinMultiplayer){
+            setTimeout(() => {
+                elem("#questions").classList.toggle("open");
+                elem("#question").remove();
+            }, 700);
+            checkResults();
+            questionCount = 0
+        }else{
+            ws.send(`{"to":"quizGame", "user":${JSON.stringify(user)}, "type":"finished"}`);
+            checkOtherUsers("function showQuestion");
+        }
         return
     }
     mixAnswers()
@@ -579,6 +591,7 @@ function checkResults() {
     showProfileData();
     localStorage.setItem("user", JSON.stringify(user))
     ws.send(`{"to":"quizGame", "user":${JSON.stringify(user)}, "type":"update"}`);
+    // if(joinMultiplayer) ws.send(`{"to":"quizGame", "user":${JSON.stringify(user)}, "type":"finished"}`);
     showSummary(winner);
 }
 
@@ -682,6 +695,7 @@ function createMultiplayer(){
     soloBtn.disabled = true;
     soloBtn.classList.add("disabledBtn");
     getQuestions(nQuestions);
+    joinMultiplayer = true;
     var counter = setInterval(() => {
         createBtn.textContent = "00:" + seconds--
         if(seconds <= 25){
@@ -732,5 +746,20 @@ function startMultGame(userData, questions){
         createBtn.classList.remove("d-none");
         createBtn.disabled = true;
         createBtn.classList.add("disabledBtn");
+    }
+}
+
+function checkOtherUsers(from){
+    console.log("in checkOtherUsers()", from)
+    if(joinMultiplayer && nPlayers == nFinished){
+        console.log("executing next display")
+        setTimeout(() => {
+            elem("#questions").classList.toggle("open");
+            elem("#question").remove();
+        }, 700);
+        checkResults();
+        questionCount = 0
+        nFinished = 0;
+        nPlayers = 0;
     }
 }
