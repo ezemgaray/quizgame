@@ -49,15 +49,19 @@ elem("#rankingBtn2").addEventListener("click", () => showRanking("big"))
 elem("#chatSendBtn").addEventListener("click", () => onSendChat("small"))
 elem("#chatSendBtn2").addEventListener("click", () => onSendChat("big"))
 elem("#enterGameBtn").addEventListener("click", showQuestions)
-elem("#chatInp").onkeyup = e => {if (e.keyCode == 13) onSendChat("small");}
-elem("#chatInp2").onkeyup = e => {if (e.keyCode == 13) onSendChat("big");}
+elem("#chatInp").onkeyup = e => {
+    if (e.keyCode == 13) onSendChat("small");
+}
+elem("#chatInp2").onkeyup = e => {
+    if (e.keyCode == 13) onSendChat("big");
+}
 elem("#buttonId").addEventListener("click", onSendChat);
-elem("#summaryBackProfile").addEventListener("click", ()=>{
+elem("#summaryBackProfile").addEventListener("click", () => {
     elem("#summary").classList.remove("open");
     correctAnswers = 0;
     wrongAnswers = 0;
 });
-elem("#summaryNewGame").addEventListener("click", ()=>{
+elem("#summaryNewGame").addEventListener("click", () => {
     setTimeout(() => {
         elem("#summary").classList.remove("open");
     }, 400);
@@ -66,24 +70,24 @@ elem("#summaryNewGame").addEventListener("click", ()=>{
     showQuestions();
 });
 
-elem("#winGraph").addEventListener("mouseover", ()=>showData("winGraph"));
-elem("#winGraph").addEventListener("mouseout", ()=>showData("winGraph"));
-elem("#winGraph").addEventListener("mousemove", (e)=>moveData(e));
-elem("#looseGraph").addEventListener("mouseover", ()=>showData("looseGraph"));
-elem("#looseGraph").addEventListener("mouseout", ()=>showData("looseGraph"));
-elem("#looseGraph").addEventListener("mousemove", (e)=>moveData(e));
-elem("#profileRatio").addEventListener("mouseover", ()=>showData("profileRatio"));
-elem("#profileRatio").addEventListener("mouseout", ()=>showData("profileRatio"));
-elem("#profileRatio").addEventListener("mousemove", (e)=>moveData(e, "profileRatio"));
-elem("#summaryWinGraph").addEventListener("mouseover", ()=>showData("summaryWinGraph"));
-elem("#summaryWinGraph").addEventListener("mouseout", ()=>showData("summaryWinGraph"));
-elem("#summaryWinGraph").addEventListener("mousemove", (e)=>moveData(e, "summaryWinGraph"));
-elem("#summaryLooseGraph").addEventListener("mouseover", ()=>showData("summaryLooseGraph"));
-elem("#summaryLooseGraph").addEventListener("mouseout", ()=>showData("summaryLooseGraph"));
-elem("#summaryLooseGraph").addEventListener("mousemove", (e)=>moveData(e, "summaryLooseGraph"));
-elem("#summaryXPGraph").addEventListener("mouseover", ()=>showData("summaryXPGraph"));
-elem("#summaryXPGraph").addEventListener("mouseout", ()=>showData("summaryXPGraph"));
-elem("#summaryXPGraph").addEventListener("mousemove", (e)=>moveData(e, "summaryXPGraph"));
+elem("#winGraph").addEventListener("mouseover", () => showData("winGraph"));
+elem("#winGraph").addEventListener("mouseout", () => showData("winGraph"));
+elem("#winGraph").addEventListener("mousemove", (e) => moveData(e));
+elem("#looseGraph").addEventListener("mouseover", () => showData("looseGraph"));
+elem("#looseGraph").addEventListener("mouseout", () => showData("looseGraph"));
+elem("#looseGraph").addEventListener("mousemove", (e) => moveData(e));
+elem("#profileRatio").addEventListener("mouseover", () => showData("profileRatio"));
+elem("#profileRatio").addEventListener("mouseout", () => showData("profileRatio"));
+elem("#profileRatio").addEventListener("mousemove", (e) => moveData(e, "profileRatio"));
+elem("#summaryWinGraph").addEventListener("mouseover", () => showData("summaryWinGraph"));
+elem("#summaryWinGraph").addEventListener("mouseout", () => showData("summaryWinGraph"));
+elem("#summaryWinGraph").addEventListener("mousemove", (e) => moveData(e, "summaryWinGraph"));
+elem("#summaryLooseGraph").addEventListener("mouseover", () => showData("summaryLooseGraph"));
+elem("#summaryLooseGraph").addEventListener("mouseout", () => showData("summaryLooseGraph"));
+elem("#summaryLooseGraph").addEventListener("mousemove", (e) => moveData(e, "summaryLooseGraph"));
+elem("#summaryXPGraph").addEventListener("mouseover", () => showData("summaryXPGraph"));
+elem("#summaryXPGraph").addEventListener("mouseout", () => showData("summaryXPGraph"));
+elem("#summaryXPGraph").addEventListener("mousemove", (e) => moveData(e, "summaryXPGraph"));
 
 
 window.onbeforeunload = leaveGame;
@@ -119,13 +123,12 @@ function joinGame() {
         let responseUser = JSON.parse(response.data);
 
         if (responseUser.auth == "OK") {
-            console.log(response)
+            //console.log(response)
             ws.send(`{"to":"quizGame", "user":"${responseUser.SID}", "type":"connect"}`);
             user.id = responseUser.SID;
             localStorage.setItem("user", JSON.stringify(user))
             showProfile()
         }
-
         switch (responseUser.type) {
             case "connect":
                 sendUser(JSON.stringify(user))
@@ -138,6 +141,10 @@ function joinGame() {
                 break
             case "user":
                 printUsers(responseUser.user)
+                break
+            case "update":
+                console.log("in switch update")
+                updateUsers(responseUser.user)
                 break
         }
     }
@@ -163,7 +170,12 @@ function printUsers(userData) {
     if (userData.name != "" && userData.id != "") {
         users.push({
             name: userData.name,
-            userId: userData.id
+            userId: userData.id,
+            ratio: userData.ratio,
+            wons: userData.win,
+            correct: userData.totalC,
+            level: userData.level,
+            image: userData.image
         });
     }
     console.log(users);
@@ -251,7 +263,7 @@ function showConfirmUser() {
     confirm.classList.add("d-flex")
     profile.classList.add("d-none")
     profile.classList.remove("d-flex")
-    elem("#confirmN").onclick = ()=>{
+    elem("#confirmN").onclick = () => {
         showLogin();
         user.countGames = 0;
         user.totalC = 0;
@@ -289,8 +301,8 @@ function showProfileData() {
     elem("#profileBtn").style = `background-image: url(${user.image}); background-size: cover;`;
     setTimeout(function () {
         animaProfileRatio()
-        elem("#winGraph").style.height = Math.floor((user.totalC/(user.totalC+user.totalW))*100) + "%";
-        elem("#looseGraph").style.height = Math.floor((user.totalW/(user.totalC+user.totalW))*100) + "%"
+        elem("#winGraph").style.height = Math.floor((user.totalC / (user.totalC + user.totalW)) * 100) + "%";
+        elem("#looseGraph").style.height = Math.floor((user.totalW / (user.totalC + user.totalW)) * 100) + "%"
     }, 100)
     elem("#menuSmall").classList.replace("d-none", "d-flex");
     elem("#sideMenu").classList.replace("d-md-none", "d-md-flex");
@@ -315,6 +327,8 @@ function showChat(from) {
 }
 
 function showRanking(from) {
+    // sendUser(JSON.stringify(user));
+    console.log("after call");
     if (from === "small") {
         setTimeout(() => {
             elem("#ranking").classList.toggle("open");
@@ -491,16 +505,16 @@ function stopQuestion(next = true) {
 
 function checkResults() {
     var winner;
-    if((correctAnswers/nQuestions)*100 >= 70){
+    if ((correctAnswers / nQuestions) * 100 >= 70) {
         user.experience++;
         user.win++
         winner = true;
-    }else{
+    } else {
         user.loose++
         winner = false;
     }
 
-    if(user.experience >= user.level && user.experience != 0){
+    if (user.experience >= user.level && user.experience != 0) {
         user.level++;
         user.experience = 0;
     }
@@ -508,15 +522,16 @@ function checkResults() {
     user.countGames++;
     user.totalC += correctAnswers;
     user.totalW += wrongAnswers;
-    user.ratio = (Math.floor((user.win/user.countGames)*100));
+    user.ratio = (Math.floor((user.win / user.countGames) * 100));
 
     showProfileData();
     localStorage.setItem("user", JSON.stringify(user))
-
+    console.log("before sending the ws.send")
+    ws.send(`{"to":"quizGame", "user":${JSON.stringify(user)}, "type":"update"}`);
     showSummary(winner);
 }
 
-function showSummary(win){
+function showSummary(win) {
     console.log("This is the summary:");
     console.log("user.experience:", user.experience);
     console.log("user.level: ", user.level);
@@ -525,44 +540,46 @@ function showSummary(win){
     console.log("user.countGames: ", user.countGames);
 
     elem(".summary__container__info--img").style = `background-image: url(${user.image}); background-size: cover;`;
-    elem("#summaryWinGraph").style = "height: " + Math.floor((correctAnswers/nQuestions)*100) + "%;";
-    elem("#summaryLooseGraph").style = "height: " + Math.floor((wrongAnswers/nQuestions)*100) + "%;";
-    elem("#summaryXPGraph").style = "height: " + Math.floor((user.experience/(user.level+1))*100) + "%;";
+    elem("#summaryWinGraph").style = "height: " + Math.floor((correctAnswers / nQuestions) * 100) + "%;";
+    elem("#summaryLooseGraph").style = "height: " + Math.floor((wrongAnswers / nQuestions) * 100) + "%;";
+    elem("#summaryXPGraph").style = "height: " + Math.floor((user.experience / (user.level + 1)) * 100) + "%;";
     elem("#summaryHits").textContent = correctAnswers;
     elem("#summaryMisses").textContent = wrongAnswers;
     elem("#summaryXP").textContent = win ? "+1" : "0";
     elem("#summaryTotalXP").textContent = user.experience;
     elem("#summary").classList.toggle("open");
+
+    //ws.send(`{"to":"quizGame", "user":${JSON.stringify(user)}, "type":"update"}`);
 }
 
 function elem(selector, all = false) {
     return all ? document.querySelectorAll(selector) : document.querySelector(selector)
 }
 
-function showData(source){
-    if(source === "winGraph"){
-        elem("#answerPercentage").textContent = Math.floor((user.totalC/(user.totalC+user.totalW))*100) + "%";
+function showData(source) {
+    if (source === "winGraph") {
+        elem("#answerPercentage").textContent = Math.floor((user.totalC / (user.totalC + user.totalW)) * 100) + "%";
         elem("#answerPercentage").style = "color: #20C868;"
         elem("#answerExplain").textContent = "of correct answers";
 
-    }else if(source === "profileRatio"){
+    } else if (source === "profileRatio") {
         elem("#answerPercentage").textContent = user.ratio + "%";
         elem("#answerPercentage").style = "color: #20C868;"
         elem("#answerExplain").textContent = "of won games";
-    }else if(source === "summaryWinGraph"){
-        elem("#answerPercentage").textContent = Math.floor((correctAnswers/nQuestions)*100) + "%";
+    } else if (source === "summaryWinGraph") {
+        elem("#answerPercentage").textContent = Math.floor((correctAnswers / nQuestions) * 100) + "%";
         elem("#answerPercentage").style = "color: #20C868;"
         elem("#answerExplain").textContent = "of correct aswers";
-    }else if(source === "summaryLooseGraph"){
-        elem("#answerPercentage").textContent = Math.floor((wrongAnswers/nQuestions)*100) + "%";
+    } else if (source === "summaryLooseGraph") {
+        elem("#answerPercentage").textContent = Math.floor((wrongAnswers / nQuestions) * 100) + "%";
         elem("#answerPercentage").style = "color: #F52631;"
         elem("#answerExplain").textContent = "of wronged aswers";
-    }else if(source === "summaryXPGraph"){
-        elem("#answerPercentage").textContent = Math.floor((user.experience/(user.level+1))*100) + "%";
+    } else if (source === "summaryXPGraph") {
+        elem("#answerPercentage").textContent = Math.floor((user.experience / (user.level + 1)) * 100) + "%";
         elem("#answerPercentage").style = "color: #20C868;"
         elem("#answerExplain").textContent = "XP for next lvl";
-    }else{
-        elem("#answerPercentage").textContent = Math.floor((user.totalW/(user.totalC+user.totalW))*100) + "%";
+    } else {
+        elem("#answerPercentage").textContent = Math.floor((user.totalW / (user.totalC + user.totalW)) * 100) + "%";
         elem("#answerPercentage").style = "color: #F52631;"
         elem("#answerExplain").textContent = "of wronged answers"
     }
@@ -570,8 +587,47 @@ function showData(source){
     elem(".resultsScreen").classList.toggle("d-none");
 }
 
-function moveData(e, source){
+function moveData(e, source) {
     var sumX = 0;
     source === "profileRatio" ? sumX = -135 : sumX = 15;
     elem(".resultsScreen").style = `top: ${e.clientY - 85}px; left: ${e.clientX + sumX}px;`
+}
+
+function updateUsers(userData){
+    console.loge("in update");
+    users.forEach(e=>{
+        if(e.userId == userData.id){
+            e.ratio = userData.ratio;
+            e.wons = userData.win;
+            e.correct = userData.totalC;
+            e.level = userData.level;
+        }
+    });
+    console.log(users)
+}
+
+
+
+function compareUsers(key, order = 'asc') {
+    return function innerSort(a, b) {
+        if (!a.hasOwnProperty(key) || !b.hasOwnProperty(key)) {
+            // property doesn't exist on either object
+            return 0;
+        }
+
+        const varA = (typeof a[key] === 'string') ?
+            a[key].toUpperCase() : a[key];
+        const varB = (typeof b[key] === 'string') ?
+            b[key].toUpperCase() : b[key];
+
+        let comparison = 0;
+        if (varA > varB) {
+            comparison = 1;
+        } else if (varA < varB) {
+            comparison = -1;
+        }
+        return (
+            (order === 'desc') ? (comparison * -1) : comparison
+        );
+    };
 }
