@@ -612,7 +612,6 @@ function stopQuestion(next = true) {
 }
 
 function checkResults() {
-   debugger
     var winner;
     if ((correctAnswers / nQuestions) * 100 >= 70) {
         user.experience++;
