@@ -327,7 +327,6 @@ function showProfile() {
 function showProfileData() {
     elem("#profileUsername").innerText = user.name
     elem("#profileLevel").innerText = user.level
-    elem("#profileId").innerText = user.id
     elem("#profileGames").innerText = user.countGames
     elem(".profile__container__info--img").style = `background-image: url(${user.image}); background-size: cover;`;
     elem("#profileBtn").style = `background-image: url(${user.image}); background-size: cover;`;
@@ -585,6 +584,7 @@ function stopQuestion(next = true) {
 }
 
 function checkResults() {
+   debugger
     var winner;
     if ((correctAnswers / nQuestions) * 100 >= 70) {
         user.experience++;
@@ -840,6 +840,7 @@ function checkOtherUsers(user, time, correctA) {
 
 //reset all variables to it's state before multiplayer
 function resetStatus(){
+   debugger
     console.log("reset function!")
     if (joinMultiplayer){
         questionCount = 0;
