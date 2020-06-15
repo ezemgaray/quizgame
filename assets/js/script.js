@@ -637,7 +637,7 @@ function showSummary(win) {
 }
 
 function showGroup() {
-
+    if(elem(".loader__container")) elem(".loader__container").remove()
     elem(".group__container__info--img").style = `background-image: url(${orderedResults[0].image}); background-size: cover;`;
     elem("#groupWinner").textContent = orderedResults[0].name;
     elem("#groupWinnerHits").textContent = orderedResults[0].correct;
