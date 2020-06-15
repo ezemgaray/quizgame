@@ -574,6 +574,9 @@ function showQuestion() {
                     })
                     wrongAnswers++;
                 }
+                stopQuestion()
+                button.disabled = true
+                elem("#question .answers button", true).forEach(button => button.disabled = true)
             }
         })
         questionTime()
