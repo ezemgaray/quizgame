@@ -594,7 +594,7 @@ function moveData(e, source) {
 }
 
 function updateUsers(userData){
-    console.loge("in update");
+    console.log("in update");
     users.forEach(e=>{
         if(e.userId == userData.id){
             e.ratio = userData.ratio;
