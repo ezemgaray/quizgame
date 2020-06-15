@@ -119,7 +119,6 @@ window.onbeforeunload = leaveGame;
 elem("#imgImport").addEventListener("change", () => {
     var info = elem("#imgImportInfo");
     var file = (elem("#imgImport").files[0]);
-    console.log(file)
     info.textContent = truncate(file.name, 25, false);
     info.style = "color: #20C868"
     if (file.size > 40000) {
@@ -178,7 +177,6 @@ function joinGame() {
                 break
             case "joinGame":
                 nPlayers++;
-                console.log(nPlayers);
                 break
             case "finished":
                 nFinished++;
@@ -428,13 +426,11 @@ function showRanking(order, mainBtn, from) {
     elem(".ranking__btn--big", true).forEach(e => e.dataset.action == order ? e.classList.add("ranking__btn--active") : e.classList.remove("ranking__btn--active"));
 
     if (mainBtn && from != "big") {
-        console.log("click from small")
         setTimeout(() => {
             elem("#ranking").classList.toggle("open");
         }, 200);
         elem("#chat").classList.remove("open");
     }else if(mainBtn && from == "big"){
-        console.log("click from big")
         setTimeout(() => {
             elem("#ranking2").classList.toggle("open");
         }, 200);
@@ -573,7 +569,6 @@ function showQuestion() {
         questionTime()
     }, 200)
     questionCount++
-    console.log(selectedAnswers);
 }
 
 function questionTime() {
@@ -628,7 +623,6 @@ function checkResults() {
                 user.experience++;
                 user.win++
                 winner = true;
-                console.log("user has won")
             }
         });
     }
@@ -867,8 +861,6 @@ function checkOtherUsers(user, time, correctA) {
 
 //reset all variables to it's state before multiplayer
 function resetStatus(){
-   debugger
-    console.log("reset function!")
     if (joinMultiplayer){
         questionCount = 0;
         correctAnswers = 0;
