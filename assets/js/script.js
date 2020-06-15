@@ -62,7 +62,13 @@ elem("#byRatio2").addEventListener("click", () => showRanking("ratio", false, "b
 elem("#byCorrect2").addEventListener("click", () => showRanking("correct", false, "big"))
 elem("#chatSendBtn").addEventListener("click", () => onSendChat("small"))
 elem("#chatSendBtn2").addEventListener("click", () => onSendChat("big"))
-soloBtn.addEventListener("click", showQuestions)
+soloBtn.addEventListener("click", ()=>{
+    showQuestions();
+    soloBtn.disabled = true;
+    setTimeout(() => {
+        soloBtn.disabled = false;
+    }, 1000);
+})
 createBtn.addEventListener("click", createMultiplayer)
 joinBtn.addEventListener("click", preJoinMultiplayer)
 elem("#chatInp").onkeyup = e => {
