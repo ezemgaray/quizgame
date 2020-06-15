@@ -131,6 +131,7 @@ init();
 
 
 function joinGame() {
+   elem("#confirmY").removeEventListener("click", joinGame)
     ws = new WebSocket("wss://cloud.achex.ca");
     ws.onopen = function (e) {
         ws.send(`{"setID":"quizGame", "passwd":"12345"}`);
@@ -259,7 +260,9 @@ function saveUser() {
 
     if (user.name.length) {
         joinGame();
+        return
     }
+    elem('#usernameInp').style.cssText = "border-color: red; background-color: rgba(255,0,0,.2);"
 }
 
 function truncate(str, n, useWordBoundary) {
