@@ -1,14 +1,19 @@
 // var user = {
 //     id: "",
 //     name: "",
-
 // }
 var ws;
 var users = [];
 var currGame
 var answers
-var selectedAnswers
+var selectedAnswers = []
 let questionCount = 0 // cuenta ascendente de preguntas, al cargar preguntas que manejar el contador por el length del array de preguntas
+let correctAnswers = 0;
+let wrongAnswers = 0;
+// let totalExperience = 0;
+
+let answerTime = 10; //time to answer the question
+let nQuestions = 5; //number of questions
 
 var globalInterval
 var user = JSON.parse(localStorage.getItem("user")) || {
@@ -18,10 +23,12 @@ var user = JSON.parse(localStorage.getItem("user")) || {
     countGames: 0,
     win: 0,
     loose: 0,
-    currC: 0,
-    currW: 0,
+    totalC: 0,
+    totalW: 0,
     currR: "",
-    ratio: 0 //(this.countGames == 0) ? 0 : ((this.win / this.countGames) * 100)
+    ratio: 0, //(this.countGames == 0) ? 0 : ((this.win / this.countGames) * 100)
+    level: 0,
+    experience: 0
 }
 
 var anonymousUser = ["quagga", "kiwi", "nyancat", "dragon", "anteater", "blobfish", "chupacabra", "bat", "ifrit", "kraken", "manatee", "ferret", "llama", "koala", "platypus", "wombat", "iguana", "mink", "narwhal", "liger"];
@@ -34,21 +41,49 @@ elem("#usernameInp").onkeyup = function (e) {
     if (e.keyCode == 13) saveUser()
 }
 elem("#usernameBtn").addEventListener("click", saveUser)
-elem("#chatBtn").addEventListener("click", ()=>showChat("small"))
-elem("#chatBtn2").addEventListener("click", ()=>showChat("big"))
+elem("#chatBtn").addEventListener("click", () => showChat("small"))
+elem("#chatBtn2").addEventListener("click", () => showChat("big"))
 elem("#profileBtn").addEventListener("click", showProfile)
-elem("#rankingBtn").addEventListener("click", ()=>showRanking("small"))
-elem("#rankingBtn2").addEventListener("click", ()=>showRanking("big"))
-elem("#chatSendBtn").addEventListener("click", ()=>onSendChat("small"))
-elem("#chatSendBtn2").addEventListener("click", ()=>onSendChat("big"))
+elem("#rankingBtn").addEventListener("click", () => showRanking("small"))
+elem("#rankingBtn2").addEventListener("click", () => showRanking("big"))
+elem("#chatSendBtn").addEventListener("click", () => onSendChat("small"))
+elem("#chatSendBtn2").addEventListener("click", () => onSendChat("big"))
 elem("#enterGameBtn").addEventListener("click", showQuestions)
-elem("#chatInp").onkeyup = e => {
-    if (e.keyCode == 13) onSendChat("small");
-}
-elem("#chatInp2").onkeyup = e => {
-    if (e.keyCode == 13) onSendChat("big");
-}
+elem("#chatInp").onkeyup = e => {if (e.keyCode == 13) onSendChat("small");}
+elem("#chatInp2").onkeyup = e => {if (e.keyCode == 13) onSendChat("big");}
 elem("#buttonId").addEventListener("click", onSendChat);
+elem("#summaryBackProfile").addEventListener("click", ()=>{
+    elem("#summary").classList.remove("open");
+    correctAnswers = 0;
+    wrongAnswers = 0;
+});
+elem("#summaryNewGame").addEventListener("click", ()=>{
+    setTimeout(() => {
+        elem("#summary").classList.remove("open");
+    }, 400);
+    correctAnswers = 0;
+    wrongAnswers = 0;
+    showQuestions();
+});
+
+elem("#winGraph").addEventListener("mouseover", ()=>showData("winGraph"));
+elem("#winGraph").addEventListener("mouseout", ()=>showData("winGraph"));
+elem("#winGraph").addEventListener("mousemove", (e)=>moveData(e));
+elem("#looseGraph").addEventListener("mouseover", ()=>showData("looseGraph"));
+elem("#looseGraph").addEventListener("mouseout", ()=>showData("looseGraph"));
+elem("#looseGraph").addEventListener("mousemove", (e)=>moveData(e));
+elem("#profileRatio").addEventListener("mouseover", ()=>showData("profileRatio"));
+elem("#profileRatio").addEventListener("mouseout", ()=>showData("profileRatio"));
+elem("#profileRatio").addEventListener("mousemove", (e)=>moveData(e, "profileRatio"));
+elem("#summaryWinGraph").addEventListener("mouseover", ()=>showData("summaryWinGraph"));
+elem("#summaryWinGraph").addEventListener("mouseout", ()=>showData("summaryWinGraph"));
+elem("#summaryWinGraph").addEventListener("mousemove", (e)=>moveData(e, "summaryWinGraph"));
+elem("#summaryLooseGraph").addEventListener("mouseover", ()=>showData("summaryLooseGraph"));
+elem("#summaryLooseGraph").addEventListener("mouseout", ()=>showData("summaryLooseGraph"));
+elem("#summaryLooseGraph").addEventListener("mousemove", (e)=>moveData(e, "summaryLooseGraph"));
+elem("#summaryXPGraph").addEventListener("mouseover", ()=>showData("summaryXPGraph"));
+elem("#summaryXPGraph").addEventListener("mouseout", ()=>showData("summaryXPGraph"));
+elem("#summaryXPGraph").addEventListener("mousemove", (e)=>moveData(e, "summaryXPGraph"));
 
 
 window.onbeforeunload = leaveGame;
@@ -153,6 +188,8 @@ function printMessage(userData, message) {
     var msg2 = msg.cloneNode(true);
     elem("#chatBox1").append(msg);
     elem("#chatBox2").append(msg2);
+    elem("#chatBox1").scrollTop = elem("#chatBox1").scrollHeight;
+    elem("#chatBox2").scrollTop = elem("#chatBox2").scrollHeight;
 }
 
 function saveUser() {
@@ -214,7 +251,17 @@ function showConfirmUser() {
     confirm.classList.add("d-flex")
     profile.classList.add("d-none")
     profile.classList.remove("d-flex")
-    elem("#confirmN").onclick = showLogin
+    elem("#confirmN").onclick = ()=>{
+        showLogin();
+        user.countGames = 0;
+        user.totalC = 0;
+        user.totalW = 0;
+        user.ratio = 0;
+        user.win = 0;
+        user.loose = 0;
+        user.level = 0;
+        user.experience = 0;
+    }
     elem("#confirmY").onclick = joinGame
 }
 
@@ -235,15 +282,15 @@ function showProfile() {
 
 function showProfileData() {
     elem("#profileUsername").innerText = user.name
-    elem("#profileLevel").innerText = user.win
+    elem("#profileLevel").innerText = user.level
     elem("#profileId").innerText = user.id
     elem("#profileGames").innerText = user.countGames
     elem(".profile__container__info--img").style = `background-image: url(${user.image}); background-size: cover;`;
     elem("#profileBtn").style = `background-image: url(${user.image}); background-size: cover;`;
     setTimeout(function () {
         animaProfileRatio()
-        elem("#winGraph").style.height = "80%"
-        elem("#looseGraph").style.height = "55%"
+        elem("#winGraph").style.height = Math.floor((user.totalC/(user.totalC+user.totalW))*100) + "%";
+        elem("#looseGraph").style.height = Math.floor((user.totalW/(user.totalC+user.totalW))*100) + "%"
     }, 100)
     elem("#menuSmall").classList.replace("d-none", "d-flex");
     elem("#sideMenu").classList.replace("d-md-none", "d-md-flex");
@@ -251,7 +298,7 @@ function showProfileData() {
 }
 
 function showChat(from) {
-    if(from === "small"){
+    if (from === "small") {
         setTimeout(() => {
             elem("#chat").classList.toggle("open");
             elem("#chatNot").classList.add("d-none");
@@ -260,7 +307,7 @@ function showChat(from) {
             }, 1000)
         }, 200);
         elem("#ranking").classList.remove("open");
-    }else{
+    } else {
         elem("#chat--big").classList.add("open");
         elem("#chatNot--big").classList.add("d-none");
         elem("#ranking--big").classList.remove("open")
@@ -268,12 +315,12 @@ function showChat(from) {
 }
 
 function showRanking(from) {
-    if(from === "small"){
+    if (from === "small") {
         setTimeout(() => {
             elem("#ranking").classList.toggle("open");
         }, 200);
         elem("#chat").classList.remove("open");
-    }else{
+    } else {
         // elem("#ranking--big").classList.add("open");
         elem("#chat--big").classList.remove("open");
     }
@@ -293,7 +340,7 @@ function animaProfileRatio() {
 
 function onSendChat(from) {
     ws.send(`{"to":"quizGame", "user":${JSON.stringify(user)}, "content":"${(from === "small") ? elem("#chatInp").value : elem("#chatInp2").value}", "type":"messageU"}`);
-    (from === "small") ? elem("#chatInp").value = "" : elem("#chatInp2").value = "";
+    (from === "small") ? elem("#chatInp").value = "": elem("#chatInp2").value = "";
 }
 
 function leaveGame() {
@@ -304,7 +351,7 @@ function leaveGame() {
     ws.close();
 }
 
-function getQuestions(amount = 5) {
+function getQuestions(amount) {
     axios
         .get("https://opentdb.com/api.php?difficulty=easy&amount=" + amount)
         .then(function (response) {
@@ -319,8 +366,9 @@ function mixAnswers() {
 }
 
 function showQuestions() {
+
     elem("#questions").classList.toggle("open")
-    getQuestions()
+    getQuestions(nQuestions)
     elem("#questions").addEventListener("transitionend", showCountDown)
 }
 
@@ -355,13 +403,17 @@ function showCountDown() {
 function showQuestion() {
 
     if (questionCount + 1 > currGame.length) {
-        elem("#questions").classList.toggle("open")
-        elem("#question").remove()
-        recuento()
+        setTimeout(() => {
+            elem("#questions").classList.toggle("open")
+            elem("#question").remove()
+        }, 700);
+        checkResults();
         questionCount = 0
         return
     }
     mixAnswers()
+    console.log(currGame[questionCount]);
+    console.log(answers);
 
     if (elem("#question")) elem("#question").remove()
     elem("#questions").innerHTML = elem("#templateQuestion").innerHTML
@@ -369,11 +421,10 @@ function showQuestion() {
     elem("#question .question__category").innerText = currGame[questionCount].category
     elem("#question .question__number").innerText = (questionCount + 1) + "/" + currGame.length
     elem("#question h2").innerHTML = currGame[questionCount].question
-    //Adaptar posibles respuestas en base a la api de preguntas.
 
     setTimeout(function () {
         elem("#question").classList.toggle("open")
-        let buttons = elem(".answers button", true)
+        // let buttons = elem(".answers button", true)
         let transition = 0.9
         answers.forEach((btn, index) => {
             let button = document.createElement("button")
@@ -382,16 +433,31 @@ function showQuestion() {
             button.innerHTML = btn
             elem("#question .answers").append(button)
             button.style.animation = `appear ${transition += 0.2}s ease-in-out forwards`
+
+            button.onclick = () => {
+                selectedAnswers.push(btn)
+                if (btn == currGame[questionCount - 1].correct_answer) {
+                    button.style.backgroundColor = "rgb(32, 200, 104)";
+                    correctAnswers++;
+                } else {
+                    button.style.backgroundColor = "rgb(245, 38, 49)";
+                    wrongAnswers++;
+                }
+                stopQuestion()
+                button.disabled = true
+                elem("#question .answers button", true).forEach(button => button.disabled = true)
+            }
         })
         questionTime()
     }, 200)
     questionCount++
+    console.log(selectedAnswers);
 }
 
 function questionTime() {
     let bar = elem(".seconds")
     barW = bar.parentElement.clientWidth
-    wPerSecond = barW / 5 // Divido por la cantidad de segundo para responder
+    wPerSecond = barW / answerTime // Divido por la cantidad de segundo para responder
     if (globalInterval) {
         clearInterval(globalInterval)
     }
@@ -402,26 +468,110 @@ function questionTime() {
         else bar.style.width = barW + "px"
         sec++
 
-        if (sec > 5) { // si pasa la cantidad de segundos cierra la pregunta
-            clearInterval(globalInterval)
+        if (sec > answerTime) { // si pasa la cantidad de segundos cierra la pregunta
+            elem("#question .answers button", true).forEach(button => button.disabled = true)
+            wrongAnswers++;
+            stopQuestion()
+        }
+    }, 1000);
+}
 
-            elem("#question").classList.toggle("open")
+function stopQuestion(next = true) {
+    clearInterval(globalInterval)
+
+    setTimeout(() => {
+        elem("#question").classList.toggle("open")
+        if (next) {
             setTimeout(function () {
-
-                bar.removeAttribute("style")
                 showQuestion()
             }, 700)
         }
     }, 1000);
 }
 
-// simulando la seccion al terminar la partida - definir seccion
-function recuento() {
-    setTimeout(() => {
-        alert("estoy en recuento")
-    }, 700);
+function checkResults() {
+    var winner;
+    if((correctAnswers/nQuestions)*100 >= 70){
+        user.experience++;
+        user.win++
+        winner = true;
+    }else{
+        user.loose++
+        winner = false;
+    }
+
+    if(user.experience >= user.level && user.experience != 0){
+        user.level++;
+        user.experience = 0;
+    }
+
+    user.countGames++;
+    user.totalC += correctAnswers;
+    user.totalW += wrongAnswers;
+    user.ratio = (Math.floor((user.win/user.countGames)*100));
+
+    showProfileData();
+    localStorage.setItem("user", JSON.stringify(user))
+
+    showSummary(winner);
+}
+
+function showSummary(win){
+    console.log("This is the summary:");
+    console.log("user.experience:", user.experience);
+    console.log("user.level: ", user.level);
+    console.log("user.totalC: ", user.totalC);
+    console.log("user.ratio: ", user.ratio);
+    console.log("user.countGames: ", user.countGames);
+
+    elem(".summary__container__info--img").style = `background-image: url(${user.image}); background-size: cover;`;
+    elem("#summaryWinGraph").style = "height: " + Math.floor((correctAnswers/nQuestions)*100) + "%;";
+    elem("#summaryLooseGraph").style = "height: " + Math.floor((wrongAnswers/nQuestions)*100) + "%;";
+    elem("#summaryXPGraph").style = "height: " + Math.floor((user.experience/(user.level+1))*100) + "%;";
+    elem("#summaryHits").textContent = correctAnswers;
+    elem("#summaryMisses").textContent = wrongAnswers;
+    elem("#summaryXP").textContent = win ? "+1" : "0";
+    elem("#summaryTotalXP").textContent = user.experience;
+    elem("#summary").classList.toggle("open");
 }
 
 function elem(selector, all = false) {
     return all ? document.querySelectorAll(selector) : document.querySelector(selector)
+}
+
+function showData(source){
+    if(source === "winGraph"){
+        elem("#answerPercentage").textContent = Math.floor((user.totalC/(user.totalC+user.totalW))*100) + "%";
+        elem("#answerPercentage").style = "color: #20C868;"
+        elem("#answerExplain").textContent = "of correct answers";
+
+    }else if(source === "profileRatio"){
+        elem("#answerPercentage").textContent = user.ratio + "%";
+        elem("#answerPercentage").style = "color: #20C868;"
+        elem("#answerExplain").textContent = "of won games";
+    }else if(source === "summaryWinGraph"){
+        elem("#answerPercentage").textContent = Math.floor((correctAnswers/nQuestions)*100) + "%";
+        elem("#answerPercentage").style = "color: #20C868;"
+        elem("#answerExplain").textContent = "of correct aswers";
+    }else if(source === "summaryLooseGraph"){
+        elem("#answerPercentage").textContent = Math.floor((wrongAnswers/nQuestions)*100) + "%";
+        elem("#answerPercentage").style = "color: #F52631;"
+        elem("#answerExplain").textContent = "of wronged aswers";
+    }else if(source === "summaryXPGraph"){
+        elem("#answerPercentage").textContent = Math.floor((user.experience/(user.level+1))*100) + "%";
+        elem("#answerPercentage").style = "color: #20C868;"
+        elem("#answerExplain").textContent = "XP for next lvl";
+    }else{
+        elem("#answerPercentage").textContent = Math.floor((user.totalW/(user.totalC+user.totalW))*100) + "%";
+        elem("#answerPercentage").style = "color: #F52631;"
+        elem("#answerExplain").textContent = "of wronged answers"
+    }
+    elem(".resultsScreen").classList.toggle("d-flex");
+    elem(".resultsScreen").classList.toggle("d-none");
+}
+
+function moveData(e, source){
+    var sumX = 0;
+    source === "profileRatio" ? sumX = -135 : sumX = 15;
+    elem(".resultsScreen").style = `top: ${e.clientY - 85}px; left: ${e.clientX + sumX}px;`
 }
