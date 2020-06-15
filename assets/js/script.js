@@ -440,7 +440,7 @@ function showRanking(order, mainBtn, from) {
         elem("#chat").classList.remove("open");
     } else if (mainBtn && from == "big") {
         setTimeout(() => {
-            elem("#ranking2").classList.toggle("open");
+            elem("#ranking2").classList.add("open");
         }, 200);
         elem("#chat--big").classList.remove("open");
     }
