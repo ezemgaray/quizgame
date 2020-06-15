@@ -644,7 +644,7 @@ function showGroup() {
             main.className = "grt mb-2 p-1 d-flex justify-content-around";
             content.className = "grt__content p-1 d-flex justify-content-between";
             data.className = "grt__content--data";
-            data.innerHTML = `<span>${e.name}: ${e.correct} answers</span>`;
+            data.innerHTML = `<span>${e.name}:</span><br><span>${e.correct} answers</span>`;
             photo.className = 'grt__user';
             photo.style = `background-image: url(${e.image});`
 
