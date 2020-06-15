@@ -143,7 +143,6 @@ function joinGame() {
                 printUsers(responseUser.user)
                 break
             case "update":
-                console.log("in switch update")
                 updateUsers(responseUser.user)
                 break
         }
@@ -328,7 +327,37 @@ function showChat(from) {
 
 function showRanking(from) {
     // sendUser(JSON.stringify(user));
-    console.log("after call");
+    const rkgBox = elem(".ranking__box");
+    while (rkgBox.firstChild) {
+        rkgBox.removeChild(rkgBox.lastChild);
+    }
+    users.sort(compareUsers('level', 'desc'))
+    users.forEach((e, index)=>{
+        console.log(e.image)
+        var main = document.createElement("div");
+        var content = document.createElement("div");
+        var position = document.createElement("div");
+        var spanPos = document.createElement("span")
+        var data = document.createElement("div");
+        var photo = document.createElement("div");
+
+        main.className = "rkg mb-2 p-1 d-flex justify-content-around";
+        content.className = "rkg__content p-1 d-flex justify-content-between";
+        position.className = "rkg__content--position";
+        spanPos.textContent = index+1;
+        data.className = "rkg__content--data";
+        data.innerHTML = `<b>Name: </b><span id="rkgUser">${e.name}</span><br><b>Level: </b><span id="rkgLevel">${e.level}</span>`;
+        photo.className = 'rkg__user';
+        photo.style = `background-image: url(${e.image});`
+
+        position.appendChild(spanPos);
+        content.appendChild(position);
+        content.appendChild(data);
+        content.appendChild(photo);
+        main.appendChild(content);
+        rkgBox.appendChild(main);
+    });
+
     if (from === "small") {
         setTimeout(() => {
             elem("#ranking").classList.toggle("open");
@@ -594,7 +623,6 @@ function moveData(e, source) {
 }
 
 function updateUsers(userData){
-    console.log("in update");
     users.forEach(e=>{
         if(e.userId == userData.id){
             e.ratio = userData.ratio;
@@ -603,7 +631,6 @@ function updateUsers(userData){
             e.level = userData.level;
         }
     });
-    console.log(users)
 }
 
 
