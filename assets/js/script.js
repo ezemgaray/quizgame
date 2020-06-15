@@ -336,6 +336,7 @@ function showProfile() {
 
 function showProfileData() {
    elem("#profileUsername").innerText = user.name
+   elem("#profileWons").innerText = user.win
    elem("#profileLevel").innerText = user.level
    elem("#profileGames").innerText = user.countGames
    elem(".profile__container__info--img").style = `background-image: url(${user.image}); background-size: cover;`;
