@@ -31,6 +31,13 @@ input:focus {
    font-family: 'Source Sans Pro', sans-serif;
 }
 
+.no-select{
+   -webkit-user-select: none;
+   -moz-user-select: none;
+   -ms-user-select: none;
+   user-select: none;
+}
+
 .main__container {
    position: relative;
    height: 100vh;
