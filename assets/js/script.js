@@ -22,7 +22,7 @@ let orderedResults = [];
 let lastClick;
 
 let answerTime = 10; //time to answer the question
-let nQuestions = 2; //number of questions
+let nQuestions = 5; //number of questions
 
 var globalInterval
 var user = JSON.parse(localStorage.getItem("user")) || {
@@ -40,7 +40,7 @@ var user = JSON.parse(localStorage.getItem("user")) || {
     experience: 0
 }
 
-var anonymousUser = ["quagga", "kiwi", "nyancat", "dragon", "anteater", "blobfish", "chupacabra", "bat", "ifrit", "kraken", "manatee", "ferret", "llama", "koala", "platypus", "wombat", "iguana", "mink", "narwhal", "liger", "turtle", "skunk", "raccoon", "crow", "otter"];
+var anonymousUser = ["quagga", "kiwi", "nyancat", "dragon", "anteater", "blobfish", "chupacabra", "bat", "ifrit", "kraken", "manatee", "ferret", "llama", "koala", "platypus", "wombat", "iguana", "mink", "narwhal", "liger", "turtle", "skunk", "raccoon", "crow", "otter", "dinosaur"];
 
 /**
  * LISTENERS
@@ -170,6 +170,9 @@ function joinGame() {
             case "finished":
                 nFinished++;
                 checkOtherUsers(responseUser.user, responseUser.time, responseUser.correct);
+                break
+            case "reset":
+                resetStatus();
                 break
         }
     }
@@ -655,8 +658,8 @@ function showGroup() {
         }
     });
 
-
     elem("#group").classList.toggle("open");
+    ws.send(`{"to":"quizGame", "user":${JSON.stringify(user)}, "type":"reset"}`);
 }
 
 function elem(selector, all = false) {
@@ -828,4 +831,23 @@ function checkOtherUsers(user, time, correctA) {
         nFinished = 0;
         nPlayers = 1;
     }
+}
+
+function resetStatus(){
+    joinMultiplayer = false;
+    joinBtn.classList.add("d-none");
+    createBtn.textContent = "Create Game";
+    createBtn.disabled = false;
+    joinBtn.disabled = false;
+    createBtn.classList.remove("d-none");
+    questionCount = 0;
+    correctAnswers = 0;
+    wrongAnswers = 0;
+    seconds = 30;
+    nPlayers = 1;
+    nFinished = 0;
+    sendConfrim = false;
+    resultsMultiplayer = [];
+    orderedResults = [];
+    lastClick;
 }
