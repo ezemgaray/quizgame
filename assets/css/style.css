@@ -873,6 +873,8 @@ div .title__span:nth-child(2) span:nth-child(4) {
 
 .question {
    position: relative;
+   width: 100%;
+   max-width: 900px;
    height: 50%;
    margin: 0 auto;
 }
@@ -1056,20 +1058,13 @@ div .title__span:nth-child(2) span:nth-child(4) {
    color: white;
 }
 
-/* .questions{ */
-   /* background: #000; */
-/* } */
 .loader__container{
    position: relative;
    top: 0;
    left: 0;
    width: 100%;
    color: white;
-   /* height: 100%; */
    text-align: center;
-   /* background-color: #fff; */
-   /* border: 10px solid #20C868; */
-
 }
 
 .loader {
@@ -1234,5 +1229,8 @@ div .title__span:nth-child(2) span:nth-child(4) {
 
    .main__contentShow{
       width: 70vw;
+   }
+   .question__btn {
+      font-size: calc(8px + 1.2vw);
    }
 }
