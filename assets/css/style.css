@@ -516,11 +516,12 @@ div .title__span:nth-child(2) span:nth-child(4) {
 }
 
 .msg,
-.rkg {
+.rkg,
+.grt {
    width: 100%;
 }
 
-.rkg {
+.rkg, .grt {
    max-width: 400px;
    margin: 0 auto;
    transition: transform .1s ease-in-out;
@@ -539,7 +540,8 @@ div .title__span:nth-child(2) span:nth-child(4) {
 }
 
 .msg__user,
-.rkg__user {
+.rkg__user,
+.grt__user {
    width: 50px;
    height: 50px;
    background: url("../img/PROFILE-PIC-ROUND-01.png");
@@ -558,7 +560,8 @@ div .title__span:nth-child(2) span:nth-child(4) {
 }
 
 .msg__content,
-.rkg__content {
+.rkg__content,
+.grt__content {
    position: relative;
    width: calc(100% - 80px);
    background-color: rgb(191, 200, 240);
@@ -574,7 +577,8 @@ div .title__span:nth-child(2) span:nth-child(4) {
    background-color: rgb(220, 220, 240);
 }
 
-.rkg__content {
+.rkg__content,
+.grt__content {
    width: 100%;
    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.38);
    background-color: rgb(209, 209, 250);
