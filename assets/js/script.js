@@ -585,7 +585,7 @@ function stopQuestion(next = true) {
 
 function checkResults() {
     var winner;
-    if ((correctAnswers / nQuestions) * 100 >= 70) {
+    if (((correctAnswers / nQuestions) * 100 >= 70) && !joinMultiplayer) {
         user.experience++;
         user.win++
         winner = true;
@@ -601,6 +601,9 @@ function checkResults() {
                 user.win++
                 winner = true;
                 console.log("user has won")
+            }else{
+                user.loose++
+                winner = false;
             }
         });
     }
