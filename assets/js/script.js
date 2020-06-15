@@ -133,7 +133,6 @@ function joinGame() {
 
     }
     ws.onmessage = function (response) {
-        console.log(response)
         let responseUser = JSON.parse(response.data);
 
         if (responseUser.auth == "OK") {
