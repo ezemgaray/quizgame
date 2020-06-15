@@ -893,3 +893,4 @@ function resetStatus() {
     resultsMultiplayer = [];
     orderedResults = [];
 }
+
