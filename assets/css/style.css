@@ -967,6 +967,14 @@ div .title__span:nth-child(2) span:nth-child(4) {
    text-align: center;
 }
 
+.disabledBtn{
+   background-color: grey;
+}
+.disabledBtn:hover{
+   transform: scale(1);
+   box-shadow: none;
+}
+
 
 /*? ======== KEYFRAMES ======== ?*/
 

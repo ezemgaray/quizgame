@@ -11,6 +11,9 @@ let questionCount = 0 // cuenta ascendente de preguntas, al cargar preguntas que
 let correctAnswers = 0;
 let wrongAnswers = 0;
 
+let joinMultiplayer = false;
+let seconds = 30;
+
 let answerTime = 10; //time to answer the question
 let nQuestions = 5; //number of questions
 
@@ -50,6 +53,8 @@ elem("#byCorrect").addEventListener("click", () => showRanking("correct"))
 elem("#chatSendBtn").addEventListener("click", () => onSendChat("small"))
 elem("#chatSendBtn2").addEventListener("click", () => onSendChat("big"))
 elem("#enterGameBtn").addEventListener("click", showQuestions)
+elem("#createGameBtn").addEventListener("click", createMultiplayer)
+elem("#joinGameBtn").addEventListener("click", preJoinMultiplayer)
 elem("#chatInp").onkeyup = e => {
     if (e.keyCode == 13) onSendChat("small");
 }
@@ -121,6 +126,7 @@ function joinGame() {
 
     }
     ws.onmessage = function (response) {
+        console.log(response)
         let responseUser = JSON.parse(response.data);
 
         if (responseUser.auth == "OK") {
@@ -145,6 +151,12 @@ function joinGame() {
                 break
             case "update":
                 updateUsers(responseUser.user)
+                break
+            case "multiplayerInit":
+                updateMultButton(responseUser.user)
+                break
+            case "multiplayerStart":
+                startMultGame(responseUser.user, responseUser.questions)
                 break
         }
     }
@@ -403,12 +415,16 @@ function getQuestions(amount) {
     axios
         .get("https://opentdb.com/api.php?difficulty=easy&amount=" + amount)
         .then(function (response) {
-            currGame = response.data.results
+            currGame = response.data.results;
+            console.log(currGame)
         })
 }
 
 function mixAnswers() {
+    console.log(currGame[0])
     answers = currGame[questionCount].incorrect_answers
+    console.log(answers)
+    console.log(currGame[questionCount].incorrect_answers)
     answers.push(currGame[questionCount].correct_answer)
     answers.sort(() => Math.random() - 0.5)
 }
@@ -651,4 +667,67 @@ function compareUsers(key, order = 'asc') {
             (order === 'desc') ? (comparison * -1) : comparison
         );
     };
+}
+
+//! Multiplayer begin
+
+function createMultiplayer(){
+    var btn = elem("#createGameBtn");
+    ws.send(`{"to":"quizGame", "user":${JSON.stringify(user)}, "type":"multiplayerInit"}`);
+    btn.disabled = true;
+    elem("#createGameBtn").classList.add("disabledBtn");
+    elem("#enterGameBtn").disabled = true;
+    elem("#enterGameBtn").classList.add("disabledBtn");
+    getQuestions(nQuestions);
+    console.log(currGame);
+    var counter = setInterval(() => {
+        btn.textContent = "00:" + seconds--
+        if(seconds <= 25){
+            clearInterval(counter);
+            ws.send(`{"to":"quizGame", "user":${JSON.stringify(user)}, "questions":${JSON.stringify(currGame)}, "type":"multiplayerStart"}`);
+        }
+    }, 1000);
+}
+
+function updateMultButton(userData){
+    if(userData.id != user.id){
+        elem("#joinGameBtn").classList.remove("d-none");
+        elem("#createGameBtn").classList.add("d-none");
+        var counter = setInterval(() => {
+            elem("#createGameBtn").textContent = "00:" + seconds--
+            if(seconds <= 25){
+                clearInterval(counter);
+                elem("#createGameBtn").textContent = "Create Game";
+            }
+        }, 1000);
+    }
+}
+
+function preJoinMultiplayer(){
+    joinMultiplayer = true;
+    elem("#joinGameBtn").classList.add("d-none");
+    elem("#createGameBtn").classList.remove("d-none");
+    elem("#createGameBtn").disabled = true;
+    elem("#createGameBtn").classList.add("disabledBtn");
+    elem("#enterGameBtn").disabled = true;
+    elem("#enterGameBtn").classList.add("disabledBtn");
+}
+
+function startMultGame(userData, questions){
+    if(userData.id == user.id || joinMultiplayer){
+        elem("#questions").classList.toggle("open")
+        currGame = questions;
+        elem("#questions").addEventListener("transitionend", showCountDown);
+        setTimeout(() => {
+            elem("#createGameBtn").disabled = false;
+            elem("#createGameBtn").classList.remove("disabledBtn");
+            elem("#enterGameBtn").disabled = false;
+            elem("#enterGameBtn").classList.remove("disabledBtn");
+        }, 700);
+    }else{
+        elem("#joinGameBtn").classList.add("d-none");
+        elem("#createGameBtn").classList.remove("d-none");
+        elem("#createGameBtn").disabled = true;
+        elem("#createGameBtn").classList.add("disabledBtn");
+    }
 }
