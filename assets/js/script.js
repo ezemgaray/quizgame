@@ -10,7 +10,6 @@ var selectedAnswers = []
 let questionCount = 0 // cuenta ascendente de preguntas, al cargar preguntas que manejar el contador por el length del array de preguntas
 let correctAnswers = 0;
 let wrongAnswers = 0;
-// let totalExperience = 0;
 
 let answerTime = 10; //time to answer the question
 let nQuestions = 5; //number of questions
@@ -26,7 +25,7 @@ var user = JSON.parse(localStorage.getItem("user")) || {
     totalC: 0,
     totalW: 0,
     currR: "",
-    ratio: 0, //(this.countGames == 0) ? 0 : ((this.win / this.countGames) * 100)
+    ratio: 0,
     level: 0,
     experience: 0
 }
@@ -555,18 +554,11 @@ function checkResults() {
 
     showProfileData();
     localStorage.setItem("user", JSON.stringify(user))
-    console.log("before sending the ws.send")
     ws.send(`{"to":"quizGame", "user":${JSON.stringify(user)}, "type":"update"}`);
     showSummary(winner);
 }
 
 function showSummary(win) {
-    console.log("This is the summary:");
-    console.log("user.experience:", user.experience);
-    console.log("user.level: ", user.level);
-    console.log("user.totalC: ", user.totalC);
-    console.log("user.ratio: ", user.ratio);
-    console.log("user.countGames: ", user.countGames);
 
     elem(".summary__container__info--img").style = `background-image: url(${user.image}); background-size: cover;`;
     elem("#summaryWinGraph").style = "height: " + Math.floor((correctAnswers / nQuestions) * 100) + "%;";
@@ -577,8 +569,6 @@ function showSummary(win) {
     elem("#summaryXP").textContent = win ? "+1" : "0";
     elem("#summaryTotalXP").textContent = user.experience;
     elem("#summary").classList.toggle("open");
-
-    //ws.send(`{"to":"quizGame", "user":${JSON.stringify(user)}, "type":"update"}`);
 }
 
 function elem(selector, all = false) {
@@ -632,8 +622,6 @@ function updateUsers(userData){
         }
     });
 }
-
-
 
 function compareUsers(key, order = 'asc') {
     return function innerSort(a, b) {
