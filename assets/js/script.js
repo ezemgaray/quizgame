@@ -792,7 +792,7 @@ function createMultiplayer() {
     joinMultiplayer = true;
     var counter = setInterval(() => {
         createBtn.textContent = "00:" + seconds--
-        if (seconds <= 25) {
+        if (seconds <= 0) {
             clearInterval(counter);
             ws.send(`{"to":"quizGame", "user":${JSON.stringify(user)}, "questions":${JSON.stringify(currGame)}, "type":"multiplayerStart"}`);
         }
@@ -805,7 +805,7 @@ function updateMultButton(userData) {
         createBtn.classList.add("d-none");
         var counter = setInterval(() => {
             createBtn.textContent = "00:" + seconds--
-            if (seconds <= 25) {
+            if (seconds <= 0) {
                 clearInterval(counter);
                 createBtn.textContent = "Create Game";
             }
