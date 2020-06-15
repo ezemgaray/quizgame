@@ -801,4 +801,5 @@ function checkOtherUsers(user, time, correctA) {
         nFinished = 0;
         nPlayers = 1;
     }
+    
 }
