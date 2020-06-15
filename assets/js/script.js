@@ -858,7 +858,6 @@ function checkOtherUsers(user, time, correctA) {
     if (joinMultiplayer && nPlayers == nFinished) {
         setTimeout(() => {
             elem("#questions").classList.toggle("open");
-            // elem("#question").remove();
         }, 700);
 
         for (var i = nQuestions; i >= 0; i--) {
