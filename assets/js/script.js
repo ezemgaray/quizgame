@@ -53,9 +53,13 @@ elem("#chatBtn").addEventListener("click", () => showChat("small"))
 elem("#chatBtn2").addEventListener("click", () => showChat("big"))
 elem("#profileBtn").addEventListener("click", showProfile)
 elem("#rankingBtn").addEventListener("click", () => showRanking("level", true))
+elem("#rankingBtn2").addEventListener("click", () => showRanking("level", true, "big"))
 elem("#byLevel").addEventListener("click", () => showRanking("level"))
 elem("#byRatio").addEventListener("click", () => showRanking("ratio"))
 elem("#byCorrect").addEventListener("click", () => showRanking("correct"))
+elem("#byLevel2").addEventListener("click", () => showRanking("level", false, "big"))
+elem("#byRatio2").addEventListener("click", () => showRanking("ratio", false, "big"))
+elem("#byCorrect2").addEventListener("click", () => showRanking("correct", false, "big"))
 elem("#chatSendBtn").addEventListener("click", () => onSendChat("small"))
 elem("#chatSendBtn2").addEventListener("click", () => onSendChat("big"))
 soloBtn.addEventListener("click", showQuestions)
@@ -354,17 +358,24 @@ function showChat(from) {
     } else {
         elem("#chat--big").classList.add("open");
         elem("#chatNot--big").classList.add("d-none");
-        elem("#ranking--big").classList.remove("open")
+        elem("#ranking2").classList.remove("open")
     }
 }
 
-function showRanking(order, mainBtn) {
+function showRanking(order, mainBtn, from) {
     const rkgBox = elem(".ranking__box");
+    const rkgBox2 = elem(".ranking__box2");
     var title;
     var result;
-    if (!(elem("#ranking").classList.contains("open")) || order !== "level" || !mainBtn) {
+    var element;
+    (from != "big") ? element = elem("#ranking") : element = elem("#ranking2");
+
+    if (!element.classList.contains("open") || order !== "level" || !mainBtn) {
         while (rkgBox.firstChild) {
             rkgBox.removeChild(rkgBox.lastChild);
+        }
+        while (rkgBox2.firstChild) {
+            rkgBox2.removeChild(rkgBox2.lastChild);
         }
         users.sort(compareUsers(order, 'desc'))
         users.forEach((e, index) => {
@@ -402,16 +413,25 @@ function showRanking(order, mainBtn) {
             content.appendChild(data);
             content.appendChild(photo);
             main.appendChild(content);
+            var main2 = main.cloneNode(true)
             rkgBox.appendChild(main);
+            rkgBox2.appendChild(main2);
         });
     }
     elem(".ranking__btn", true).forEach(e => e.dataset.action == order ? e.classList.add("ranking__btn--active") : e.classList.remove("ranking__btn--active"));
 
-    if (mainBtn) {
+    if (mainBtn && from != "big") {
+        console.log("click from small")
         setTimeout(() => {
             elem("#ranking").classList.toggle("open");
         }, 200);
         elem("#chat").classList.remove("open");
+    }else if(mainBtn && from == "big"){
+        console.log("click from big")
+        setTimeout(() => {
+            elem("#ranking2").classList.toggle("open");
+        }, 200);
+        elem("#chat--big").classList.remove("open");
     }
 }
 
@@ -824,7 +844,7 @@ function checkOtherUsers(user, time, correctA) {
             elem("#question").remove();
         }, 700);
 
-        resultsMultiplayer.sort(compareUsers("correct", "desc"));
+        //resultsMultiplayer.sort(compareUsers("correct", "desc"));
 
         for (var i = nQuestions; i >= 0; i--) {
             var temp = resultsMultiplayer.filter(e => e.correct == i);
