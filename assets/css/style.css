@@ -714,7 +714,8 @@ div .title__span:nth-child(2) span:nth-child(4) {
 }
 
 
-.rkg__content--data{
+.rkg__content--data,
+.grt__content--data{
    width: calc(100% - 130px);
    text-align: left;
 }

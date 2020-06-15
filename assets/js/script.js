@@ -22,7 +22,7 @@ let orderedResults = [];
 let lastClick;
 
 let answerTime = 10; //time to answer the question
-let nQuestions = 5; //number of questions
+let nQuestions = 2; //number of questions
 
 var globalInterval
 var user = JSON.parse(localStorage.getItem("user")) || {
@@ -612,8 +612,8 @@ function checkResults() {
     showProfileData();
     localStorage.setItem("user", JSON.stringify(user))
     ws.send(`{"to":"quizGame", "user":${JSON.stringify(user)}, "type":"update"}`);
-    // if(joinMultiplayer) ws.send(`{"to":"quizGame", "user":${JSON.stringify(user)}, "type":"finished"}`);
-    showSummary(winner);
+
+    joinMultiplayer ? showGroup () : showSummary(winner);
 }
 
 function showSummary(win) {
@@ -627,6 +627,37 @@ function showSummary(win) {
     elem("#summaryXP").textContent = win ? "+1" : "0";
     elem("#summaryTotalXP").textContent = user.experience;
     elem("#summary").classList.toggle("open");
+}
+
+function showGroup() {
+
+    elem(".group__container__info--img").style = `background-image: url(${orderedResults[0].image}); background-size: cover;`;
+    elem("#groupWinner").textContent = orderedResults[0].name;
+    elem("#groupWinnerHits").textContent = orderedResults[0].correct;
+
+    orderedResults.forEach((e, i)=>{
+        if(i>0){
+            var main = document.createElement("div");
+            var content = document.createElement("div");
+            var data = document.createElement("div");
+            var photo = document.createElement("div");
+
+            main.className = "grt mb-2 p-1 d-flex justify-content-around";
+            content.className = "grt__content p-1 d-flex justify-content-between";
+            data.className = "grt__content--data";
+            data.innerHTML = `<span>${e.name}: ${e.correct} answers</span>`;
+            photo.className = 'grt__user';
+            photo.style = `background-image: url(${e.image});`
+
+            content.appendChild(photo);
+            content.appendChild(data);
+            main.appendChild(content);
+            elem(".group__box").appendChild(main);
+        }
+    });
+
+
+    elem("#group").classList.toggle("open");
 }
 
 function elem(selector, all = false) {
