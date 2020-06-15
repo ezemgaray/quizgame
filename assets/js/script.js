@@ -343,8 +343,8 @@ function showProfileData() {
     elem("#profileWons").innerText = user.win
     elem("#profileLevel").innerText = user.level
     elem("#profileGames").innerText = user.countGames
-    elem(".profile__container__info--img").style = `background-image: url(${user.image}); background-size: cover;`;
-    elem("#profileBtn").style = `background-image: url(${user.image}); background-size: cover;`;
+    elem(".profile__container__info--img").style = `background-image: url(${user.image}); background-size: cover; background-position: center; background-repeat: no-repeat`;
+    elem("#profileBtn").style = `background-image: url(${user.image}); background-size: cover; background-position: center; background-repeat: no-repeat`;
     setTimeout(function () {
         animaProfileRatio()
         elem("#winGraph").style.height = Math.floor((user.totalC / (user.totalC + user.totalW)) * 100) + "%";
