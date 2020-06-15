@@ -43,8 +43,10 @@ elem("#usernameBtn").addEventListener("click", saveUser)
 elem("#chatBtn").addEventListener("click", () => showChat("small"))
 elem("#chatBtn2").addEventListener("click", () => showChat("big"))
 elem("#profileBtn").addEventListener("click", showProfile)
-elem("#rankingBtn").addEventListener("click", () => showRanking("small"))
-elem("#rankingBtn2").addEventListener("click", () => showRanking("big"))
+elem("#rankingBtn").addEventListener("click", () => showRanking("level", true))
+elem("#byLevel").addEventListener("click", () => showRanking("level"))
+elem("#byRatio").addEventListener("click", () => showRanking("ratio"))
+elem("#byCorrect").addEventListener("click", () => showRanking("correct"))
 elem("#chatSendBtn").addEventListener("click", () => onSendChat("small"))
 elem("#chatSendBtn2").addEventListener("click", () => onSendChat("big"))
 elem("#enterGameBtn").addEventListener("click", showQuestions)
@@ -324,14 +326,20 @@ function showChat(from) {
     }
 }
 
-function showRanking(from) {
+function showRanking(order, mainBtn) {
     const rkgBox = elem(".ranking__box");
-    if(!(elem("#ranking").classList.contains("open"))){
+    var title;
+    var result;
+    if(!(elem("#ranking").classList.contains("open"))||order!== "level"||!mainBtn){
         while (rkgBox.firstChild) {
             rkgBox.removeChild(rkgBox.lastChild);
         }
-        users.sort(compareUsers('level', 'desc'))
+        users.sort(compareUsers(order, 'desc'))
         users.forEach((e, index)=>{
+            if(order == "level") {title = "Level"; result = e.level};
+            if(order == "ratio") {title = "Ratio"; result = e.ratio + "%"};
+            if(order == "correct") {title = "Correct answers"; result = e.correct};
+
             var main = document.createElement("div");
             var content = document.createElement("div");
             var position = document.createElement("div");
@@ -344,7 +352,7 @@ function showRanking(from) {
             position.className = "rkg__content--position";
             spanPos.textContent = index+1;
             data.className = "rkg__content--data";
-            data.innerHTML = `<b>Name: </b><span id="rkgUser">${e.name}</span><br><b>Level: </b><span id="rkgLevel">${e.level}</span>`;
+            data.innerHTML = `<b>Name: </b><span id="rkgUser">${e.name}</span><br><b>${title}: </b><span id="rkgLevel">${result}</span>`;
             photo.className = 'rkg__user';
             photo.style = `background-image: url(${e.image});`
 
@@ -356,15 +364,13 @@ function showRanking(from) {
             rkgBox.appendChild(main);
         });
     }
+    elem(".ranking__btn", true).forEach(e=>e.dataset.action==order ? e.classList.add("ranking__btn--active") : e.classList.remove("ranking__btn--active"));
 
-    if (from === "small") {
+    if(mainBtn){
         setTimeout(() => {
             elem("#ranking").classList.toggle("open");
         }, 200);
         elem("#chat").classList.remove("open");
-    } else {
-        // elem("#ranking--big").classList.add("open");
-        elem("#chat--big").classList.remove("open");
     }
 }
 
