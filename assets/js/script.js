@@ -521,7 +521,6 @@ function showCountDown() {
 }
 
 function showQuestion() {
-
     if (questionCount + 1 > currGame.length) {
         if (!joinMultiplayer) {
             setTimeout(() => {
@@ -649,7 +648,6 @@ function checkResults() {
     }
 
     user.countGames++;
-    console.log(countGames)
     user.totalC += correctAnswers;
     user.totalW += wrongAnswers;
     user.ratio = (Math.floor((user.win / user.countGames) * 100));
@@ -662,7 +660,7 @@ function checkResults() {
 }
 
 function showSummary(win) {
-
+    console.log("in showSummary")
     elem(".summary__container__info--img").style = `background-image: url(${user.image}); background-size: cover;`;
     elem("#summaryWinGraph").style = "height: " + Math.floor((correctAnswers / nQuestions) * 100) + "%;";
     elem("#summaryLooseGraph").style = "height: " + Math.floor((wrongAnswers / nQuestions) * 100) + "%;";
