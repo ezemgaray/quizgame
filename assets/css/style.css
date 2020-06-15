@@ -1075,7 +1075,7 @@ div .title__span:nth-child(2) span:nth-child(4) {
 }
 
 .disabledBtn{
-   background-color: grey;
+   background-color: rgb(165, 150, 63);
 }
 .disabledBtn:hover{
    transform: scale(1);

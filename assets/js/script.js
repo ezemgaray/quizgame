@@ -8,7 +8,7 @@ let correctAnswers = 0;
 let wrongAnswers = 0;
 
 //? Multiplayer Variabeles
-let joinMultiplayer = false;
+// let joinMultiplayer = false;
 let seconds = 30;
 let createBtn = elem("#createGameBtn");
 let joinBtn = elem("#joinGameBtn");
@@ -35,7 +35,8 @@ var user = JSON.parse(localStorage.getItem("user")) || {
     currR: "",
     ratio: 0,
     level: 0,
-    experience: 0
+    experience: 0,
+    isPlaying: false
 }
 
 var anonymousUser = ["quagga", "kiwi", "nyancat", "dragon", "anteater", "blobfish", "chupacabra", "bat", "ifrit", "kraken", "manatee", "ferret", "llama", "koala", "platypus", "wombat", "iguana", "mink", "narwhal", "liger", "turtle", "skunk", "raccoon", "crow", "otter", "dinosaur"];
@@ -467,7 +468,7 @@ function leaveGame() {
     user.id = ""
     user.name = ""
     user.image = ""
-    ws.send(`{"to":"quizGame", "userId":"", "username":"", "online":${JSON.parse(joinMultiplayer)}, "type":"disconnect"}`);
+    ws.send(`{"to":"quizGame", "userId":"", "username":"", "online":${JSON.parse(user.isPlaying)}, "type":"disconnect"}`);
     ws.close();
 }
 
@@ -522,7 +523,7 @@ function showCountDown() {
 
 function showQuestion() {
     if (questionCount + 1 > currGame.length) {
-        if (!joinMultiplayer) {
+        if (!user.isPlaying) {
             setTimeout(() => {
                 elem("#questions").classList.toggle("open");
                 elem("#question").remove();
@@ -621,7 +622,7 @@ function stopQuestion(next = true) {
 
 function checkResults() {
     var winner;
-    if (((correctAnswers / nQuestions) * 100 >= 70) && !joinMultiplayer) {
+    if (((correctAnswers / nQuestions) * 100 >= 70) && !user.isPlaying) {
         user.experience++;
         user.win++
         winner = true;
@@ -630,7 +631,7 @@ function checkResults() {
         winner = false;
     }
 
-    if (joinMultiplayer && resultsMultiplayer.length > 1) {
+    if (user.isPlaying && resultsMultiplayer.length > 1) {
         orderedResults.forEach((e, i) => {
             if (e.id === user.id && i == 0) {
                 user.experience++;
@@ -657,7 +658,7 @@ function checkResults() {
     localStorage.setItem("user", JSON.stringify(user))
     ws.send(`{"to":"quizGame", "user":${JSON.stringify(user)}, "type":"update"}`);
 
-    joinMultiplayer ? showGroup() : showSummary(winner);
+    user.isPlaying ? showGroup() : showSummary(winner);
 }
 
 function showSummary(win) {
@@ -791,7 +792,8 @@ function createMultiplayer() {
     soloBtn.disabled = true;
     soloBtn.classList.add("disabledBtn");
     getQuestions(nQuestions);
-    joinMultiplayer = true;
+    // joinMultiplayer = true;
+    user.isPlaying = true;
     var counter = setInterval(() => {
         createBtn.textContent = "00:" + seconds--
         if (seconds <= 0) {
@@ -816,7 +818,8 @@ function updateMultButton(userData) {
 }
 
 function preJoinMultiplayer() {
-    joinMultiplayer = true;
+    // joinMultiplayer = true;
+    user.isPlaying = true;
     joinBtn.classList.add("d-none");
     createBtn.classList.remove("d-none");
     createBtn.disabled = true;
@@ -827,7 +830,7 @@ function preJoinMultiplayer() {
 }
 
 function startMultGame(userData, questions) {
-    if (userData.id == user.id || joinMultiplayer) {
+    if (userData.id == user.id || user.isPlaying) {
         elem("#questions").classList.toggle("open")
         currGame = questions;
         elem("#questions").addEventListener("transitionend", showCountDown);
@@ -855,7 +858,7 @@ function checkOtherUsers(user, time, correctA) {
             correct: correctA
         });
     }
-    if (joinMultiplayer && nPlayers == nFinished) {
+    if (user.isPlaying && nPlayers == nFinished) {
         setTimeout(() => {
             elem("#questions").classList.toggle("open");
         }, 700);
@@ -874,12 +877,12 @@ function checkOtherUsers(user, time, correctA) {
 
 //reset all variables to it's state before multiplayer
 function resetStatus() {
-    if (joinMultiplayer) {
+    if (user.isPlaying) {
         questionCount = 0;
         correctAnswers = 0;
         wrongAnswers = 0;
         lastClick;
-        joinMultiplayer = false;
+        user.isPlaying = false;
     }
     joinBtn.classList.add("d-none");
     createBtn.textContent = "Create Game";
@@ -892,4 +895,8 @@ function resetStatus() {
     nFinished = 0;
     resultsMultiplayer = [];
     orderedResults = [];
+}
+
+function checkCurrentGame(){
+
 }
