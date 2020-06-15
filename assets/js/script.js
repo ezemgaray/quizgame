@@ -26,7 +26,7 @@ var user = JSON.parse(localStorage.getItem("user")) || {
     totalC: 0,
     totalW: 0,
     currR: "",
-    ratio: 0, //(this.countGames == 0) ? 0 : ((this.win / this.countGames) * 100)
+    ratio: 0,
     level: 0,
     experience: 0
 }
