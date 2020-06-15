@@ -16,7 +16,6 @@ let joinBtn = elem("#joinGameBtn");
 let soloBtn = elem("#enterGameBtn");
 let nPlayers = 1;
 let nFinished = 0;
-let sendConfrim = false;
 let resultsMultiplayer = [];
 let orderedResults = [];
 let lastClick;
@@ -833,21 +832,24 @@ function checkOtherUsers(user, time, correctA) {
     }
 }
 
+//reset all variables to it's state before multiplayer
 function resetStatus(){
-    joinMultiplayer = false;
+    console.log("reset function!")
+    if (joinMultiplayer){
+        questionCount = 0;
+        correctAnswers = 0;
+        wrongAnswers = 0;
+        lastClick;
+        joinMultiplayer = false;
+    }
     joinBtn.classList.add("d-none");
     createBtn.textContent = "Create Game";
     createBtn.disabled = false;
     joinBtn.disabled = false;
     createBtn.classList.remove("d-none");
-    questionCount = 0;
-    correctAnswers = 0;
-    wrongAnswers = 0;
     seconds = 30;
     nPlayers = 1;
     nFinished = 0;
-    sendConfrim = false;
     resultsMultiplayer = [];
     orderedResults = [];
-    lastClick;
 }
