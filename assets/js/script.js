@@ -73,6 +73,11 @@ elem("#summaryBackProfile").addEventListener("click", () => {
     correctAnswers = 0;
     wrongAnswers = 0;
 });
+elem("#groupBackProfile").addEventListener("click", () => {
+    elem("#group").classList.remove("open");
+    correctAnswers = 0;
+    wrongAnswers = 0;
+});
 elem("#summaryNewGame").addEventListener("click", () => {
     setTimeout(() => {
         elem("#summary").classList.remove("open");
@@ -847,6 +852,7 @@ function resetStatus(){
     createBtn.disabled = false;
     joinBtn.disabled = false;
     createBtn.classList.remove("d-none");
+    createBtn.classList.remove("disabledBtn");
     seconds = 30;
     nPlayers = 1;
     nFinished = 0;
