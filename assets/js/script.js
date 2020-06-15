@@ -582,7 +582,6 @@ function showQuestion() {
 }
 
 function questionTime() {
-    debugger
     let bar = elem(".seconds")
     barW = bar.parentElement.clientWidth
     wPerSecond = barW / answerTime // Divido por la cantidad de segundo para responder
