@@ -1064,6 +1064,7 @@ div .title__span:nth-child(2) span:nth-child(4) {
    top: 0;
    left: 0;
    width: 100%;
+   color: white;
    /* height: 100%; */
    text-align: center;
    /* background-color: #fff; */
@@ -1086,7 +1087,7 @@ div .title__span:nth-child(2) span:nth-child(4) {
    top: 50%;
    left: 50%;
    border-radius: 5px;
-   background-color: rgb(0, 0, 0);
+   background-color: white;
    transform-origin: 50% 50%;
    transform: translate(-50%, -50%);
    -webkit-transform: translate(-50%, -50%);
@@ -1100,7 +1101,7 @@ div .title__span:nth-child(2) span:nth-child(4) {
 .cssload-loader:before {
    content: "";
    position: absolute;
-   background-color: rgb(0, 0, 0);
+   background-color: white;
    top: 0px;
    left: -10px;
    height: 5px;
@@ -1111,7 +1112,7 @@ div .title__span:nth-child(2) span:nth-child(4) {
 .cssload-loader:after {
    content: "";
    position: absolute;
-   background-color: rgb(0, 0, 0);
+   background-color: white;
    top: 0px;
    left: 10px;
    height: 5px;
