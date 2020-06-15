@@ -20,6 +20,7 @@ let soloBtn = elem("#enterGameBtn");
 let nPlayers = 1;
 let nFinished = 0;
 let sendConfrim = false;
+let resultsMultiplayer = [];
 
 let answerTime = 10; //time to answer the question
 let nQuestions = 5; //number of questions
@@ -170,8 +171,7 @@ function joinGame() {
                 break
             case "finished":
                 nFinished++;
-                checkOtherUsers("from switcha")
-                console.log(nPlayers, nFinished);
+                checkOtherUsers(responseUser.user, responseUser.time, responseUser.correct);
                 break
         }
     }
@@ -486,7 +486,8 @@ function showQuestion() {
             checkResults();
             questionCount = 0
         }else{
-            ws.send(`{"to":"quizGame", "user":${JSON.stringify(user)}, "type":"finished"}`);
+            var finishTime = new Date();
+            ws.send(`{"to":"quizGame", "user":${JSON.stringify(user)}, "time":${finishTime}, "correct":${correctAnswers}, "type":"finished"}`);
             checkOtherUsers("function showQuestion");
         }
         return
@@ -749,8 +750,15 @@ function startMultGame(userData, questions){
     }
 }
 
-function checkOtherUsers(from){
-    console.log("in checkOtherUsers()", from)
+function checkOtherUsers(user, time, correctA){
+    resultsMultiplayer.push({
+        id: user.id,
+        image: user.image,
+        name: user.name,
+        time: time,
+        correct: correctA
+    });
+    console.log(resultsMultiplayer);
     if(joinMultiplayer && nPlayers == nFinished){
         console.log("executing next display")
         setTimeout(() => {
@@ -760,6 +768,6 @@ function checkOtherUsers(from){
         checkResults();
         questionCount = 0
         nFinished = 0;
-        nPlayers = 0;
+        nPlayers = 1;
     }
 }
