@@ -611,6 +611,7 @@ function checkResults() {
     }
 
     user.countGames++;
+    console.log(countGames)
     user.totalC += correctAnswers;
     user.totalW += wrongAnswers;
     user.ratio = (Math.floor((user.win / user.countGames) * 100));
