@@ -333,14 +333,13 @@ function showRanking(from) {
         }
         users.sort(compareUsers('level', 'desc'))
         users.forEach((e, index)=>{
-            console.log(e.image)
             var main = document.createElement("div");
             var content = document.createElement("div");
             var position = document.createElement("div");
             var spanPos = document.createElement("span")
             var data = document.createElement("div");
             var photo = document.createElement("div");
-    
+
             main.className = "rkg mb-2 p-1 d-flex justify-content-around";
             content.className = "rkg__content p-1 d-flex justify-content-between";
             position.className = "rkg__content--position";
@@ -349,7 +348,7 @@ function showRanking(from) {
             data.innerHTML = `<b>Name: </b><span id="rkgUser">${e.name}</span><br><b>Level: </b><span id="rkgLevel">${e.level}</span>`;
             photo.className = 'rkg__user';
             photo.style = `background-image: url(${e.image});`
-    
+
             position.appendChild(spanPos);
             content.appendChild(position);
             content.appendChild(data);
