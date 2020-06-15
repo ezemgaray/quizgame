@@ -81,6 +81,9 @@ elem("#groupBackProfile").addEventListener("click", () => {
     elem("#group").classList.remove("open");
     correctAnswers = 0;
     wrongAnswers = 0;
+    while (elem(".group__box").firstChild) {
+        elem(".group__box").removeChild(elem(".group__box").lastChild);
+    }
 });
 elem("#summaryNewGame").addEventListener("click", () => {
     setTimeout(() => {
@@ -158,6 +161,7 @@ function joinGame() {
                 break
             case "disconnect":
                 sendUser(JSON.stringify(user))
+                // if(responseUser)
                 break
             case "user":
                 printUsers(responseUser.user)
@@ -456,7 +460,7 @@ function leaveGame() {
     user.id = ""
     user.name = ""
     user.image = ""
-    ws.send(`{"to":"quizGame", "userId":"", "username":"", "type":"disconnect"}`);
+    ws.send(`{"to":"quizGame", "userId":"", "username":"", "online":${JSON.parse(joinMultiplayer)}, "type":"disconnect"}`);
     ws.close();
 }
 
@@ -841,7 +845,7 @@ function checkOtherUsers(user, time, correctA) {
     if (joinMultiplayer && nPlayers == nFinished) {
         setTimeout(() => {
             elem("#questions").classList.toggle("open");
-            elem("#question").remove();
+            // elem("#question").remove();
         }, 700);
 
         //resultsMultiplayer.sort(compareUsers("correct", "desc"));
