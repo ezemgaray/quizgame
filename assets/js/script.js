@@ -503,6 +503,7 @@ function showQuestion() {
             //var finishTime = new Date();
             ws.send(`{"to":"quizGame", "user":${JSON.stringify(user)}, "time":${JSON.stringify(lastClick)}, "correct":${JSON.stringify(correctAnswers)}, "type":"finished"}`);
             checkOtherUsers("function showQuestion");
+            elem("#questions").innerHTML = '<h2 class="loader__container">Waiting players <span class="loader"><span class="cssload-loader"></span></span></h2>'
         }
         return
     }

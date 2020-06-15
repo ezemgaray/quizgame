@@ -1056,6 +1056,88 @@ div .title__span:nth-child(2) span:nth-child(4) {
    color: white;
 }
 
+/* .questions{ */
+   /* background: #000; */
+/* } */
+.loader__container{
+   position: relative;
+   top: 0;
+   left: 0;
+   width: 100%;
+   /* height: 100%; */
+   text-align: center;
+   /* background-color: #fff; */
+   /* border: 10px solid #20C868; */
+
+}
+
+.loader {
+   position: relative;
+   top: 3px;
+   left: 20px;
+   height: 100%;
+   width: 100%;
+}
+
+.cssload-loader {
+   position: absolute;
+   width: 5px;
+   height: 5px;
+   top: 50%;
+   left: 50%;
+   border-radius: 5px;
+   background-color: rgb(0, 0, 0);
+   transform-origin: 50% 50%;
+   transform: translate(-50%, -50%);
+   -webkit-transform: translate(-50%, -50%);
+   -moz-transform: translate(-50%, -50%);
+   -ms-transform: translate(-50%, -50%);
+   -o-transform: translate(-50%, -50%);
+   animation: cssload-loader 1.15s ease-in-out infinite;
+   -webkit-animation: cssload-loader 1.15s ease-in-out infinite;
+}
+
+.cssload-loader:before {
+   content: "";
+   position: absolute;
+   background-color: rgb(0, 0, 0);
+   top: 0px;
+   left: -10px;
+   height: 5px;
+   width: 5px;
+   border-radius: 5px;
+}
+
+.cssload-loader:after {
+   content: "";
+   position: absolute;
+   background-color: rgb(0, 0, 0);
+   top: 0px;
+   left: 10px;
+   height: 5px;
+   width: 5px;
+   border-radius: 5px;
+   -webkit-border-radius: 5px;
+   -moz-border-radius: 5px;
+   -ms-border-radius: 5px;
+   -o-border-radius: 5px;
+}
+
+@keyframes cssload-loader {
+   0% {
+       transform: rotate(0deg);
+   }
+
+   50% {
+       transform: rotate(180deg);
+   }
+
+   100% {
+       transform: rotate(180deg);
+   }
+}
+
+
 
 /*? ======== KEYFRAMES ======== ?*/
 
