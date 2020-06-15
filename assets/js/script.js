@@ -21,6 +21,8 @@ let nPlayers = 1;
 let nFinished = 0;
 let sendConfrim = false;
 let resultsMultiplayer = [];
+let orderedResults = [];
+let lastClick;
 
 let answerTime = 10; //time to answer the question
 let nQuestions = 5; //number of questions
@@ -486,8 +488,8 @@ function showQuestion() {
             checkResults();
             questionCount = 0
         }else{
-            var finishTime = new Date();
-            ws.send(`{"to":"quizGame", "user":${JSON.stringify(user)}, "time":${finishTime}, "correct":${correctAnswers}, "type":"finished"}`);
+            //var finishTime = new Date();
+            ws.send(`{"to":"quizGame", "user":${JSON.stringify(user)}, "time":${JSON.stringify(lastClick)}, "correct":${JSON.stringify(correctAnswers)}, "type":"finished"}`);
             checkOtherUsers("function showQuestion");
         }
         return
@@ -513,7 +515,8 @@ function showQuestion() {
             elem("#question .answers").append(button)
             button.style.animation = `appear ${transition += 0.2}s ease-in-out forwards`
 
-            button.onclick = () => {
+            button.onclick = (e) => {
+                lastClick = e.timeStamp
                 selectedAnswers.push(btn)
                 if (btn == currGame[questionCount - 1].correct_answer) {
                     button.style.backgroundColor = "rgb(32, 200, 104)";
@@ -577,6 +580,17 @@ function checkResults() {
     } else {
         user.loose++
         winner = false;
+    }
+
+    if(joinMultiplayer && resultsMultiplayer.length > 1){
+        resultsMultiplayer.forEach((e, i)=>{
+            if(e.id === user.id && i == 0) {
+                user.experience++;
+                user.win++
+                winner = true;
+                console.log("user has won")
+            }
+        });
     }
 
     if (user.experience >= user.level && user.experience != 0) {
@@ -751,13 +765,15 @@ function startMultGame(userData, questions){
 }
 
 function checkOtherUsers(user, time, correctA){
-    resultsMultiplayer.push({
-        id: user.id,
-        image: user.image,
-        name: user.name,
-        time: time,
-        correct: correctA
-    });
+    if(!(user.id === undefined)){
+        resultsMultiplayer.push({
+            id: user.id,
+            image: user.image,
+            name: user.name,
+            time: time,
+            correct: correctA
+        });
+    }
     console.log(resultsMultiplayer);
     if(joinMultiplayer && nPlayers == nFinished){
         console.log("executing next display")
@@ -765,6 +781,14 @@ function checkOtherUsers(user, time, correctA){
             elem("#questions").classList.toggle("open");
             elem("#question").remove();
         }, 700);
+        resultsMultiplayer.sort(compareUsers("correct", "desc"));
+        for(var i = nQuestions; i == 0; i--){
+            var temp = resultsMultiplayer.filter(e=> e.correct == i);
+            console.log(temp);
+            temp.sort(compareUsers("time", "asc"));
+            temp.forEach( e=> orderedResults.push(e));
+        };
+        console.log(orderedResults);
         checkResults();
         questionCount = 0
         nFinished = 0;
