@@ -1,7 +1,4 @@
-// var user = {
-//     id: "",
-//     name: "",
-// }
+
 var ws;
 var users = [];
 var currGame
