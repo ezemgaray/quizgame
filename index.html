@@ -56,6 +56,15 @@
                   <button class="chat__form--button chat__form--button--big" id="chatSendBtn2">SEND</button>
                </div>
             </div>
+            <div class="ranking ranking--big p-2 d-flex flex-column justify-content-start" id="ranking2">
+               <div class="d-flex justify-content-around flex-wrap mb-4 mt-2">
+                  <button id="byLevel2" class="ranking__btn--big ranking__btn--active m-2" data-action="level">By Level</button>
+                  <button id="byRatio2" class="ranking__btn--big m-2" data-action="ratio">By Ratio</button>
+                  <button id="byCorrect2" class="ranking__btn--big m-2" data-action="correct">By Correct Answers</button>
+               </div>
+               <div class="ranking__box2">
+               </div>
+            </div>
             <div class="menu menu--big d-flex justify-content-around align-items-center">
                <button id="chatBtn2">
                   <svg id="chatSvg--big" class="menu__icon" enable-background="new 0 0 512 512" height="80%"
@@ -164,8 +173,6 @@
                               id="profileUsername"></span></span>
                         <span class="d-flex justify-content-between"><span>Level</span><span
                               id="profileLevel"></span></span>
-                        <span class="d-flex justify-content-between"><span>Session ID</span><span
-                              id="profileId"></span></span>
                         <span class="d-flex justify-content-between"><span>Total Games</span><span
                               id="profileGames"></span></span>
                      </div>
@@ -205,7 +212,7 @@
             </div>
 
             <!-- RANKING SECTION -->
-            <div class="ranking p-2 d-flex flex-column justify-content-center" id="ranking">
+            <div class="ranking p-2 d-flex d-md-none flex-column justify-content-center" id="ranking">
                <div class="d-flex justify-content-around mb-4 mt-2">
                   <button id="byLevel" class="ranking__btn ranking__btn--active" data-action="level">By Level</button>
                   <button id="byRatio" class="ranking__btn" data-action="ratio">By Ratio</button>
@@ -298,11 +305,6 @@
                      </g>
                   </svg>
                </button>
-               <!-- <div class="menu__container">
-                  <div class="chat-icon"></div>
-                  <div class="scoring-icon"></div>
-                  <div class="logout"></div>
-               </div> -->
             </div>
 
             <!-- QUESTIONS SECTION -->
