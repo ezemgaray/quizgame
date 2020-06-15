@@ -161,7 +161,7 @@ function joinGame() {
                 break
             case "disconnect":
                 sendUser(JSON.stringify(user))
-                // if(responseUser)
+                if(responseUser.online) nPlayers--;
                 break
             case "user":
                 printUsers(responseUser.user)
