@@ -585,7 +585,8 @@ function showQuestion() {
 
 function questionTime() {
     let bar = elem(".seconds")
-    barW = bar.parentElement.clientWidth
+    bar.classList.add("questiondown");
+    barW = bar.parentElement.clientWidth // || bar.parentElement.innerWidth
     wPerSecond = barW / answerTime // Divido por la cantidad de segundo para responder
     if (globalInterval) {
         clearInterval(globalInterval)
@@ -594,7 +595,7 @@ function questionTime() {
     globalInterval = setInterval(() => {
         barW -= wPerSecond
         if (barW < 0) bar.style.width = "0px"
-        else bar.style.width = barW + "px"
+        // else bar.style.width = barW + "px"
         sec++
 
         if (sec > answerTime) { // si pasa la cantidad de segundos cierra la pregunta
@@ -607,7 +608,7 @@ function questionTime() {
 
 function stopQuestion(next = true) {
     clearInterval(globalInterval)
-
+    elem(".seconds").style.webkitAnimationPlayState = "paused";
     setTimeout(() => {
         elem("#question").classList.toggle("open")
         if (next) {
