@@ -662,7 +662,7 @@ function checkResults() {
 
 function showSummary(win) {
     console.log("in showSummary")
-    elem(".summary__container__info--img").style = `background-image: url(${user.image}); background-size: cover;`;
+    elem(".summary__container__info--img").style = `background-image: url(${user.image}); background-size: cover; background-position: center; background-repeat: no-repeat`;
     elem("#summaryWinGraph").style = "height: " + Math.floor((correctAnswers / nQuestions) * 100) + "%;";
     elem("#summaryLooseGraph").style = "height: " + Math.floor((wrongAnswers / nQuestions) * 100) + "%;";
     elem("#summaryXPGraph").style = "height: " + Math.floor((user.experience / (user.level + 1)) * 100) + "%;";
@@ -675,7 +675,7 @@ function showSummary(win) {
 
 function showGroup() {
     if (elem(".loader__container")) elem(".loader__container").remove()
-    elem(".group__container__info--img").style = `background-image: url(${orderedResults[0].image}); background-size: cover;`;
+    elem(".group__container__info--img").style = `background-image: url(${orderedResults[0].image}); background-size: cover; background-position: center; background-repeat: no-repeat`;
     elem("#groupWinner").textContent = orderedResults[0].name;
     elem("#groupWinnerHits").textContent = orderedResults[0].correct;
 
