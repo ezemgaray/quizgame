@@ -861,8 +861,6 @@ function checkOtherUsers(user, time, correctA) {
             // elem("#question").remove();
         }, 700);
 
-        //resultsMultiplayer.sort(compareUsers("correct", "desc"));
-
         for (var i = nQuestions; i >= 0; i--) {
             var temp = resultsMultiplayer.filter(e => e.correct == i);
             temp.sort(compareUsers("time", "asc"));
