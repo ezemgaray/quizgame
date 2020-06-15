@@ -563,6 +563,10 @@ function showQuestion() {
                correctAnswers++;
             } else {
                button.style.backgroundColor = "rgb(245, 38, 49)";
+               elem("#question .answers button", true).forEach((correct) => {
+                  if(correct.innerHTML == currGame[questionCount - 1].correct_answer)
+                     correct.style.backgroundColor = "rgb(32, 200, 104)";
+               })
                wrongAnswers++;
             }
             stopQuestion()
@@ -612,7 +616,6 @@ function stopQuestion(next = true) {
 }
 
 function checkResults() {
-   debugger
    var winner;
    if ((correctAnswers / nQuestions) * 100 >= 70) {
       user.experience++;
@@ -868,7 +871,6 @@ function checkOtherUsers(user, time, correctA) {
 
 //reset all variables to it's state before multiplayer
 function resetStatus() {
-   debugger
    console.log("reset function!")
    if (joinMultiplayer) {
       questionCount = 0;
