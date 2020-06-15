@@ -359,15 +359,24 @@ function showRanking(order, mainBtn) {
     const rkgBox = elem(".ranking__box");
     var title;
     var result;
-    if(!(elem("#ranking").classList.contains("open"))||order!== "level"||!mainBtn){
+    if (!(elem("#ranking").classList.contains("open")) || order !== "level" || !mainBtn) {
         while (rkgBox.firstChild) {
             rkgBox.removeChild(rkgBox.lastChild);
         }
         users.sort(compareUsers(order, 'desc'))
-        users.forEach((e, index)=>{
-            if(order == "level") {title = "Level"; result = e.level};
-            if(order == "ratio") {title = "Ratio"; result = e.ratio + "%"};
-            if(order == "correct") {title = "Correct answers"; result = e.correct};
+        users.forEach((e, index) => {
+            if (order == "level") {
+                title = "Level";
+                result = e.level
+            };
+            if (order == "ratio") {
+                title = "Ratio";
+                result = e.ratio + "%"
+            };
+            if (order == "correct") {
+                title = "Correct answers";
+                result = e.correct
+            };
 
             var main = document.createElement("div");
             var content = document.createElement("div");
@@ -379,7 +388,7 @@ function showRanking(order, mainBtn) {
             main.className = "rkg mb-2 p-1 d-flex justify-content-around";
             content.className = "rkg__content p-1 d-flex justify-content-between";
             position.className = "rkg__content--position";
-            spanPos.textContent = index+1;
+            spanPos.textContent = index + 1;
             data.className = "rkg__content--data";
             data.innerHTML = `<b>Name: </b><span id="rkgUser">${e.name}</span><br><b>${title}: </b><span id="rkgLevel">${result}</span>`;
             photo.className = 'rkg__user';
@@ -393,9 +402,9 @@ function showRanking(order, mainBtn) {
             rkgBox.appendChild(main);
         });
     }
-    elem(".ranking__btn", true).forEach(e=>e.dataset.action==order ? e.classList.add("ranking__btn--active") : e.classList.remove("ranking__btn--active"));
+    elem(".ranking__btn", true).forEach(e => e.dataset.action == order ? e.classList.add("ranking__btn--active") : e.classList.remove("ranking__btn--active"));
 
-    if(mainBtn){
+    if (mainBtn) {
         setTimeout(() => {
             elem("#ranking").classList.toggle("open");
         }, 200);
@@ -480,14 +489,14 @@ function showCountDown() {
 function showQuestion() {
 
     if (questionCount + 1 > currGame.length) {
-        if(!joinMultiplayer){
+        if (!joinMultiplayer) {
             setTimeout(() => {
                 elem("#questions").classList.toggle("open");
                 elem("#question").remove();
             }, 700);
             checkResults();
             questionCount = 0
-        }else{
+        } else {
             //var finishTime = new Date();
             ws.send(`{"to":"quizGame", "user":${JSON.stringify(user)}, "time":${JSON.stringify(lastClick)}, "correct":${JSON.stringify(correctAnswers)}, "type":"finished"}`);
             checkOtherUsers("function showQuestion");
@@ -582,9 +591,9 @@ function checkResults() {
         winner = false;
     }
 
-    if(joinMultiplayer && resultsMultiplayer.length > 1){
-        resultsMultiplayer.forEach((e, i)=>{
-            if(e.id === user.id && i == 0) {
+    if (joinMultiplayer && resultsMultiplayer.length > 1) {
+        orderedResults.forEach((e, i) => {
+            if (e.id === user.id && i == 0) {
                 user.experience++;
                 user.win++
                 winner = true;
@@ -664,9 +673,9 @@ function moveData(e, source) {
     elem(".resultsScreen").style = `top: ${e.clientY - 85}px; left: ${e.clientX + sumX}px;`
 }
 
-function updateUsers(userData){
-    users.forEach(e=>{
-        if(e.userId == userData.id){
+function updateUsers(userData) {
+    users.forEach(e => {
+        if (e.userId == userData.id) {
             e.ratio = userData.ratio;
             e.wons = userData.win;
             e.correct = userData.totalC;
@@ -703,7 +712,7 @@ function compareUsers(key, order = 'asc') {
 //! ============== Multiplayer section =============== !\\
 
 
-function createMultiplayer(){
+function createMultiplayer() {
     ws.send(`{"to":"quizGame", "user":${JSON.stringify(user)}, "type":"multiplayerInit"}`);
     createBtn.disabled = true;
     createBtn.classList.add("disabledBtn");
@@ -713,20 +722,20 @@ function createMultiplayer(){
     joinMultiplayer = true;
     var counter = setInterval(() => {
         createBtn.textContent = "00:" + seconds--
-        if(seconds <= 25){
+        if (seconds <= 25) {
             clearInterval(counter);
             ws.send(`{"to":"quizGame", "user":${JSON.stringify(user)}, "questions":${JSON.stringify(currGame)}, "type":"multiplayerStart"}`);
         }
     }, 1000);
 }
 
-function updateMultButton(userData){
-    if(userData.id != user.id){
+function updateMultButton(userData) {
+    if (userData.id != user.id) {
         joinBtn.classList.remove("d-none");
         createBtn.classList.add("d-none");
         var counter = setInterval(() => {
             createBtn.textContent = "00:" + seconds--
-            if(seconds <= 25){
+            if (seconds <= 25) {
                 clearInterval(counter);
                 createBtn.textContent = "Create Game";
             }
@@ -734,7 +743,7 @@ function updateMultButton(userData){
     }
 }
 
-function preJoinMultiplayer(){
+function preJoinMultiplayer() {
     joinMultiplayer = true;
     joinBtn.classList.add("d-none");
     createBtn.classList.remove("d-none");
@@ -745,8 +754,8 @@ function preJoinMultiplayer(){
     ws.send(`{"to":"quizGame", "user":${JSON.stringify(user)}, "type":"joinGame"}`);
 }
 
-function startMultGame(userData, questions){
-    if(userData.id == user.id || joinMultiplayer){
+function startMultGame(userData, questions) {
+    if (userData.id == user.id || joinMultiplayer) {
         elem("#questions").classList.toggle("open")
         currGame = questions;
         elem("#questions").addEventListener("transitionend", showCountDown);
@@ -756,7 +765,7 @@ function startMultGame(userData, questions){
             soloBtn.disabled = false;
             soloBtn.classList.remove("disabledBtn");
         }, 700);
-    }else{
+    } else {
         joinBtn.classList.add("d-none");
         createBtn.classList.remove("d-none");
         createBtn.disabled = true;
@@ -764,8 +773,8 @@ function startMultGame(userData, questions){
     }
 }
 
-function checkOtherUsers(user, time, correctA){
-    if(!(user.id === undefined)){
+function checkOtherUsers(user, time, correctA) {
+    if (!(user.id === undefined)) {
         resultsMultiplayer.push({
             id: user.id,
             image: user.image,
@@ -774,21 +783,19 @@ function checkOtherUsers(user, time, correctA){
             correct: correctA
         });
     }
-    console.log(resultsMultiplayer);
-    if(joinMultiplayer && nPlayers == nFinished){
-        console.log("executing next display")
+    if (joinMultiplayer && nPlayers == nFinished) {
         setTimeout(() => {
             elem("#questions").classList.toggle("open");
             elem("#question").remove();
         }, 700);
+
         resultsMultiplayer.sort(compareUsers("correct", "desc"));
-        for(var i = nQuestions; i == 0; i--){
-            var temp = resultsMultiplayer.filter(e=> e.correct == i);
-            console.log(temp);
+
+        for (var i = nQuestions; i >= 0; i--) {
+            var temp = resultsMultiplayer.filter(e => e.correct == i);
             temp.sort(compareUsers("time", "asc"));
-            temp.forEach( e=> orderedResults.push(e));
+            temp.forEach(e => orderedResults.push(e));
         };
-        console.log(orderedResults);
         checkResults();
         questionCount = 0
         nFinished = 0;
