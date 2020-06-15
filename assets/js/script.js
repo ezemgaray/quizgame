@@ -898,5 +898,4 @@ function resetStatus() {
 }
 
 function checkCurrentGame(){
-
 }
