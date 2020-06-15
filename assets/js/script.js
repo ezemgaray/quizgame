@@ -11,8 +11,13 @@ let questionCount = 0 // cuenta ascendente de preguntas, al cargar preguntas que
 let correctAnswers = 0;
 let wrongAnswers = 0;
 
+//? Multiplayer Variabeles
 let joinMultiplayer = false;
 let seconds = 30;
+let createBtn = elem("#createGameBtn");
+let joinBtn = elem("#joinGameBtn");
+let soloBtn = elem("#enterGameBtn");
+let nPlayers = 1;
 
 let answerTime = 10; //time to answer the question
 let nQuestions = 5; //number of questions
@@ -52,9 +57,9 @@ elem("#byRatio").addEventListener("click", () => showRanking("ratio"))
 elem("#byCorrect").addEventListener("click", () => showRanking("correct"))
 elem("#chatSendBtn").addEventListener("click", () => onSendChat("small"))
 elem("#chatSendBtn2").addEventListener("click", () => onSendChat("big"))
-elem("#enterGameBtn").addEventListener("click", showQuestions)
-elem("#createGameBtn").addEventListener("click", createMultiplayer)
-elem("#joinGameBtn").addEventListener("click", preJoinMultiplayer)
+soloBtn.addEventListener("click", showQuestions)
+createBtn.addEventListener("click", createMultiplayer)
+joinBtn.addEventListener("click", preJoinMultiplayer)
 elem("#chatInp").onkeyup = e => {
     if (e.keyCode == 13) onSendChat("small");
 }
@@ -130,7 +135,6 @@ function joinGame() {
         let responseUser = JSON.parse(response.data);
 
         if (responseUser.auth == "OK") {
-            //console.log(response)
             ws.send(`{"to":"quizGame", "user":"${responseUser.SID}", "type":"connect"}`);
             user.id = responseUser.SID;
             localStorage.setItem("user", JSON.stringify(user))
@@ -157,6 +161,10 @@ function joinGame() {
                 break
             case "multiplayerStart":
                 startMultGame(responseUser.user, responseUser.questions)
+                break
+            case "joinGame":
+                nPlayers++;
+                console.log(nPlayers);
                 break
         }
     }
@@ -416,15 +424,11 @@ function getQuestions(amount) {
         .get("https://opentdb.com/api.php?difficulty=easy&amount=" + amount)
         .then(function (response) {
             currGame = response.data.results;
-            console.log(currGame)
         })
 }
 
 function mixAnswers() {
-    console.log(currGame[0])
     answers = currGame[questionCount].incorrect_answers
-    console.log(answers)
-    console.log(currGame[questionCount].incorrect_answers)
     answers.push(currGame[questionCount].correct_answer)
     answers.sort(() => Math.random() - 0.5)
 }
@@ -476,8 +480,6 @@ function showQuestion() {
         return
     }
     mixAnswers()
-    console.log(currGame[questionCount]);
-    console.log(answers);
 
     if (elem("#question")) elem("#question").remove()
     elem("#questions").innerHTML = elem("#templateQuestion").innerHTML
@@ -669,19 +671,19 @@ function compareUsers(key, order = 'asc') {
     };
 }
 
-//! Multiplayer begin
+
+//! ============== Multiplayer section =============== !\\
+
 
 function createMultiplayer(){
-    var btn = elem("#createGameBtn");
     ws.send(`{"to":"quizGame", "user":${JSON.stringify(user)}, "type":"multiplayerInit"}`);
-    btn.disabled = true;
-    elem("#createGameBtn").classList.add("disabledBtn");
-    elem("#enterGameBtn").disabled = true;
-    elem("#enterGameBtn").classList.add("disabledBtn");
+    createBtn.disabled = true;
+    createBtn.classList.add("disabledBtn");
+    soloBtn.disabled = true;
+    soloBtn.classList.add("disabledBtn");
     getQuestions(nQuestions);
-    console.log(currGame);
     var counter = setInterval(() => {
-        btn.textContent = "00:" + seconds--
+        createBtn.textContent = "00:" + seconds--
         if(seconds <= 25){
             clearInterval(counter);
             ws.send(`{"to":"quizGame", "user":${JSON.stringify(user)}, "questions":${JSON.stringify(currGame)}, "type":"multiplayerStart"}`);
@@ -691,13 +693,13 @@ function createMultiplayer(){
 
 function updateMultButton(userData){
     if(userData.id != user.id){
-        elem("#joinGameBtn").classList.remove("d-none");
-        elem("#createGameBtn").classList.add("d-none");
+        joinBtn.classList.remove("d-none");
+        createBtn.classList.add("d-none");
         var counter = setInterval(() => {
-            elem("#createGameBtn").textContent = "00:" + seconds--
+            createBtn.textContent = "00:" + seconds--
             if(seconds <= 25){
                 clearInterval(counter);
-                elem("#createGameBtn").textContent = "Create Game";
+                createBtn.textContent = "Create Game";
             }
         }, 1000);
     }
@@ -705,12 +707,13 @@ function updateMultButton(userData){
 
 function preJoinMultiplayer(){
     joinMultiplayer = true;
-    elem("#joinGameBtn").classList.add("d-none");
-    elem("#createGameBtn").classList.remove("d-none");
-    elem("#createGameBtn").disabled = true;
-    elem("#createGameBtn").classList.add("disabledBtn");
-    elem("#enterGameBtn").disabled = true;
-    elem("#enterGameBtn").classList.add("disabledBtn");
+    joinBtn.classList.add("d-none");
+    createBtn.classList.remove("d-none");
+    createBtn.disabled = true;
+    createBtn.classList.add("disabledBtn");
+    soloBtn.disabled = true;
+    soloBtn.classList.add("disabledBtn");
+    ws.send(`{"to":"quizGame", "user":${JSON.stringify(user)}, "type":"joinGame"}`);
 }
 
 function startMultGame(userData, questions){
@@ -719,15 +722,15 @@ function startMultGame(userData, questions){
         currGame = questions;
         elem("#questions").addEventListener("transitionend", showCountDown);
         setTimeout(() => {
-            elem("#createGameBtn").disabled = false;
-            elem("#createGameBtn").classList.remove("disabledBtn");
-            elem("#enterGameBtn").disabled = false;
-            elem("#enterGameBtn").classList.remove("disabledBtn");
+            createBtn.disabled = false;
+            createBtn.classList.remove("disabledBtn");
+            soloBtn.disabled = false;
+            soloBtn.classList.remove("disabledBtn");
         }, 700);
     }else{
-        elem("#joinGameBtn").classList.add("d-none");
-        elem("#createGameBtn").classList.remove("d-none");
-        elem("#createGameBtn").disabled = true;
-        elem("#createGameBtn").classList.add("disabledBtn");
+        joinBtn.classList.add("d-none");
+        createBtn.classList.remove("d-none");
+        createBtn.disabled = true;
+        createBtn.classList.add("disabledBtn");
     }
 }
