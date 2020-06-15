@@ -30,7 +30,7 @@ var user = JSON.parse(localStorage.getItem("user")) || {
     experience: 0
 }
 
-var anonymousUser = ["quagga", "kiwi", "nyancat", "dragon", "anteater", "blobfish", "chupacabra", "bat", "ifrit", "kraken", "manatee", "ferret", "llama", "koala", "platypus", "wombat", "iguana", "mink", "narwhal", "liger"];
+var anonymousUser = ["quagga", "kiwi", "nyancat", "dragon", "anteater", "blobfish", "chupacabra", "bat", "ifrit", "kraken", "manatee", "ferret", "llama", "koala", "platypus", "wombat", "iguana", "mink", "narwhal", "liger", "turtle", "skunk", "raccoon", "crow", "otter"];
 
 /**
  * LISTENERS
