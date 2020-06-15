@@ -425,6 +425,7 @@ function showRanking(order, mainBtn, from) {
         });
     }
     elem(".ranking__btn", true).forEach(e => e.dataset.action == order ? e.classList.add("ranking__btn--active") : e.classList.remove("ranking__btn--active"));
+    elem(".ranking__btn--big", true).forEach(e => e.dataset.action == order ? e.classList.add("ranking__btn--active") : e.classList.remove("ranking__btn--active"));
 
     if (mainBtn && from != "big") {
         console.log("click from small")
