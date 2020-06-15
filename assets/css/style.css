@@ -237,14 +237,17 @@ div .title__span:nth-child(2) span:nth-child(4) {
 
 /*? ========= PROFILE DISPLAY ========== ?*/
 
-.profile, .summary {
+.profile, 
+.summary,
+.group {
    height: 90%;
    width: 100%;
    flex-grow: 1;
 }
 
 .profile__container,
-.summary__container {
+.summary__container,
+.group__container {
    /* border: 1px solid yellow; */
    height: 100%;
    max-height: 650px;
@@ -252,7 +255,8 @@ div .title__span:nth-child(2) span:nth-child(4) {
 }
 
 .profile__container__info,
-.summary__container__info {
+.summary__container__info,
+.group__container__info {
    width: 100%;
    max-height: 500px;
    height: 80%;
@@ -267,7 +271,8 @@ div .title__span:nth-child(2) span:nth-child(4) {
 }
 
 .profile__container__info--img,
-.summary__container__info--img {
+.summary__container__info--img,
+.group__container__info--img {
    height: 120px;
    width: 120px;
    border-radius: 50%;
@@ -276,7 +281,8 @@ div .title__span:nth-child(2) span:nth-child(4) {
 }
 
 .profile__container__info--graph,
-.summary__container__info--graph {
+.summary__container__info--graph,
+.group__container__info--graph {
    border-bottom: 1px solid rgb(29, 29, 29, 0.5);
    height: 120px;
    width: 100%;
@@ -434,7 +440,8 @@ div .title__span:nth-child(2) span:nth-child(4) {
 .chat,
 .ranking,
 .questions,
-.summary {
+.summary,
+.group {
    position: absolute;
    left: 0;
    top: 100%;
@@ -449,7 +456,8 @@ div .title__span:nth-child(2) span:nth-child(4) {
    -o-transition: top .7s ease-in-out;
 }
 
-.summary{
+.summary,
+.group{
    height: 90%;
 }
 
@@ -463,7 +471,8 @@ div .title__span:nth-child(2) span:nth-child(4) {
 
 .chat.open,
 .ranking.open,
-.summary.open {
+.summary.open,
+.group.open {
    top: 0;
 }
 
@@ -471,7 +480,8 @@ div .title__span:nth-child(2) span:nth-child(4) {
 
 .chat__box,
 .ranking__box,
-.chat__box2 {
+.chat__box2,
+.group__box {
    height: calc(100% - 50px);
    overflow-y: auto;
 }
@@ -1023,18 +1033,21 @@ div .title__span:nth-child(2) span:nth-child(4) {
    }
 
    .profile__container__info--img,
-   .summary__container__info--img {
+   .summary__container__info--img,
+   .group__container__info--img {
       height: 50px;
       width: 50px;
    }
 
    .profile__container__info--values,
-   .summary__container__info--values {
+   .summary__container__info--values,
+   .group__container__info--values {
       max-width: 120px;
    }
 
    .profile__container__info--graph,
-   .summary__container__info--graph {
+   .summary__container__info--graph,
+   .group__container__info--graph {
       height: 60px;
       max-width: 250px;
    }
@@ -1048,24 +1061,28 @@ div .title__span:nth-child(2) span:nth-child(4) {
 @media (max-height: 668px) {
 
    .profile__container__info--img,
-   .summary__container__info--img {
+   .summary__container__info--img,
+   .group__container__info--img {
       height: 75px;
       width: 75px;
    }
 
    .profile__container__info--values,
-   .summary__container__info--values {
+   .summary__container__info--values,
+   .group__container__info--values {
       font-size: 15px;
    }
 
    .profile__container__info--graph,
-   .summary__container__info--graph {
+   .summary__container__info--graph,
+   .group__container__info--graph {
       height: 60px;
       max-width: 250px;
    }
 
    .profile__container__info--graph>span,
-   .summary__container__info--graph>span {
+   .summary__container__info--graph>span,
+   .group__container__info--graph>span {
       font-size: 32px;
    }
 }
