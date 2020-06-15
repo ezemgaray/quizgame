@@ -76,7 +76,7 @@ elem("#chatInp").onkeyup = e => {
 elem("#chatInp2").onkeyup = e => {
     if (e.keyCode == 13) onSendChat("big");
 }
-elem("#buttonId").addEventListener("click", onSendChat);
+// elem("#buttonId").addEventListener("click", onSendChat);
 elem("#summaryBackProfile").addEventListener("click", () => {
     elem("#summary").classList.remove("open");
     correctAnswers = 0;
