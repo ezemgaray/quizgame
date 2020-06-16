@@ -683,7 +683,6 @@ function checkResults() {
 }
 
 function showSummary(win) {
-    debugger
     console.log("in showSummary")
     elem(".summary__container__info--img").style = `background-image: url(${user.image}); background-size: cover; background-position: center; background-repeat: no-repeat`;
     elem("#summaryWinGraph").style = "height: " + Math.floor((correctAnswers / nQuestions) * 100) + "%;";
@@ -693,11 +692,10 @@ function showSummary(win) {
     elem("#summaryMisses").textContent = wrongAnswers;
     elem("#summaryXP").textContent = win ? "+1" : "0";
     elem("#summaryTotalXP").textContent = user.experience;
-    elem("#summary").classList.toggle("open");
+    if(!user.isPlaying) elem("#summary").classList.toggle("open");
 }
 
 function showGroup() {
-    debugger
     if (elem(".loader__container")) elem(".loader__container").remove()
     elem(".group__container__info--img").style = `background-image: url(${orderedResults[0].image}); background-size: cover; background-position: center; background-repeat: no-repeat`;
     elem("#groupWinner").textContent = orderedResults[0].name;
@@ -848,6 +846,7 @@ function startMultGame(userData, questions) {
     if (userData.id == user.id || user.readyToPlay) { //user.isPlaying
         elem("#questions").classList.toggle("open")
         currGame = questions;
+        elem("#questions").addEventListener("transitionend", showCountDown);
         user.readyToPlay = false;
         user.isPlaying = true;
         user.isPlaying = true;
