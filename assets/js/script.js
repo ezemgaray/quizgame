@@ -8,7 +8,6 @@ let correctAnswers = 0;
 let wrongAnswers = 0;
 
 //? Multiplayer Variabeles
-// let joinMultiplayer = false;
 let seconds = 30;
 let createBtn = elem("#createGameBtn");
 let joinBtn = elem("#joinGameBtn");
