@@ -8,12 +8,8 @@ let correctAnswers = 0;
 let wrongAnswers = 0;
 
 //? Multiplayer Variabeles
-<<<<<<< HEAD
-let seconds = 30;
-=======
 // let joinMultiplayer = false;
 let seconds = 31;
->>>>>>> hotfix
 let createBtn = elem("#createGameBtn");
 let joinBtn = elem("#joinGameBtn");
 let soloBtn = elem("#enterGameBtn");
@@ -952,3 +948,5 @@ function disableButtons(opt) {
         soloBtn.classList.remove("disabledBtn");
     }
 }
+
+
