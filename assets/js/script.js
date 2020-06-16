@@ -3,7 +3,7 @@ var users = [];
 var currGame
 var answers
 var selectedAnswers = []
-let questionCount = 0 // cuenta ascendente de preguntas, al cargar preguntas que manejar el contador por el length del array de preguntas
+let questionCount = 0
 let correctAnswers = 0;
 let wrongAnswers = 0;
 
@@ -134,9 +134,7 @@ elem("#imgImport").addEventListener("change", () => {
     }
 });
 
-/**
- * FUNCTIONS
- */
+// ! ============= FUNCTIONS ============== ! \\
 
 init();
 
@@ -601,7 +599,7 @@ function questionTime() {
     let bar = elem(".seconds")
     bar.classList.add("questiondown");
     barW = bar.parentElement.clientWidth // || bar.parentElement.innerWidth
-    wPerSecond = barW / answerTime // Divido por la cantidad de segundo para responder
+    wPerSecond = barW / answerTime // divided by the quantity of seconds to answer
     if (globalInterval) {
         clearInterval(globalInterval)
     }
@@ -612,7 +610,7 @@ function questionTime() {
         // else bar.style.width = barW + "px"
         sec++
 
-        if (sec > answerTime) { // si pasa la cantidad de segundos cierra la pregunta
+        if (sec > answerTime) { // if it reaches the limit of seconds, it takes you to the next question
             elem("#question .answers button", true).forEach(button => button.disabled = true)
             wrongAnswers++;
             stopQuestion()
