@@ -214,8 +214,8 @@ function sendUser(user) {
 }
 
 function printUsers(userData) {
-   
-   if (userData.name != "" && userData.id != "") {
+
+    if (userData.name != "" && userData.id != "") {
         users.push({
             name: userData.name,
             userId: userData.id,
@@ -228,9 +228,9 @@ function printUsers(userData) {
             readyToPlay: userData.readyToPlay
         });
     }
-    if(!user.readyToPlay && !user.isPlaying){
-        if(userData.isPlaying) disableButtons("join");
-        if(userData.readyToPlay) disableButtons("ask");
+    if (!user.readyToPlay && !user.isPlaying) {
+        if (userData.isPlaying) disableButtons("join");
+        if (userData.readyToPlay) disableButtons("ask");
     }
     console.log(users);
 }
@@ -669,17 +669,17 @@ function checkResults() {
     user.ratio = (Math.floor((user.win / user.countGames) * 100));
 
     showProfileData();
-    if(user.isPlaying){
-       user.isPlaying =false
-      showGroup()
-      user.reset = true
-      localStorage.setItem("user", JSON.stringify(user))
-       ws.send(`{"to":"quizGame", "user":${JSON.stringify(user)}, "type":"update"}`);
-      }else{
-         showSummary(winner)
-         localStorage.setItem("user", JSON.stringify(user))
-         ws.send(`{"to":"quizGame", "user":${JSON.stringify(user)}, "type":"update"}`);
-      }
+    if (user.isPlaying) {
+        user.isPlaying = false
+        showGroup()
+        user.reset = true
+        localStorage.setItem("user", JSON.stringify(user))
+        ws.send(`{"to":"quizGame", "user":${JSON.stringify(user)}, "type":"update"}`);
+    } else {
+        showSummary(winner)
+        localStorage.setItem("user", JSON.stringify(user))
+        ws.send(`{"to":"quizGame", "user":${JSON.stringify(user)}, "type":"update"}`);
+    }
 }
 
 function showSummary(win) {
@@ -692,7 +692,10 @@ function showSummary(win) {
     elem("#summaryMisses").textContent = wrongAnswers;
     elem("#summaryXP").textContent = win ? "+1" : "0";
     elem("#summaryTotalXP").textContent = user.experience;
-    if(!user.isPlaying) elem("#summary").classList.toggle("open");
+    if (user.isPlaying) {
+        console.log(user)
+        elem("#summary").classList.toggle("open");
+    }
 }
 
 function showGroup() {
@@ -896,7 +899,7 @@ function resetStatus() {
         user.isPlaying = false;
         user.reset = false;
         user.readyToPlay = false;
-      }
+    }
     joinBtn.classList.add("d-none");
     createBtn.textContent = "Create Game";
     createBtn.disabled = false;
@@ -910,13 +913,13 @@ function resetStatus() {
     orderedResults = [];
 }
 
-function disableButtons(opt){
-    if(opt === "create"){
+function disableButtons(opt) {
+    if (opt === "create") {
         createBtn.disabled = true;
         createBtn.classList.add("disabledBtn");
         soloBtn.disabled = true;
         soloBtn.classList.add("disabledBtn");
-    }else if(opt === "ask"){
+    } else if (opt === "ask") {
         joinBtn.classList.remove("d-none");
         createBtn.classList.add("d-none");
         var counter = setInterval(() => {
@@ -926,12 +929,12 @@ function disableButtons(opt){
                 createBtn.textContent = "Create Game";
             }
         }, 1000);
-    }else if(opt === "join"){
+    } else if (opt === "join") {
         joinBtn.classList.add("d-none");
         createBtn.classList.remove("d-none");
         createBtn.disabled = true;
         createBtn.classList.add("disabledBtn");
-    }else if(opt === "reset"){
+    } else if (opt === "reset") {
         createBtn.disabled = false;
         createBtn.classList.remove("disabledBtn");
         soloBtn.disabled = false;
