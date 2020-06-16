@@ -668,13 +668,22 @@ function checkResults() {
     user.ratio = (Math.floor((user.win / user.countGames) * 100));
 
     showProfileData();
-    localStorage.setItem("user", JSON.stringify(user))
-    ws.send(`{"to":"quizGame", "user":${JSON.stringify(user)}, "type":"update"}`);
+    if(user.isPlaying){
+        user.isPlaying = false;
+        showGroup();
+        user.reset = true;
+        localStorage.setItem("user", JSON.stringify(user))
+        ws.send(`{"to":"quizGame", "user":${JSON.stringify(user)}, "type":"update"}`);
+    }else{
+        showSummary(winner);
+        localStorage.setItem("user", JSON.stringify(user))
+        ws.send(`{"to":"quizGame", "user":${JSON.stringify(user)}, "type":"update"}`);
+    }
 
-    user.isPlaying ? showGroup() : showSummary(winner);
 }
 
 function showSummary(win) {
+    debugger
     console.log("in showSummary")
     elem(".summary__container__info--img").style = `background-image: url(${user.image}); background-size: cover; background-position: center; background-repeat: no-repeat`;
     elem("#summaryWinGraph").style = "height: " + Math.floor((correctAnswers / nQuestions) * 100) + "%;";
@@ -688,6 +697,7 @@ function showSummary(win) {
 }
 
 function showGroup() {
+    debugger
     if (elem(".loader__container")) elem(".loader__container").remove()
     elem(".group__container__info--img").style = `background-image: url(${orderedResults[0].image}); background-size: cover; background-position: center; background-repeat: no-repeat`;
     elem("#groupWinner").textContent = orderedResults[0].name;
@@ -838,9 +848,9 @@ function startMultGame(userData, questions) {
     if (userData.id == user.id || user.readyToPlay) { //user.isPlaying
         elem("#questions").classList.toggle("open")
         currGame = questions;
-        elem("#questions").addEventListener("transitionend", showCountDown);
         user.readyToPlay = false;
         user.isPlaying = true;
+        elem("#questions").addEventListener("transitionend", showCountDown);
         setTimeout(() => {
             disableButtons("reset")
         }, 700);
@@ -878,13 +888,14 @@ function checkOtherUsers(user, time, correctA) {
 
 //reset all variables to it's state before multiplayer
 function resetStatus() {
-    if (user.isPlaying) {
+    if (user.reset) {
         questionCount = 0;
         correctAnswers = 0;
         wrongAnswers = 0;
         lastClick;
         user.isPlaying = false;
         user.readyToPlay = false;
+        user.reset = false;
     }
     joinBtn.classList.add("d-none");
     createBtn.textContent = "Create Game";
