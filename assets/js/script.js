@@ -164,8 +164,8 @@ function joinGame() {
                 break
             case "disconnect":
                 sendUser(JSON.stringify(user))
-                if (JSON.parse(responseUser.online)) nPlayers--;
-                if (JSON.parse(responseUser.ready)) nPlayers--;
+                if (responseUser.online || responseUser.ready) nPlayers--;
+                // if (responseUser.ready) nPlayers--;
                 console.log(nPlayers)
                 return
             case "user":
@@ -476,7 +476,7 @@ function leaveGame() {
     user.id = ""
     user.name = ""
     user.image = ""
-    ws.send(`{"to":"quizGame", "userId":"", "username":"", "ready":"${JSON.stringify(user.readyToPlay)}", "online":"${JSON.stringify(user.isPlaying)}", "type":"disconnect"}`);
+    ws.send(`{"to":"quizGame", "userId":"", "username":"", "ready":${JSON.stringify(user.readyToPlay)}, "online":${JSON.stringify(user.isPlaying)}, "type":"disconnect"}`);
     console.log("disconnect")
     user.isPlaying = false;
     user.readyToPlay = false;
