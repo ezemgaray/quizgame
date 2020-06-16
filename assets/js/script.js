@@ -142,62 +142,62 @@ init();
 
 
 function joinGame() {
-   elem("#confirmY").removeEventListener("click", joinGame)
-   ws = new WebSocket("wss://cloud.achex.ca");
-   ws.onopen = function (e) {
-      ws.send(`{"setID":"quizGame", "passwd":"12345"}`);
+    elem("#confirmY").removeEventListener("click", joinGame)
+    ws = new WebSocket("wss://cloud.achex.ca");
+    ws.onopen = function (e) {
+        ws.send(`{"setID":"quizGame", "passwd":"12345"}`);
 
-   }
-   ws.onmessage = function (response) {
-      let responseUser = JSON.parse(response.data);
+    }
+    ws.onmessage = function (response) {
+        let responseUser = JSON.parse(response.data);
 
-      if (responseUser.auth == "OK") {
-         ws.send(`{"to":"quizGame", "user":"${responseUser.SID}", "type":"connect"}`);
-         user.id = responseUser.SID;
-         localStorage.setItem("user", JSON.stringify(user))
-         showProfile()
-      }
-      switch (responseUser.type) {
-         case "connect":
-            sendUser(JSON.stringify(user))
-            break
-         case "messageU":
-            printMessage(responseUser.user, responseUser.content)
-            break
-         case "disconnect":
-            sendUser(JSON.stringify(user))
-            if (responseUser.online || responseUser.ready) nPlayers--;
-            // if (responseUser.ready) nPlayers--;
-            console.log(nPlayers)
-            return
-         case "user":
-            printUsers(responseUser.user)
-            break
-         case "update":
-            updateUsers(responseUser.user)
-            break
-         case "multiplayerInit":
-            updateMultButton(responseUser.user)
-            break
-         case "multiplayerStart":
-            startMultGame(responseUser.user, responseUser.questions)
-            break
-         case "joinGame":
-            nPlayers++;
-            console.log(nPlayers)
-            break
-         case "finished":
-            nFinished++;
-            checkOtherUsers(responseUser.user, responseUser.time, responseUser.correct);
-            break
-         case "reset":
-            resetStatus();
-            break
-      }
-   }
-   ws.onclose = function (e) {
-      console.log("onclose")
-   }
+        if (responseUser.auth == "OK") {
+            ws.send(`{"to":"quizGame", "user":"${responseUser.SID}", "type":"connect"}`);
+            user.id = responseUser.SID;
+            localStorage.setItem("user", JSON.stringify(user))
+            showProfile()
+        }
+        switch (responseUser.type) {
+            case "connect":
+                sendUser(JSON.stringify(user))
+                break
+            case "messageU":
+                printMessage(responseUser.user, responseUser.content)
+                break
+            case "disconnect":
+                sendUser(JSON.stringify(user))
+                if (responseUser.online || responseUser.ready) nPlayers--;
+                // if (responseUser.ready) nPlayers--;
+                console.log(nPlayers)
+                return
+            case "user":
+                printUsers(responseUser.user)
+                break
+            case "update":
+                updateUsers(responseUser.user)
+                break
+            case "multiplayerInit":
+                updateMultButton(responseUser.user)
+                break
+            case "multiplayerStart":
+                startMultGame(responseUser.user, responseUser.questions)
+                break
+            case "joinGame":
+                nPlayers++;
+                console.log(nPlayers)
+                break
+            case "finished":
+                nFinished++;
+                checkOtherUsers(responseUser.user, responseUser.time, responseUser.correct);
+                break
+            case "reset":
+                resetStatus();
+                break
+        }
+    }
+    ws.onclose = function (e) {
+        console.log("onclose")
+    }
 }
 
 function init() {
@@ -475,15 +475,15 @@ function onSendChat(from) {
 
 function leaveGame() {
 
-   user.id = ""
-   user.name = ""
-   user.image = ""
-   ws.send(`{"to":"quizGame", "userId":"", "username":"", "ready":${JSON.stringify(user.readyToPlay)}, "online":${JSON.stringify(user.isPlaying)}, "type":"disconnect"}`);
-   console.log("disconnect")
-   user.isPlaying = false;
-   user.readyToPlay = false;
-   ws.close();
-   return false;
+    user.id = ""
+    user.name = ""
+    user.image = ""
+    ws.send(`{"to":"quizGame", "userId":"", "username":"", "ready":${JSON.stringify(user.readyToPlay)}, "online":${JSON.stringify(user.isPlaying)}, "type":"disconnect"}`);
+    console.log("disconnect")
+    user.isPlaying = false;
+    user.readyToPlay = false;
+    ws.close();
+    return false;
 }
 
 function getQuestions(amount) {
