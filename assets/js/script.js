@@ -692,7 +692,10 @@ function showSummary(win) {
     elem("#summaryMisses").textContent = wrongAnswers;
     elem("#summaryXP").textContent = win ? "+1" : "0";
     elem("#summaryTotalXP").textContent = user.experience;
-    elem("#summary").classList.toggle("open");
+    if(user.isPlaying){
+       console.log(user)
+       elem("#summary").classList.toggle("open");
+    }
 }
 
 function showGroup() {
