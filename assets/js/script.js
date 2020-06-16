@@ -884,6 +884,7 @@ function resetStatus() {
         wrongAnswers = 0;
         lastClick;
         user.isPlaying = false;
+        user.readyToPlay = false;
     }
     joinBtn.classList.add("d-none");
     createBtn.textContent = "Create Game";
