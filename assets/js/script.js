@@ -165,7 +165,6 @@ function joinGame() {
             case "disconnect":
                 sendUser(JSON.stringify(user))
                 if (responseUser.online || responseUser.ready) nPlayers--;
-                // if (responseUser.ready) nPlayers--;
                 console.log(nPlayers)
                 return
             case "user":
