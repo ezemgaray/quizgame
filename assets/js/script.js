@@ -3,12 +3,11 @@ var users = [];
 var currGame
 var answers
 var selectedAnswers = []
-let questionCount = 0
+let questionCount = 0 
 let correctAnswers = 0;
 let wrongAnswers = 0;
 
 //? Multiplayer Variabeles
-// let joinMultiplayer = false;
 let seconds = 31;
 let createBtn = elem("#createGameBtn");
 let joinBtn = elem("#joinGameBtn");
@@ -42,9 +41,7 @@ var user = JSON.parse(localStorage.getItem("user")) || {
 
 var anonymousUser = ["quagga", "kiwi", "nyancat", "dragon", "anteater", "blobfish", "chupacabra", "bat", "ifrit", "kraken", "manatee", "ferret", "llama", "koala", "platypus", "wombat", "iguana", "mink", "narwhal", "liger", "turtle", "skunk", "raccoon", "crow", "otter", "dinosaur"];
 
-/**
- * LISTENERS
- */
+// ! ============ LISTENERS ============ ! \\
 
 elem("#usernameInp").onkeyup = function (e) {
     if (e.keyCode == 13) saveUser()
@@ -134,7 +131,7 @@ elem("#imgImport").addEventListener("change", () => {
     }
 });
 
-// ! ============= FUNCTIONS ============== ! \\
+// ! ============ FUNCTIONS ============ ! \\
 
 init();
 
@@ -476,7 +473,6 @@ function leaveGame() {
     user.name = ""
     user.image = ""
     ws.send(`{"to":"quizGame", "userId":"", "username":"", "ready":${JSON.stringify(user.readyToPlay)}, "online":${JSON.stringify(user.isPlaying)}, "type":"disconnect"}`);
-    console.log("disconnect")
     user.isPlaying = false;
     user.readyToPlay = false;
     ws.close();
@@ -542,7 +538,6 @@ function showQuestion() {
             checkResults();
             questionCount = 0
         } else {
-            //var finishTime = new Date();
             ws.send(`{"to":"quizGame", "user":${JSON.stringify(user)}, "time":${JSON.stringify(lastClick)}, "correct":${JSON.stringify(correctAnswers)}, "type":"finished"}`);
             checkOtherUsers("function showQuestion");
             elem("#questions").innerHTML = '<h2 class="loader__container">Waiting players <span class="loader"><span class="cssload-loader"></span></span></h2>'
@@ -560,7 +555,6 @@ function showQuestion() {
 
     setTimeout(function () {
         elem("#question").classList.toggle("open")
-        // let buttons = elem(".answers button", true)
         let transition = 0.9
         answers.forEach((btn, index) => {
             let button = document.createElement("button")
@@ -598,8 +592,8 @@ function showQuestion() {
 function questionTime() {
     let bar = elem(".seconds")
     bar.classList.add("questiondown");
-    barW = bar.parentElement.clientWidth // || bar.parentElement.innerWidth
-    wPerSecond = barW / answerTime // divided by the quantity of seconds to answer
+    barW = bar.parentElement.clientWidth;
+    wPerSecond = barW / answerTime
     if (globalInterval) {
         clearInterval(globalInterval)
     }
@@ -607,10 +601,9 @@ function questionTime() {
     globalInterval = setInterval(() => {
         barW -= wPerSecond
         if (barW < 0) bar.style.width = "0px"
-        // else bar.style.width = barW + "px"
         sec++
 
-        if (sec > answerTime) { // if it reaches the limit of seconds, it takes you to the next question
+        if (sec > answerTime) { 
             elem("#question .answers button", true).forEach(button => button.disabled = true)
             wrongAnswers++;
             stopQuestion()
@@ -680,7 +673,6 @@ function checkResults() {
 }
 
 function showSummary(win) {
-    console.log("in showSummary")
     elem(".summary__container__info--img").style = `background-image: url(${user.image}); background-size: cover; background-position: center; background-repeat: no-repeat`;
     elem("#summaryWinGraph").style = "height: " + Math.floor((correctAnswers / nQuestions) * 100) + "%;";
     elem("#summaryLooseGraph").style = "height: " + Math.floor((wrongAnswers / nQuestions) * 100) + "%;";
@@ -690,7 +682,6 @@ function showSummary(win) {
     elem("#summaryXP").textContent = win ? "+1" : "0";
     elem("#summaryTotalXP").textContent = user.experience;
     if (!user.isPlaying) {
-        console.log(user)
         elem("#summary").classList.toggle("open");
     }
 }
@@ -810,8 +801,6 @@ function createMultiplayer() {
     ws.send(`{"to":"quizGame", "user":${JSON.stringify(user)}, "type":"multiplayerInit"}`);
     disableButtons("create");
     getQuestions(nQuestions);
-    // joinMultiplayer = true;
-    // user.isPlaying = true;
     user.readyToPlay = true;
     if (globalInterval) {
         clearInterval(globalInterval)
@@ -833,8 +822,6 @@ function updateMultButton(userData) {
 }
 
 function preJoinMultiplayer() {
-    // joinMultiplayer = true;
-    // user.isPlaying = true;
     user.readyToPlay = true;
     joinBtn.classList.add("d-none");
     createBtn.classList.remove("d-none");
@@ -846,8 +833,7 @@ function preJoinMultiplayer() {
 }
 
 function startMultGame(userData, questions) {
-    console.log(user.readyToPlay);
-    if (userData.id == user.id || user.readyToPlay) { //user.isPlaying
+    if (userData.id == user.id || user.readyToPlay) {
         elem("#questions").classList.toggle("open")
         currGame = questions;
         elem("#questions").addEventListener("transitionend", showCountDown);
