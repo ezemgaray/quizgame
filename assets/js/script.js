@@ -169,7 +169,7 @@ function joinGame() {
                 if (JSON.parse(responseUser.online)) nPlayers--;
                 if (JSON.parse(responseUser.ready)) nPlayers--;
                 console.log(nPlayers)
-                break
+                return
             case "user":
                 printUsers(responseUser.user)
                 break
@@ -214,7 +214,6 @@ function sendUser(user) {
 }
 
 function printUsers(userData) {
-   
    if (userData.name != "" && userData.id != "") {
         users.push({
             name: userData.name,
@@ -683,7 +682,6 @@ function checkResults() {
 }
 
 function showSummary(win) {
-    debugger
     console.log("in showSummary")
     elem(".summary__container__info--img").style = `background-image: url(${user.image}); background-size: cover; background-position: center; background-repeat: no-repeat`;
     elem("#summaryWinGraph").style = "height: " + Math.floor((correctAnswers / nQuestions) * 100) + "%;";
@@ -700,7 +698,6 @@ function showSummary(win) {
 }
 
 function showGroup() {
-    debugger
     if (elem(".loader__container")) elem(".loader__container").remove()
     elem(".group__container__info--img").style = `background-image: url(${orderedResults[0].image}); background-size: cover; background-position: center; background-repeat: no-repeat`;
     elem("#groupWinner").textContent = orderedResults[0].name;
