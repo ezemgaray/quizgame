@@ -214,12 +214,7 @@ function sendUser(user) {
 }
 
 function printUsers(userData) {
-<<<<<<< HEAD
    if (userData.name != "" && userData.id != "") {
-=======
-
-    if (userData.name != "" && userData.id != "") {
->>>>>>> a4ed6f851f7ec3ac6fed128b44029db4984d78c7
         users.push({
             name: userData.name,
             userId: userData.id,
