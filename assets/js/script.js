@@ -120,7 +120,6 @@ elem("#summaryXPGraph").addEventListener("mouseover", () => showData("summaryXPG
 elem("#summaryXPGraph").addEventListener("mouseout", () => showData("summaryXPGraph"));
 elem("#summaryXPGraph").addEventListener("mousemove", (e) => moveData(e, "summaryXPGraph"));
 
-
 window.onbeforeunload = leaveGame;
 
 elem("#imgImport").addEventListener("change", () => {
@@ -215,8 +214,8 @@ function sendUser(user) {
 }
 
 function printUsers(userData) {
-    
-    if (userData.name != "" && userData.id != "") {
+   
+   if (userData.name != "" && userData.id != "") {
         users.push({
             name: userData.name,
             userId: userData.id,
@@ -225,7 +224,8 @@ function printUsers(userData) {
             correct: userData.totalC,
             level: userData.level,
             image: userData.image,
-            isPlaying: userData.isPlaying
+            isPlaying: userData.isPlaying,
+            readyToPlay: userData.readyToPlay
         });
     }
     if(!user.readyToPlay && !user.isPlaying){
@@ -474,6 +474,7 @@ function onSendChat(from) {
 }
 
 function leaveGame() {
+
     user.id = ""
     user.name = ""
     user.image = ""
@@ -668,10 +669,17 @@ function checkResults() {
     user.ratio = (Math.floor((user.win / user.countGames) * 100));
 
     showProfileData();
-    localStorage.setItem("user", JSON.stringify(user))
-    ws.send(`{"to":"quizGame", "user":${JSON.stringify(user)}, "type":"update"}`);
-
-    user.isPlaying ? showGroup() : showSummary(winner);
+    if(user.isPlaying){
+       user.isPlaying =false
+      showGroup()
+      user.reset = true
+      localStorage.setItem("user", JSON.stringify(user))
+       ws.send(`{"to":"quizGame", "user":${JSON.stringify(user)}, "type":"update"}`);
+      }else{
+         showSummary(winner)
+         localStorage.setItem("user", JSON.stringify(user))
+         ws.send(`{"to":"quizGame", "user":${JSON.stringify(user)}, "type":"update"}`);
+      }
 }
 
 function showSummary(win) {
@@ -806,7 +814,7 @@ function createMultiplayer() {
     // user.isPlaying = true;
     user.readyToPlay = true;
     var counter = setInterval(() => {
-        createBtn.textContent = "00:" + seconds--
+        createBtn.textContent = "00:" + ((seconds < 10) ? "0" + seconds-- : seconds--)
         if (seconds <= 0) {
             clearInterval(counter);
             ws.send(`{"to":"quizGame", "user":${JSON.stringify(user)}, "questions":${JSON.stringify(currGame)}, "type":"multiplayerStart"}`);
@@ -841,8 +849,10 @@ function startMultGame(userData, questions) {
         elem("#questions").addEventListener("transitionend", showCountDown);
         user.readyToPlay = false;
         user.isPlaying = true;
+        user.isPlaying = true;
         setTimeout(() => {
             disableButtons("reset")
+
         }, 700);
     } else {
         disableButtons("join")
@@ -878,17 +888,18 @@ function checkOtherUsers(user, time, correctA) {
 
 //reset all variables to it's state before multiplayer
 function resetStatus() {
-    if (user.isPlaying) {
+    if (user.reset) {
         questionCount = 0;
         correctAnswers = 0;
         wrongAnswers = 0;
         lastClick;
         user.isPlaying = false;
-    }
+        user.reset = false
+      }
     joinBtn.classList.add("d-none");
     createBtn.textContent = "Create Game";
     createBtn.disabled = false;
-    joinBtn.disabled = false;
+    joinBtn.disabled = true;
     createBtn.classList.remove("d-none");
     createBtn.classList.remove("disabledBtn");
     seconds = 30;
