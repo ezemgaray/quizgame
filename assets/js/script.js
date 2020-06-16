@@ -135,7 +135,6 @@ elem("#imgImport").addEventListener("change", () => {
     }
 });
 
-
 /**
  * FUNCTIONS
  */
