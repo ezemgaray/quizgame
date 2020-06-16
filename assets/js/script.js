@@ -8,7 +8,12 @@ let correctAnswers = 0;
 let wrongAnswers = 0;
 
 //? Multiplayer Variabeles
+<<<<<<< HEAD
 let seconds = 30;
+=======
+// let joinMultiplayer = false;
+let seconds = 31;
+>>>>>>> hotfix
 let createBtn = elem("#createGameBtn");
 let joinBtn = elem("#joinGameBtn");
 let soloBtn = elem("#enterGameBtn");
@@ -211,7 +216,7 @@ function sendUser(user) {
 }
 
 function printUsers(userData) {
-   if (userData.name != "" && userData.id != "") {
+    if (userData.name != "" && userData.id != "") {
         users.push({
             name: userData.name,
             userId: userData.id,
@@ -226,7 +231,8 @@ function printUsers(userData) {
     }
     if (!user.readyToPlay && !user.isPlaying) {
         if (userData.isPlaying) disableButtons("join");
-        if (userData.readyToPlay) disableButtons("ask");
+        else if (userData.readyToPlay) disableButtons("ask");
+        else if (!userData.readyToPlay && !userData.isPlaying) disableButtons("reset");
     }
     console.log(users);
 }
@@ -688,7 +694,7 @@ function showSummary(win) {
     elem("#summaryMisses").textContent = wrongAnswers;
     elem("#summaryXP").textContent = win ? "+1" : "0";
     elem("#summaryTotalXP").textContent = user.experience;
-    if (user.isPlaying) {
+    if (!user.isPlaying) {
         console.log(user)
         elem("#summary").classList.toggle("open");
     }
@@ -812,10 +818,14 @@ function createMultiplayer() {
     // joinMultiplayer = true;
     // user.isPlaying = true;
     user.readyToPlay = true;
-    var counter = setInterval(() => {
-        createBtn.textContent = "00:" + ((seconds < 10) ? "0" + seconds-- : seconds--)
+    if (globalInterval) {
+        clearInterval(globalInterval)
+    }
+    globalInterval = setInterval(() => {
+        seconds--
+        createBtn.textContent = "00:" + ((seconds < 10) ? "0" + seconds : seconds)
         if (seconds <= 0) {
-            clearInterval(counter);
+            clearInterval(globalInterval);
             ws.send(`{"to":"quizGame", "user":${JSON.stringify(user)}, "questions":${JSON.stringify(currGame)}, "type":"multiplayerStart"}`);
         }
     }, 1000);
@@ -917,11 +927,16 @@ function disableButtons(opt) {
         soloBtn.classList.add("disabledBtn");
     } else if (opt === "ask") {
         joinBtn.classList.remove("d-none");
+        joinBtn.disabled = false;
         createBtn.classList.add("d-none");
-        var counter = setInterval(() => {
-            createBtn.textContent = "00:" + seconds--
+        if (globalInterval) {
+            clearInterval(globalInterval)
+        }
+        globalInterval = setInterval(() => {
+            seconds--
+            createBtn.textContent = "00:" + ((seconds < 10) ? "0" + seconds : seconds)
             if (seconds <= 0) {
-                clearInterval(counter);
+                clearInterval(globalInterval);
                 createBtn.textContent = "Create Game";
             }
         }, 1000);
