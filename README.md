@@ -1,6 +1,6 @@
 # The Quiz Game
 
-![The Quiz Game]('assets/img/quizgame.png')
+![The Quiz Game](assets/img/quizgame.png)
 
 Trivial game (SPA) implementing websocket to incorporate a chat and multiplayer option.
 
